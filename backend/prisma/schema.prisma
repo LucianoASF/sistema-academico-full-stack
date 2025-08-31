@@ -24,6 +24,8 @@ model Usuario {
   cursos              Curso[]
   DisciplinaRealizada DisciplinaRealizada[]
   Matricula           Matricula[]
+
+  @@map("usuarios")
 }
 
 model Curso {
@@ -31,6 +33,8 @@ model Curso {
   nome     String    @db.VarChar(45)
   usuarios Usuario[]
   Grades   Grade[]
+
+  @@map("cursos")
 }
 
 model Disciplina {
@@ -39,6 +43,8 @@ model Disciplina {
   quantidadeAulas     Int                   @map("quantidade_aulas")
   grades              Grade[]
   DisciplinaRealizada DisciplinaRealizada[]
+
+  @@map("disciplinas")
 }
 
 model Grade {
@@ -47,6 +53,8 @@ model Grade {
   cursoId     Int          @map("curso_id")
   curso       Curso        @relation(fields: [cursoId], references: [id])
   disciplinas Disciplina[]
+
+  @@map("grades")
 }
 
 model DisciplinaRealizada {
@@ -69,7 +77,9 @@ model Aula {
   descricao             String              @db.VarChar(100)
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
   disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
-  presenca              presenca[]
+  presenca              Presenca[]
+
+  @@map("aulas")
 }
 
 model Avaliacao {
@@ -78,7 +88,9 @@ model Avaliacao {
   valor                 Int
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
   disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
-  nota                  nota[]
+  nota                  Nota[]
+
+  @@map("avaliacoes")
 }
 
 model Matricula {
@@ -89,24 +101,30 @@ model Matricula {
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
   usuario               Usuario             @relation(fields: [alunoId], references: [id])
   disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
-  presenca              presenca[]
-  nota                  nota[]
+  presenca              Presenca[]
+  nota                  Nota[]
+
+  @@map("matriculas")
 }
 
-model presenca {
+model Presenca {
   id          Int       @id @default(autoincrement())
   presente    Boolean
   matriculaId Int       @map("matricula_id")
   aulaId      Int       @map("aula_id")
   matricula   Matricula @relation(fields: [matriculaId], references: [id])
   aula        Aula      @relation(fields: [aulaId], references: [id])
+
+  @@map("presencas")
 }
 
-model nota {
+model Nota {
   id          Int       @id @default(autoincrement())
   valorObtido Decimal   @map("valor_obtido") @db.Decimal(4, 2)
   matriculaId Int       @map("matricula_id")
   avaliacaoId Int       @map("avaliacao_id")
   matricula   Matricula @relation(fields: [matriculaId], references: [id])
   avaliacao   Avaliacao @relation(fields: [avaliacaoId], references: [id])
+
+  @@map("notas")
 }
