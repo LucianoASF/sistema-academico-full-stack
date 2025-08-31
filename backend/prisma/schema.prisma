@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                  Int                   @id @default(autoincrement())
+  nome                String                @db.VarChar(100)
+  email               String                @unique @db.VarChar(100)
+  telefone            String                @db.VarChar(11)
+  cpf                 String                @unique @db.VarChar(11)
+  dataNacimento       DateTime              @map("data_nascimento")
+  senha               String                @db.VarChar(60)
+  cursos              Curso[]
+  DisciplinaRealizada DisciplinaRealizada[]
+  Matricula           Matricula[]
+}
+
+model Curso {
+  id       Int       @id @default(autoincrement())
+  nome     String    @db.VarChar(45)
+  usuarios Usuario[]
+  Grades   Grade[]
+}
+
+model Disciplina {
+  id                  Int                   @id @default(autoincrement())
+  nome                String                @db.VarChar(45)
+  quantidadeAulas     Int                   @map("quantidade_aulas")
+  grades              Grade[]
+  DisciplinaRealizada DisciplinaRealizada[]
+}
+
+model Grade {
+  id          Int          @id @default(autoincrement())
+  versao      Int
+  cursoId     Int          @map("curso_id")
+  curso       Curso        @relation(fields: [cursoId], references: [id])
+  disciplinas Disciplina[]
+}
+
+model DisciplinaRealizada {
+  id           Int         @id @default(autoincrement())
+  dataInicio   DateTime    @map("data_inicio")
+  dataFim      DateTime?   @map("data_fim")
+  disciplinaId Int         @map("disciplina_id")
+  professorId  Int         @map("professor_id")
+  disciplina   Disciplina  @relation(fields: [disciplinaId], references: [id])
+  usuario      Usuario     @relation(fields: [professorId], references: [id])
+  Aula         Aula[]
+  Avaliacao    Avaliacao[]
+  Matricula    Matricula[]
+
+  @@map("disciplinas_realizadas")
+}
+
+model Aula {
+  id                    Int                 @id @default(autoincrement())
+  descricao             String              @db.VarChar(100)
+  disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
+  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
+  presenca              presenca[]
+}
+
+model Avaliacao {
+  id                    Int                 @id @default(autoincrement())
+  nome                  String              @db.VarChar(60)
+  valor                 Int
+  disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
+  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
+  nota                  nota[]
+}
+
+model Matricula {
+  id                    Int                 @id @default(autoincrement())
+  notaFinal             Int?                @map("nota_final")
+  presencaFinal         Int?                @map("presenca_final")
+  alunoId               Int                 @map("aluno_id")
+  disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
+  usuario               Usuario             @relation(fields: [alunoId], references: [id])
+  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
+  presenca              presenca[]
+  nota                  nota[]
+}
+
+model presenca {
+  id          Int       @id @default(autoincrement())
+  presente    Boolean
+  matriculaId Int       @map("matricula_id")
+  aulaId      Int       @map("aula_id")
+  matricula   Matricula @relation(fields: [matriculaId], references: [id])
+  aula        Aula      @relation(fields: [aulaId], references: [id])
+}
+
+model nota {
+  id          Int       @id @default(autoincrement())
+  valorObtido Decimal   @map("valor_obtido") @db.Decimal(4, 2)
+  matriculaId Int       @map("matricula_id")
+  avaliacaoId Int       @map("avaliacao_id")
+  matricula   Matricula @relation(fields: [matriculaId], references: [id])
+  avaliacao   Avaliacao @relation(fields: [avaliacaoId], references: [id])
+}
