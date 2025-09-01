@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import type { Response } from 'express';
 
 export class ErrorBase extends Error {
   constructor(private status: number, message: string) {
