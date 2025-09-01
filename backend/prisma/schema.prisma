@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  administrador
+  usuario
+  professor
+}
+
 model Usuario {
   id                  Int                   @id @default(autoincrement())
   nome                String                @db.VarChar(100)
@@ -21,6 +27,7 @@ model Usuario {
   cpf                 String                @unique @db.VarChar(11)
   dataNascimento      DateTime              @map("data_nascimento")
   senha               String                @db.VarChar(60)
+  role                Role
   cursos              Curso[]
   DisciplinaRealizada DisciplinaRealizada[]
   Matricula           Matricula[]
