@@ -12,14 +12,18 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@prisma/client": "^6.15.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
+    "prisma": "^6.15.0",
     "tsc-watch": "^7.1.1",
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@prisma/client": "^6.15.0",
+    "bcrypt": "^6.0.0",
+    "celebrate": "^15.0.3",
     "express": "^5.1.0",
-    "prisma": "^6.15.0"
+    "express-async-handler": "^1.2.0"
   }
 }
