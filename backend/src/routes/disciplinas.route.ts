@@ -1,0 +1,22 @@
+import { Router } from 'express';
+import { DisciplinaController } from '../controllers/disciplina.controller.js';
+import { celebrate, Segments } from 'celebrate';
+import asyncHandler from 'express-async-handler';
+import { disciplinaSchema } from '../schemas/disciplina.schema.js';
+
+export const disciplinaRoutes = Router();
+
+disciplinaRoutes.post(
+  '/disciplinas',
+  celebrate({ [Segments.BODY]: disciplinaSchema }),
+  asyncHandler(DisciplinaController.create),
+);
+disciplinaRoutes.get('/disciplinas', asyncHandler(DisciplinaController.getAll));
+disciplinaRoutes.get(
+  '/disciplinas/:id',
+  asyncHandler(DisciplinaController.getById),
+);
+disciplinaRoutes.delete(
+  '/disciplinas/:id',
+  asyncHandler(DisciplinaController.delete),
+);
