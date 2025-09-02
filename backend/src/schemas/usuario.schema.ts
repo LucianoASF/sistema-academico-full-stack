@@ -20,5 +20,5 @@ export const updateUsuarioSchema = Joi.object().keys({
 });
 
 export const senhaSchema = Joi.object().keys({
-  senha: Joi.string().min(5).max(60).required(),
+  senha: Joi.string().trim().min(5).max(60).required(),
 });
