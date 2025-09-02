@@ -13,13 +13,13 @@ export class UsuarioService {
   }
 
   // Criar usuário com hash de senha
-  async save(data: Omit<Usuario, 'id'>): Promise<Omit<Usuario, 'senha'>> {
+  async create(data: Omit<Usuario, 'id'>): Promise<Omit<Usuario, 'senha'>> {
     const emailEmUso = await this.usuarioRepository.findByEmail(data.email);
     if (emailEmUso) throw new EmailAlreadyExistsError();
     const cpfEmUso = await this.usuarioRepository.findByCpf(data.cpf);
     if (cpfEmUso) throw new CpfAlreadyExistsError();
     const hashedPassword = await bcrypt.hash(data.senha, 10);
-    return this.usuarioRepository.save({
+    return this.usuarioRepository.create({
       ...data,
       senha: hashedPassword,
     });

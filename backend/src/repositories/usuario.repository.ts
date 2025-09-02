@@ -14,7 +14,7 @@ export class UsuarioRepository {
   constructor() {
     this.prisma = new PrismaClient({ log: ['query'] });
   }
-  async save(usuario: Omit<Usuario, 'id'>): Promise<Omit<Usuario, 'senha'>> {
+  async create(usuario: Omit<Usuario, 'id'>): Promise<Omit<Usuario, 'senha'>> {
     return await this.prisma.usuario.create({
       data: usuario,
       select: this.selectUsuarioSemSenha,

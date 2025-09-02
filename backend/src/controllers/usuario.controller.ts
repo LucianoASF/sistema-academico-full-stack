@@ -2,8 +2,8 @@ import type { Request, Response } from 'express';
 import { UsuarioService } from '../services/usuario.service.js';
 
 export class UsuarioController {
-  static async save(req: Request, res: Response) {
-    res.status(201).json(await new UsuarioService().save(req.body));
+  static async create(req: Request, res: Response) {
+    res.status(201).json(await new UsuarioService().create(req.body));
   }
   static async getById(req: Request, res: Response) {
     res

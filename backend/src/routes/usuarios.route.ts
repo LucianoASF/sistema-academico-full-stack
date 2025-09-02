@@ -13,7 +13,7 @@ export const usuarioRoutes = Router();
 usuarioRoutes.post(
   '/usuarios',
   celebrate({ [Segments.BODY]: novoUsuarioSchema }),
-  asyncHandler(UsuarioController.save),
+  asyncHandler(UsuarioController.create),
 );
 usuarioRoutes.get('/usuarios/:id', asyncHandler(UsuarioController.getById));
 usuarioRoutes.delete('/usuarios/:id', asyncHandler(UsuarioController.delete));
