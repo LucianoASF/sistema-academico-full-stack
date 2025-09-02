@@ -26,8 +26,8 @@ export class UsuarioRepository {
       select: this.selectUsuarioSemSenha,
     });
   }
-  async delete(id: number) {
-    await this.prisma.usuario.delete({ where: { id } });
+  async delete(id: number): Promise<Usuario | null> {
+    return await this.prisma.usuario.delete({ where: { id } });
   }
   async update(
     id: number,
