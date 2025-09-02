@@ -14,8 +14,8 @@ export class CursoRepository {
   async getById(id: number): Promise<Curso | null> {
     return this.prisma.curso.findFirst({ where: { id } });
   }
-  async delete(id: number): Promise<Curso | null> {
-    return await this.prisma.curso.delete({ where: { id } });
+  async delete(id: number) {
+    await this.prisma.curso.delete({ where: { id } });
   }
   async update(id: number, data: Omit<Curso, 'id'>): Promise<Curso | null> {
     return this.prisma.curso.update({ where: { id }, data });

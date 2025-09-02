@@ -14,7 +14,7 @@ export class DisciplinaRepository {
   async getById(id: number): Promise<Disciplina | null> {
     return this.prisma.disciplina.findFirst({ where: { id } });
   }
-  async delete(id: number): Promise<Disciplina | null> {
-    return await this.prisma.disciplina.delete({ where: { id } });
+  async delete(id: number) {
+    await this.prisma.disciplina.delete({ where: { id } });
   }
 }

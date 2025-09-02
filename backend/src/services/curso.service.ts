@@ -23,13 +23,14 @@ export class CursoService {
   }
 
   async update(id: number, data: Omit<Curso, 'id'>): Promise<Curso> {
+    await this.getById(id);
     const curso = await this.cursoRepository.update(id, data);
     if (!curso) throw new NotFoundError('Curso não encontrado!');
     return curso;
   }
 
   async delete(id: number) {
-    const curso = await this.cursoRepository.delete(id);
-    if (!curso) throw new NotFoundError('Curso não encontrado!');
+    await this.getById(id);
+    await this.cursoRepository.delete(id);
   }
 }

@@ -23,7 +23,7 @@ export class DisciplinaService {
   }
 
   async delete(id: number) {
-    const disciplina = await this.disciplinaRepository.delete(id);
-    if (!disciplina) throw new NotFoundError('Disciplina não encontrado!');
+    await this.getById(id);
+    await this.disciplinaRepository.delete(id);
   }
 }

@@ -36,6 +36,7 @@ export class UsuarioService {
     id: number,
     data: Omit<Usuario, 'id' | 'senha'>,
   ): Promise<Omit<Usuario, 'senha'>> {
+    await this.getById(id);
     const usuarioByEmail = await this.usuarioRepository.findByEmail(data.email);
     if (usuarioByEmail && usuarioByEmail.id !== id)
       throw new EmailAlreadyExistsError();
@@ -50,12 +51,13 @@ export class UsuarioService {
     id: number,
     { senha }: Pick<Usuario, 'senha'>,
   ): Promise<Omit<Usuario, 'senha'>> {
+    await this.getById(id);
     const senhaCrypto = await bcrypt.hash(senha, 10);
     return this.usuarioRepository.updatePassword(id, senhaCrypto);
   }
 
   async delete(id: number) {
-    const usuario = await this.usuarioRepository.delete(id);
-    if (!usuario) throw new NotFoundError('Usuário não encontrado!');
+    await this.getById(id);
+    await this.usuarioRepository.delete(id);
   }
 }
