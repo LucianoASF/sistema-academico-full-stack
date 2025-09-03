@@ -58,7 +58,7 @@ model Grade {
   id          Int          @id @default(autoincrement())
   versao      Int
   cursoId     Int          @map("curso_id")
-  curso       Curso        @relation(fields: [cursoId], references: [id])
+  curso       Curso        @relation(fields: [cursoId], references: [id], onDelete: Cascade)
   disciplinas Disciplina[]
 
   @@map("grades")
@@ -70,8 +70,8 @@ model DisciplinaRealizada {
   dataFim      DateTime?   @map("data_fim")
   disciplinaId Int         @map("disciplina_id")
   professorId  Int         @map("professor_id")
-  disciplina   Disciplina  @relation(fields: [disciplinaId], references: [id])
-  usuario      Usuario     @relation(fields: [professorId], references: [id])
+  disciplina   Disciplina  @relation(fields: [disciplinaId], references: [id], onDelete: Cascade)
+  usuario      Usuario     @relation(fields: [professorId], references: [id], onDelete: Cascade)
   Aula         Aula[]
   Avaliacao    Avaliacao[]
   Matricula    Matricula[]
@@ -83,7 +83,7 @@ model Aula {
   id                    Int                 @id @default(autoincrement())
   descricao             String              @db.VarChar(100)
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
-  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
+  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id], onDelete: Cascade)
   presenca              Presenca[]
 
   @@map("aulas")
@@ -94,7 +94,7 @@ model Avaliacao {
   nome                  String              @db.VarChar(60)
   valor                 Int
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
-  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
+  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id], onDelete: Cascade)
   nota                  Nota[]
 
   @@map("avaliacoes")
@@ -106,8 +106,8 @@ model Matricula {
   presencaFinal         Int?                @map("presenca_final")
   alunoId               Int                 @map("aluno_id")
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
-  usuario               Usuario             @relation(fields: [alunoId], references: [id])
-  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id])
+  usuario               Usuario             @relation(fields: [alunoId], references: [id], onDelete: Cascade)
+  disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id], onDelete: Cascade)
   presenca              Presenca[]
   nota                  Nota[]
 
@@ -119,8 +119,8 @@ model Presenca {
   presente    Boolean
   matriculaId Int       @map("matricula_id")
   aulaId      Int       @map("aula_id")
-  matricula   Matricula @relation(fields: [matriculaId], references: [id])
-  aula        Aula      @relation(fields: [aulaId], references: [id])
+  matricula   Matricula @relation(fields: [matriculaId], references: [id], onDelete: Cascade)
+  aula        Aula      @relation(fields: [aulaId], references: [id], onDelete: Cascade)
 
   @@map("presencas")
 }
@@ -130,8 +130,8 @@ model Nota {
   valorObtido Decimal   @map("valor_obtido") @db.Decimal(4, 2)
   matriculaId Int       @map("matricula_id")
   avaliacaoId Int       @map("avaliacao_id")
-  matricula   Matricula @relation(fields: [matriculaId], references: [id])
-  avaliacao   Avaliacao @relation(fields: [avaliacaoId], references: [id])
+  matricula   Matricula @relation(fields: [matriculaId], references: [id], onDelete: Cascade)
+  avaliacao   Avaliacao @relation(fields: [avaliacaoId], references: [id], onDelete: Cascade)
 
   @@map("notas")
 }
