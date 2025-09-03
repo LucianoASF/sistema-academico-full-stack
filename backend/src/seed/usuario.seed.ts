@@ -1,0 +1,112 @@
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+
+const prisma = new PrismaClient();
+
+export async function seedUsuarios() {
+  await prisma.usuario.createMany({
+    data: [
+      {
+        id: 1,
+        nome: 'John Doe',
+        email: 'jonhdoe@gmail.com',
+        telefone: '12345678912',
+        cpf: '43604680085',
+        dataNascimento: new Date('2000-02-02'),
+        senha: await bcrypt.hash('12345', 10),
+        role: 'administrador',
+      },
+      {
+        id: 2,
+        nome: 'Maria Oliveira',
+        email: 'maria.oliveira@gmail.com',
+        telefone: '11987654321',
+        cpf: '12345678901',
+        dataNascimento: new Date('1995-05-15'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'usuario',
+      },
+      {
+        id: 3,
+        nome: 'Carlos Silva',
+        email: 'carlos.silva@gmail.com',
+        telefone: '21912345678',
+        cpf: '23456789012',
+        dataNascimento: new Date('1988-11-20'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'usuario',
+      },
+      {
+        id: 4,
+        nome: 'Ana Souza',
+        email: 'ana.souza@gmail.com',
+        telefone: '31987654321',
+        cpf: '34567890123',
+        dataNascimento: new Date('1992-03-10'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'professor',
+      },
+      {
+        id: 5,
+        nome: 'Bruno Costa',
+        email: 'bruno.costa@gmail.com',
+        telefone: '41912345678',
+        cpf: '45678901234',
+        dataNascimento: new Date('1990-07-07'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'usuario',
+      },
+      {
+        id: 6,
+        nome: 'Fernanda Lima',
+        email: 'fernanda.lima@gmail.com',
+        telefone: '51987654321',
+        cpf: '56789012345',
+        dataNascimento: new Date('1998-12-25'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'usuario',
+      },
+      {
+        id: 7,
+        nome: 'Ricardo Mendes',
+        email: 'ricardo.mendes@gmail.com',
+        telefone: '61912345678',
+        cpf: '67890123456',
+        dataNascimento: new Date('1985-09-09'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'professor',
+      },
+      {
+        id: 8,
+        nome: 'Juliana Alves',
+        email: 'juliana.alves@gmail.com',
+        telefone: '71987654321',
+        cpf: '78901234567',
+        dataNascimento: new Date('1993-04-30'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'usuario',
+      },
+      {
+        id: 9,
+        nome: 'Paulo Henrique',
+        email: 'paulo.henrique@gmail.com',
+        telefone: '81912345678',
+        cpf: '89012345678',
+        dataNascimento: new Date('1991-06-18'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'usuario',
+      },
+      {
+        id: 10,
+        nome: 'Camila Rocha',
+        email: 'camila.rocha@gmail.com',
+        telefone: '91987654321',
+        cpf: '90123456789',
+        dataNascimento: new Date('1996-01-12'),
+        senha: await bcrypt.hash('senha123', 10),
+        role: 'professor',
+      },
+    ],
+    skipDuplicates: true, // evita duplicar ao rodar várias vezes
+  });
+}
