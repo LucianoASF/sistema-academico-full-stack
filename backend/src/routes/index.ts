@@ -6,6 +6,7 @@ import { gradeRoutes } from './grades.route.js';
 import { disciplinaRealizadaRoutes } from './disciplinasRealizadas.route.js';
 import { aulaRoutes } from './aulas.route.js';
 import { avaliacaoRoutes } from './avaliacoes.route.js';
+import { matriculaRoutes } from './matriculas.route.js';
 
 export const routes = (app: Express) => {
   app.use(usuarioRoutes);
@@ -15,4 +16,5 @@ export const routes = (app: Express) => {
   app.use(disciplinaRealizadaRoutes);
   app.use(aulaRoutes);
   app.use(avaliacaoRoutes);
+  app.use(matriculaRoutes);
 };
