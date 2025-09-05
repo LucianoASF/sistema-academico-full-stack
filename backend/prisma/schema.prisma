@@ -52,14 +52,14 @@ enum Status {
 }
 
 model matriculaCurso {
-  id         Int      @id @default(autoincrement())
-  dataInicio DateTime @map("data_inicio")
-  dataFim    DateTime @map("data_fim")
+  id         Int       @id @default(autoincrement())
+  dataInicio DateTime  @map("data_inicio")
+  dataFim    DateTime? @map("data_fim")
   status     Status
-  usuarioId  Int      @map("usuario_id")
-  cursoId    Int      @map("curso_id")
-  usuario    Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
-  curso      Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  usuarioId  Int       @map("usuario_id")
+  cursoId    Int       @map("curso_id")
+  usuario    Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  curso      Curso     @relation(fields: [cursoId], references: [id], onDelete: Cascade)
 
   @@map("matriculas_cursos")
 }
