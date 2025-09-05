@@ -24,7 +24,7 @@ export async function seedUsuarios() {
         cpf: '12345678901',
         dataNascimento: new Date('1995-05-15'),
         senha: await bcrypt.hash('senha123', 10),
-        role: 'usuario',
+        role: 'aluno',
       },
       {
         id: 3,
@@ -34,7 +34,7 @@ export async function seedUsuarios() {
         cpf: '23456789012',
         dataNascimento: new Date('1988-11-20'),
         senha: await bcrypt.hash('senha123', 10),
-        role: 'usuario',
+        role: 'aluno',
       },
       {
         id: 4,
@@ -54,7 +54,7 @@ export async function seedUsuarios() {
         cpf: '45678901234',
         dataNascimento: new Date('1990-07-07'),
         senha: await bcrypt.hash('senha123', 10),
-        role: 'usuario',
+        role: 'aluno',
       },
       {
         id: 6,
@@ -64,7 +64,7 @@ export async function seedUsuarios() {
         cpf: '56789012345',
         dataNascimento: new Date('1998-12-25'),
         senha: await bcrypt.hash('senha123', 10),
-        role: 'usuario',
+        role: 'aluno',
       },
       {
         id: 7,
@@ -84,7 +84,7 @@ export async function seedUsuarios() {
         cpf: '78901234567',
         dataNascimento: new Date('1993-04-30'),
         senha: await bcrypt.hash('senha123', 10),
-        role: 'usuario',
+        role: 'aluno',
       },
       {
         id: 9,
@@ -94,7 +94,7 @@ export async function seedUsuarios() {
         cpf: '89012345678',
         dataNascimento: new Date('1991-06-18'),
         senha: await bcrypt.hash('senha123', 10),
-        role: 'usuario',
+        role: 'aluno',
       },
       {
         id: 10,
