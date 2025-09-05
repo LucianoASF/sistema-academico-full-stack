@@ -15,7 +15,7 @@ export class MatriculaService {
 
   async create(data: Omit<Matricula, 'id'>): Promise<Matricula> {
     const usuario = await this.usuarioRepository.getById(data.alunoId);
-    if (usuario?.role !== 'usuario')
+    if (usuario?.role !== 'aluno')
       throw new UnprocessableEntityError(
         'O usuário informado deve ser um aluno',
       );
