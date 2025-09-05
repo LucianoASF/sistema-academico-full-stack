@@ -2,7 +2,10 @@ import { Router } from 'express';
 import { DisciplinaController } from '../controllers/disciplina.controller.js';
 import { celebrate, Segments } from 'celebrate';
 import asyncHandler from 'express-async-handler';
-import { disciplinaSchema } from '../schemas/disciplina.schema.js';
+import {
+  conectarGradeSchema,
+  disciplinaSchema,
+} from '../schemas/disciplina.schema.js';
 
 export const disciplinaRoutes = Router();
 
@@ -19,4 +22,13 @@ disciplinaRoutes.get(
 disciplinaRoutes.delete(
   '/disciplinas/:id',
   asyncHandler(DisciplinaController.delete),
+);
+disciplinaRoutes.patch(
+  '/disciplinas/:id/grades',
+  celebrate({ [Segments.BODY]: conectarGradeSchema }),
+  asyncHandler(DisciplinaController.conectarDisciplinaComGrade),
+);
+disciplinaRoutes.delete(
+  '/disciplinas/:id/grades/:gradeId',
+  asyncHandler(DisciplinaController.desconectarDisciplinaComGrade),
 );

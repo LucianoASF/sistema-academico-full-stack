@@ -26,4 +26,16 @@ export class DisciplinaService {
     await this.getById(id);
     await this.disciplinaRepository.delete(id);
   }
+  async conectarDisciplinaComGrade(disciplinaId: number, gradeId: number) {
+    await this.disciplinaRepository.conectarDisciplinaComGrade(
+      disciplinaId,
+      gradeId,
+    );
+  }
+  async desconectarDisciplinaComGrade(disciplinaId: number, gradeId: number) {
+    await this.disciplinaRepository.desconectarDisciplinaComGrade(
+      disciplinaId,
+      gradeId,
+    );
+  }
 }

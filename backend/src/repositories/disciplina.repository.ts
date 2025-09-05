@@ -17,4 +17,24 @@ export class DisciplinaRepository {
   async delete(id: number) {
     await this.prisma.disciplina.delete({ where: { id } });
   }
+  async conectarDisciplinaComGrade(disciplinaId: number, gradeId: number) {
+    await this.prisma.disciplina.update({
+      where: { id: disciplinaId },
+      data: {
+        grades: {
+          connect: { id: gradeId },
+        },
+      },
+    });
+  }
+  async desconectarDisciplinaComGrade(disciplinaId: number, gradeId: number) {
+    await this.prisma.disciplina.update({
+      where: { id: disciplinaId },
+      data: {
+        grades: {
+          disconnect: { id: gradeId },
+        },
+      },
+    });
+  }
 }

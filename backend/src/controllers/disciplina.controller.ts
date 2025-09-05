@@ -17,4 +17,18 @@ export class DisciplinaController {
     await new DisciplinaService().delete(Number(req.params.id));
     res.status(204).end();
   }
+  static async conectarDisciplinaComGrade(req: Request, res: Response) {
+    await new DisciplinaService().conectarDisciplinaComGrade(
+      Number(req.params.id),
+      Number(req.body.gradeId),
+    );
+    res.status(204).end();
+  }
+  static async desconectarDisciplinaComGrade(req: Request, res: Response) {
+    await new DisciplinaService().desconectarDisciplinaComGrade(
+      Number(req.params.id),
+      Number(req.params.gradeId),
+    );
+    res.status(204).end();
+  }
 }
