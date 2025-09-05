@@ -9,6 +9,7 @@ import { avaliacaoRoutes } from './avaliacoes.route.js';
 import { matriculaRoutes } from './matriculas.route.js';
 import { notaRoutes } from './notas.route.js';
 import { presencaRoutes } from './presencas.route.js';
+import { matriculaCursoRoutes } from './matriculasCursos.route.js';
 
 export const routes = (app: Express) => {
   app.use(usuarioRoutes);
@@ -21,4 +22,5 @@ export const routes = (app: Express) => {
   app.use(matriculaRoutes);
   app.use(notaRoutes);
   app.use(presencaRoutes);
+  app.use(matriculaCursoRoutes);
 };
