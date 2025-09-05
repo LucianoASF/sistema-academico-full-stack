@@ -44,10 +44,18 @@ model Curso {
   @@map("cursos")
 }
 
+enum Status {
+  cursando
+  finalizado
+  trancado
+  abandonado
+}
+
 model matriculaCurso {
   id         Int      @id @default(autoincrement())
   dataInicio DateTime @map("data_inicio")
   dataFim    DateTime @map("data_fim")
+  status     Status
   usuarioId  Int      @map("usuario_id")
   cursoId    Int      @map("curso_id")
   usuario    Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
