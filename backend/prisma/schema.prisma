@@ -30,7 +30,7 @@ model Usuario {
   role                Role
   DisciplinaRealizada DisciplinaRealizada[]
   Matricula           Matricula[]
-  matriculaCurso      matriculaCurso[]
+  matriculaCurso      MatriculaCurso[]
 
   @@map("usuarios")
 }
@@ -39,7 +39,7 @@ model Curso {
   id             Int              @id @default(autoincrement())
   nome           String           @db.VarChar(45)
   Grades         Grade[]
-  matriculaCurso matriculaCurso[]
+  matriculaCurso MatriculaCurso[]
 
   @@map("cursos")
 }
@@ -51,7 +51,7 @@ enum Status {
   abandonado
 }
 
-model matriculaCurso {
+model MatriculaCurso {
   id         Int       @id @default(autoincrement())
   dataInicio DateTime  @map("data_inicio")
   dataFim    DateTime? @map("data_fim")
