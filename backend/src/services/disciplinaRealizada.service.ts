@@ -3,6 +3,7 @@ import { DisciplinaRealizadaRepository } from '../repositories/disciplinaRealiza
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
+import { verificaSeDataFimEhMaiorQueDataInicio } from '../utils/verificaSeDataFimEhMaiorQueDataInicio.js';
 
 export class DisciplinaRealizadaService {
   private disciplinaRealizadaRepository: DisciplinaRealizadaRepository;
@@ -19,23 +20,12 @@ export class DisciplinaRealizadaService {
         'O usuário informado deve ser um professor',
       );
   }
-  private verificaSeDataFimEhMaiorQueDataInicio(
-    dataInicio: Date,
-    dataFim: Date | null,
-  ) {
-    if (dataFim) {
-      if (dataInicio >= dataFim)
-        throw new UnprocessableEntityError(
-          'A data de fim deve ser maior que a data de início',
-        );
-    }
-  }
 
   async create(
     data: Omit<DisciplinaRealizada, 'id'>,
   ): Promise<DisciplinaRealizada> {
     await this.verificaSeEhProfessor(data.professorId);
-    this.verificaSeDataFimEhMaiorQueDataInicio(data.dataInicio, data.dataFim);
+    verificaSeDataFimEhMaiorQueDataInicio(data.dataInicio, data.dataFim);
     return this.disciplinaRealizadaRepository.create(data);
   }
   async getAll(): Promise<DisciplinaRealizada[]> {
@@ -56,7 +46,7 @@ export class DisciplinaRealizadaService {
   ): Promise<DisciplinaRealizada> {
     await this.getById(id);
     await this.verificaSeEhProfessor(data.professorId);
-    this.verificaSeDataFimEhMaiorQueDataInicio(data.dataInicio, data.dataFim);
+    verificaSeDataFimEhMaiorQueDataInicio(data.dataInicio, data.dataFim);
     const disciplinaRealizada = await this.disciplinaRealizadaRepository.update(
       id,
       data,
