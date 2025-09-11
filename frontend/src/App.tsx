@@ -1,9 +1,11 @@
-import Login from './routes/Login';
+import Layout from './components/Layout';
+// import Login from './routes/Login';
 
 function App() {
   return (
     <>
-      <Login />
+      {/* <Login /> */}
+      <Layout />
     </>
   );
 }
