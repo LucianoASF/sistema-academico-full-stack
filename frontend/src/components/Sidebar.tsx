@@ -1,3 +1,5 @@
+import { NavLink } from 'react-router';
+
 interface SidebarProps {
   isOpen: boolean;
 }
@@ -11,15 +13,42 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
       <div className="font-titulo text-xl py-8 h-12 flex items-center justify-center">
         <h5>MENU</h5>
       </div>
-      <ul className="">
-        <li className="py-3 pl-3 bg-gray-600">
-          <a href="#">Disciplinas Em Curso</a>
+      <ul>
+        <li>
+          <NavLink
+            to="/disciplinas-em-curso"
+            className={({ isActive }) =>
+              `block py-3 pl-3 ${
+                isActive ? 'bg-gray-600' : 'hover:bg-gray-700'
+              }`
+            }
+          >
+            Disciplinas Em Curso
+          </NavLink>
         </li>
-        <li className="py-3 pl-3">
-          <a href="#">Atualizar Cadastro</a>
+        <li>
+          <NavLink
+            to="/atualizar-cadastro"
+            className={({ isActive }) =>
+              `block py-3 pl-3 ${
+                isActive ? 'bg-gray-600' : 'hover:bg-gray-700'
+              }`
+            }
+          >
+            Atualizar Cadastro
+          </NavLink>
         </li>
-        <li className="pt-3 pl-3">
-          <a href="#">Histórico</a>
+        <li>
+          <NavLink
+            to="/historico"
+            className={({ isActive }) =>
+              `block py-3 pl-3 ${
+                isActive ? 'bg-gray-600' : 'hover:bg-gray-700'
+              }`
+            }
+          >
+            Histórico
+          </NavLink>
         </li>
       </ul>
     </nav>
