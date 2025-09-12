@@ -26,6 +26,11 @@ export class UsuarioRepository {
       select: this.selectUsuarioSemSenha,
     });
   }
+  async getByEmailWithPassword(email: string): Promise<Usuario | null> {
+    return await this.prisma.usuario.findFirst({
+      where: { email },
+    });
+  }
   async delete(id: number) {
     await this.prisma.usuario.delete({ where: { id } });
   }
