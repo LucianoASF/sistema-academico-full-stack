@@ -9,7 +9,7 @@ interface CardProps {
 
 const Card = ({ titulo, paragrafo, nomeDoBotao, to }: CardProps) => {
   return (
-    <div className="border m-4 p-4 rounded-lg border-gray-900 bg-gray-100">
+    <div className="border m-4 p-4 rounded-lg border-gray-900 bg-gray-100 hover:shadow-2xl">
       <h3 className="font-titulo p-4 text-gray-900">{titulo}</h3>
       <div className="flex justify-between items-center">
         <p className="font-corpo pl-4">{paragrafo}</p>
