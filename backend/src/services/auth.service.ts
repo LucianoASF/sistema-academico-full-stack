@@ -19,7 +19,7 @@ export class AuthService {
     if (!senhaCorreta) throw new UnauthorizedError();
 
     const token = jwt.sign(
-      { id: usuario.id, nome: usuario.nome, role: usuario.role },
+      { id: usuario.id, role: usuario.role },
       process.env.SECRET!,
       {
         expiresIn: 86400,
