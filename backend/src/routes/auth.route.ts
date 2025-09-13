@@ -11,3 +11,4 @@ authRoutes.post(
   celebrate({ [Segments.BODY]: loginSchema }),
   asyncHandler(AuthController.login),
 );
+authRoutes.get('/auth/logout', asyncHandler(AuthController.logout));
