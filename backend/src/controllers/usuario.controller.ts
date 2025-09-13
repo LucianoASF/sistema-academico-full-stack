@@ -29,4 +29,7 @@ export class UsuarioController {
         ),
       );
   }
+  static perfilDecodificadoJwt(req: Request, res: Response) {
+    res.json(new UsuarioService().perfilDecodificadoJwt(req.cookies.token));
+  }
 }

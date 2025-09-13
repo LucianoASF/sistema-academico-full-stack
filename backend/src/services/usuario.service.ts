@@ -1,9 +1,11 @@
 import type { Usuario } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { EmailAlreadyExistsError } from '../errors/email-already-exists.error.js';
 import { CpfAlreadyExistsError } from '../errors/cpf-already-exists.error.js';
+import { UnauthorizedError } from '../errors/unauthorized.error.js';
 
 export class UsuarioService {
   private usuarioRepository: UsuarioRepository;
@@ -59,5 +61,15 @@ export class UsuarioService {
   async delete(id: number) {
     await this.getById(id);
     await this.usuarioRepository.delete(id);
+  }
+
+  perfilDecodificadoJwt(token: string) {
+    if (!token) throw new UnauthorizedError('Não autenticado!');
+    try {
+      const dados = jwt.verify(token, process.env.SECRET!);
+      return dados;
+    } catch (error) {
+      throw new UnauthorizedError('Token invádio!');
+    }
   }
 }

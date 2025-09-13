@@ -15,6 +15,10 @@ usuarioRoutes.post(
   celebrate({ [Segments.BODY]: novoUsuarioSchema }),
   asyncHandler(UsuarioController.create),
 );
+usuarioRoutes.get(
+  '/usuarios/perfil',
+  asyncHandler(UsuarioController.perfilDecodificadoJwt),
+);
 usuarioRoutes.get('/usuarios/:id', asyncHandler(UsuarioController.getById));
 usuarioRoutes.delete('/usuarios/:id', asyncHandler(UsuarioController.delete));
 usuarioRoutes.patch(

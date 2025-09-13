@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import type { Usuario } from '@prisma/client';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
-import { NotFoundError } from '../errors/not-found.error.js';
+import { UnauthorizedError } from '../errors/unauthorized.error.js';
 
 export class AuthService {
   private usuarioRepository: UsuarioRepository;
@@ -14,9 +14,9 @@ export class AuthService {
     const usuario = await this.usuarioRepository.getByEmailWithPassword(
       data.email,
     );
-    if (!usuario) throw new NotFoundError('Usuário e/ou senha incorretos');
+    if (!usuario) throw new UnauthorizedError();
     const senhaCorreta = await bcrypt.compare(data.senha, usuario.senha);
-    if (!senhaCorreta) throw new NotFoundError('Usuário e/ou senha incorretos');
+    if (!senhaCorreta) throw new UnauthorizedError();
 
     const token = jwt.sign(
       { id: usuario.id, nome: usuario.nome, role: usuario.role },
