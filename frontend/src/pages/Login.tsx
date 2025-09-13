@@ -1,3 +1,4 @@
+import axios from 'axios';
 import salaDeAula from '../assets/sala_de_aula.jpg';
 import logo from '../assets/logo.png';
 import Input from '../components/Input';
@@ -7,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ErrorMessage from '../components/ErrorMessage';
 import TituloPrincipal from '../components/TituloPrincipal';
+import api from '../api/api';
+import { useAuthContext } from '../contexts/useAuthContext';
 
 const loginSchema = z.object({
   email: z
@@ -23,6 +26,7 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
+  const { login } = useAuthContext();
   const {
     register,
     handleSubmit,
@@ -32,9 +36,19 @@ const Login = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: LoginFormInputs) => {
+  const onSubmit = async (data: LoginFormInputs) => {
     console.log('Dados enviados:', data);
-    // Aqui você pode chamar sua API de login
+
+    try {
+      await api.post('/auth/login', data);
+      login();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data?.erro);
+      } else {
+        console.error(error);
+      }
+    }
   };
   return (
     <div className="flex h-screen bg-gray-50 ">
