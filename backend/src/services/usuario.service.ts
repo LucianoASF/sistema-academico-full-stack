@@ -69,7 +69,7 @@ export class UsuarioService {
       const dados = jwt.verify(token, process.env.SECRET!);
       return dados;
     } catch (error) {
-      throw new UnauthorizedError('Token invádio!');
+      throw new UnauthorizedError('Token inválido!');
     }
   }
 }
