@@ -5,6 +5,7 @@ export interface AuthContextProps {
   setUser: (user: { id: number; role: string; nome?: string } | null) => void;
   login: () => void;
   logout: () => void;
+  loading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -12,4 +13,5 @@ export const AuthContext = createContext<AuthContextProps>({
   setUser: () => {},
   login: () => {},
   logout: () => {},
+  loading: true,
 });

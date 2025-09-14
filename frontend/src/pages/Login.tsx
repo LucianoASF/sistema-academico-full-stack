@@ -10,6 +10,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import TituloPrincipal from '../components/TituloPrincipal';
 import api from '../api/api';
 import { useAuthContext } from '../contexts/useAuthContext';
+import { Navigate } from 'react-router';
 
 const loginSchema = z.object({
   email: z
@@ -26,7 +27,8 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  const { login } = useAuthContext();
+  const { login, user } = useAuthContext();
+
   const {
     register,
     handleSubmit,
@@ -50,6 +52,9 @@ const Login = () => {
       }
     }
   };
+  if (user) {
+    return <Navigate to="/" />;
+  }
   return (
     <div className="flex h-screen bg-gray-50 ">
       <img

@@ -13,6 +13,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     role: string;
     nome?: string;
   } | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const login = async () => {
     try {
@@ -53,13 +54,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // Se der erro, significa que não está autenticado
         setUser(null);
       }
+      setLoading(false);
     };
 
     checkAuth();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
