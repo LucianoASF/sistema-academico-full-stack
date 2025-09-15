@@ -1,10 +1,17 @@
-import { NavLink } from 'react-router';
+import { useAuthContext } from '../contexts/useAuthContext';
+import {
+  ClipboardClockIcon,
+  GraduationCapIcon,
+  PencilIcon,
+} from 'lucide-react';
+import Navlink from './Navlink';
 
 interface SidebarProps {
   isOpen: boolean;
 }
 
 const Sidebar = ({ isOpen }: SidebarProps) => {
+  const { user } = useAuthContext();
   const className = isOpen && 'translate-x-0';
   return (
     <nav
@@ -14,42 +21,26 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
         <h5>MENU</h5>
       </div>
       <ul>
-        <li>
-          <NavLink
-            to="/disciplinas-em-curso"
-            className={({ isActive }) =>
-              `block py-3 pl-3 ${
-                isActive ? 'bg-gray-600' : 'hover:bg-gray-700'
-              }`
-            }
-          >
-            Disciplinas Em Curso
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/atualizar-cadastro"
-            className={({ isActive }) =>
-              `block py-3 pl-3 ${
-                isActive ? 'bg-gray-600' : 'hover:bg-gray-700'
-              }`
-            }
-          >
-            Atualizar Cadastro
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/historico"
-            className={({ isActive }) =>
-              `block py-3 pl-3 ${
-                isActive ? 'bg-gray-600' : 'hover:bg-gray-700'
-              }`
-            }
-          >
-            Histórico
-          </NavLink>
-        </li>
+        {user?.role === 'administrador' && (
+          <>
+            <li>
+              <Navlink to="/disciplinas-em-curso">
+                <GraduationCapIcon /> Disciplinas Em Curso
+              </Navlink>
+            </li>
+            <li>
+              <Navlink to="/atualizar-cadastro">
+                <PencilIcon />
+                Atualizar Cadastro
+              </Navlink>
+            </li>
+            <li>
+              <Navlink to="/historico">
+                <ClipboardClockIcon /> Histórico
+              </Navlink>
+            </li>
+          </>
+        )}
       </ul>
     </nav>
   );
