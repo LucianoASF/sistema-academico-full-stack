@@ -5,6 +5,7 @@ import NotFound from './pages/NotFound';
 import { AuthProvider } from './contexts/AuthProvider';
 import PrivateRoute from './routes/PrivateRoute';
 import NavigationSetter from './helpers/Setters';
+import DisciplinasEmCurso from './pages/DisciplinasEmCurso';
 
 function App() {
   return (
@@ -18,6 +19,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/disciplinas-em-curso"
+            element={
+              <PrivateRoute roles={['aluno']}>
+                <DisciplinasEmCurso />
               </PrivateRoute>
             }
           />
