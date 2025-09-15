@@ -2,6 +2,7 @@ import { useAuthContext } from '../contexts/useAuthContext';
 import {
   ClipboardClockIcon,
   GraduationCapIcon,
+  LogOutIcon,
   PencilIcon,
 } from 'lucide-react';
 import Navlink from './Navlink';
@@ -11,7 +12,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ isOpen }: SidebarProps) => {
-  const { user } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const className = isOpen && 'translate-x-0';
   return (
     <nav
@@ -21,7 +22,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
         <h5>MENU</h5>
       </div>
       <ul>
-        {user?.role === 'administrador' && (
+        {user?.role === 'aluno' && (
           <>
             <li>
               <Navlink to="/disciplinas-em-curso">
@@ -41,6 +42,14 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
             </li>
           </>
         )}
+        <li>
+          <button
+            className="flex items-center py-3 pl-3 gap-2 text-sm md:text-xl hover:bg-gray-700 w-full cursor-pointer"
+            onClick={logout}
+          >
+            <LogOutIcon /> Sair
+          </button>
+        </li>
       </ul>
     </nav>
   );
