@@ -17,8 +17,8 @@ api.interceptors.response.use(
     ) {
       // Ação global para 401
       console.log('Usuário não autenticado. Redirecionando para login...');
-      doNavigate('/login');
       doSetUser(null);
+      doNavigate('/login');
     }
     return Promise.reject(error);
   },
