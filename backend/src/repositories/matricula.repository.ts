@@ -23,7 +23,7 @@ export class MatriculaRepository {
   }
   async update(
     id: number,
-    data: Pick<Matricula, 'presencaFinal' | 'notaFinal'>,
+    data: Pick<Matricula, 'presencaFinal' | 'notaFinal' | 'status'>,
   ): Promise<Matricula | null> {
     return this.prisma.matricula.update({ where: { id }, data });
   }

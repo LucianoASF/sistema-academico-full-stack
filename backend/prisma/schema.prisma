@@ -36,12 +36,32 @@ model Usuario {
 }
 
 model Curso {
-  id             Int              @id @default(autoincrement())
-  nome           String           @db.VarChar(45)
-  Grades         Grade[]
-  matriculaCurso MatriculaCurso[]
+  id     Int     @id @default(autoincrement())
+  nome   String  @db.VarChar(45)
+  Grades Grade[]
 
   @@map("cursos")
+}
+
+model Disciplina {
+  id                  Int                   @id @default(autoincrement())
+  nome                String                @db.VarChar(45)
+  quantidadeAulas     Int                   @map("quantidade_aulas")
+  grades              Grade[]
+  DisciplinaRealizada DisciplinaRealizada[]
+
+  @@map("disciplinas")
+}
+
+model Grade {
+  id             Int              @id @default(autoincrement())
+  versao         Int
+  cursoId        Int              @map("curso_id")
+  curso          Curso            @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  disciplinas    Disciplina[]
+  matriculaCurso MatriculaCurso[]
+
+  @@map("grades")
 }
 
 enum Status {
@@ -57,31 +77,11 @@ model MatriculaCurso {
   dataFim    DateTime? @map("data_fim")
   status     Status
   alunoId    Int       @map("aluno_id")
-  cursoId    Int       @map("curso_id")
+  gradeId    Int       @map("grade_id")
   usuario    Usuario   @relation(fields: [alunoId], references: [id], onDelete: Cascade)
-  curso      Curso     @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+  grade      Grade     @relation(fields: [gradeId], references: [id], onDelete: Cascade)
 
   @@map("matriculas_cursos")
-}
-
-model Disciplina {
-  id                  Int                   @id @default(autoincrement())
-  nome                String                @db.VarChar(45)
-  quantidadeAulas     Int                   @map("quantidade_aulas")
-  grades              Grade[]
-  DisciplinaRealizada DisciplinaRealizada[]
-
-  @@map("disciplinas")
-}
-
-model Grade {
-  id          Int          @id @default(autoincrement())
-  versao      Int
-  cursoId     Int          @map("curso_id")
-  curso       Curso        @relation(fields: [cursoId], references: [id], onDelete: Cascade)
-  disciplinas Disciplina[]
-
-  @@map("grades")
 }
 
 model DisciplinaRealizada {
@@ -101,7 +101,8 @@ model DisciplinaRealizada {
 
 model Aula {
   id                    Int                 @id @default(autoincrement())
-  descricao             String              @db.VarChar(100)
+  titulo                String              @db.VarChar(100)
+  descricao             String              @db.VarChar(255)
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
   disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id], onDelete: Cascade)
   presenca              Presenca[]
@@ -113,6 +114,7 @@ model Avaliacao {
   id                    Int                 @id @default(autoincrement())
   nome                  String              @db.VarChar(60)
   valor                 Int
+  data                  DateTime
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
   disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id], onDelete: Cascade)
   nota                  Nota[]
@@ -120,10 +122,18 @@ model Avaliacao {
   @@map("avaliacoes")
 }
 
+enum StatusMatricula {
+  cursando
+  aprovado
+  reprovado
+  abandonado
+}
+
 model Matricula {
   id                    Int                 @id @default(autoincrement())
   notaFinal             Int?                @map("nota_final")
   presencaFinal         Int?                @map("presenca_final")
+  status                StatusMatricula
   alunoId               Int                 @map("aluno_id")
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
   usuario               Usuario             @relation(fields: [alunoId], references: [id], onDelete: Cascade)

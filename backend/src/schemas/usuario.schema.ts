@@ -8,7 +8,10 @@ export const novoUsuarioSchema = Joi.object().keys({
   cpf: Joi.string().trim().length(11).required(),
   dataNascimento: Joi.date().required(),
   senha: Joi.string().trim().min(5).max(60).required(),
-  role: Joi.string().trim().required(),
+  role: Joi.string()
+    .trim()
+    .valid('aluno', 'professor', 'administrador')
+    .required(),
 });
 export const updateUsuarioSchema = Joi.object().keys({
   nome: Joi.string().trim().min(5).max(100).required(),
@@ -16,7 +19,6 @@ export const updateUsuarioSchema = Joi.object().keys({
   telefone: Joi.string().trim().regex(brasilPhoneRegex).length(11).required(),
   cpf: Joi.string().trim().length(11).required(),
   dataNascimento: Joi.date().required(),
-  role: Joi.string().trim().required(),
 });
 
 export const senhaSchema = Joi.object().keys({

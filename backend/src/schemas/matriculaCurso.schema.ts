@@ -7,7 +7,7 @@ export const novoMatriculaCursoSchema = Joi.object().keys({
     .valid('cursando', 'finalizado', 'trancado', 'abandonado')
     .required(),
   alunoId: Joi.number().integer().required(),
-  cursoId: Joi.number().integer().required(),
+  gradeId: Joi.number().integer().required(),
 });
 
 export const updateMatriculaCursoSchema = Joi.object().keys({

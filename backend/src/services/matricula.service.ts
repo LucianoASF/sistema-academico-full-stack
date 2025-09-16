@@ -46,7 +46,7 @@ export class MatriculaService {
 
   async update(
     id: number,
-    data: Pick<Matricula, 'presencaFinal' | 'notaFinal'>,
+    data: Pick<Matricula, 'presencaFinal' | 'notaFinal' | 'status'>,
   ): Promise<Matricula> {
     await this.getById(id);
     const matricula = await this.matriculaRepository.update(id, data);
