@@ -57,4 +57,21 @@ export async function seedGrades() {
     ],
     skipDuplicates: true, // evita duplicar ao rodar várias vezes
   });
+  await prisma.grade.update({
+    where: { id: 1 },
+    data: {
+      disciplinas: {
+        connect: [
+          { id: 1 },
+          { id: 2 },
+          { id: 3 },
+          { id: 4 },
+          { id: 5 },
+          { id: 6 },
+          { id: 7 },
+          { id: 8 },
+        ],
+      },
+    },
+  });
 }
