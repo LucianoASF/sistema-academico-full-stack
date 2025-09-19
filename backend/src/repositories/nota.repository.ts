@@ -11,7 +11,10 @@ export class NotaRepository {
     });
   }
   async getAllByMatricula(matriculaId: number): Promise<Nota[]> {
-    return this.prisma.nota.findMany({ where: { matriculaId } });
+    return this.prisma.nota.findMany({
+      where: { matriculaId },
+      include: { avaliacao: true },
+    });
   }
 
   async update(
@@ -20,7 +23,6 @@ export class NotaRepository {
   ): Promise<Nota | null> {
     return this.prisma.nota.update({ where: { id }, data });
   }
-
   async getById(id: number): Promise<Nota | null> {
     return this.prisma.nota.findFirst({ where: { id } });
   }

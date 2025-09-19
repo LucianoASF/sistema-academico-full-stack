@@ -31,7 +31,7 @@ export async function seedNotas() {
       },
       {
         id: 5,
-        valorObtido: 22,
+        valorObtido: 15,
         matriculaId: 1,
         avaliacaoId: 5,
       },

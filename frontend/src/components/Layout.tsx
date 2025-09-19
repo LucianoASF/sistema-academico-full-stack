@@ -37,7 +37,7 @@ const Layout = ({ children }: LayoutProps) => {
       {isSidebarOpen && breakpoint !== 'lg' && (
         <div
           onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 bg-black/60 z-40"
+          className="fixed inset-0 bg-black/60 z-30"
         />
       )}
     </div>

@@ -37,7 +37,7 @@ export async function seedAvaliacoes() {
         id: 5,
         nome: 'Prova III',
         data: new Date('2025-08-10'),
-        valor: 30,
+        valor: 20,
         disciplinaRealizadaId: 3,
       },
     ],

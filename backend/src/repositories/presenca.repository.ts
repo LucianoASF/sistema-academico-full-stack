@@ -11,7 +11,10 @@ export class PresencaRepository {
     });
   }
   async getAllByMatricula(matriculaId: number): Promise<Presenca[]> {
-    return this.prisma.presenca.findMany({ where: { matriculaId } });
+    return this.prisma.presenca.findMany({
+      where: { matriculaId },
+      include: { aula: true },
+    });
   }
   async getAllByAula(aulaId: number): Promise<Presenca[]> {
     return this.prisma.presenca.findMany({ where: { aulaId } });

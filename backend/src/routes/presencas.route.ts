@@ -15,7 +15,7 @@ presencaRoutes.post(
   asyncHandler(PresencaController.create),
 );
 presencaRoutes.get(
-  '/presencas/matriculas/:matriculaId',
+  '/presencas/matriculas/:matriculaId/usuarios/:usuarioId',
   asyncHandler(PresencaController.getAllByMatricula),
 );
 presencaRoutes.get(

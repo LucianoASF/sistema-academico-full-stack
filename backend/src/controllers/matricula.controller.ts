@@ -14,6 +14,15 @@ export class MatriculaController {
         ),
       );
   }
+  static async getMatriculasCursandoByAluno(req: Request, res: Response) {
+    res
+      .status(200)
+      .json(
+        await new MatriculaService().getMatriculasCursandoByAluno(
+          Number(req.params.alunoId),
+        ),
+      );
+  }
   static async getById(req: Request, res: Response) {
     res
       .status(200)

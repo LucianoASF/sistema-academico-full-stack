@@ -3,6 +3,7 @@ import { MatriculaRepository } from '../repositories/matricula.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
+import type { getMatriculasCursandoByAlunoType } from '../types/getMatriculasCursandoByAluno.js';
 
 export class MatriculaService {
   private matriculaRepository: MatriculaRepository;
@@ -42,6 +43,11 @@ export class MatriculaService {
     const matricula = await this.matriculaRepository.getById(id);
     if (!matricula) throw new NotFoundError('Matricula não encontrada!');
     return matricula;
+  }
+  async getMatriculasCursandoByAluno(
+    alunoId: number,
+  ): Promise<getMatriculasCursandoByAlunoType[]> {
+    return this.matriculaRepository.getMatriculasCursandoByAluno(alunoId);
   }
 
   async update(

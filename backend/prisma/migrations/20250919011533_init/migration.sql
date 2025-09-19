@@ -68,6 +68,7 @@ CREATE TABLE `aulas` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `titulo` VARCHAR(100) NOT NULL,
     `descricao` VARCHAR(255) NOT NULL,
+    `data` DATETIME(3) NOT NULL,
     `disciplina_realizada_id` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)

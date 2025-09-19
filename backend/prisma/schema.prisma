@@ -103,6 +103,7 @@ model Aula {
   id                    Int                 @id @default(autoincrement())
   titulo                String              @db.VarChar(100)
   descricao             String              @db.VarChar(255)
+  data                  DateTime
   disciplinaRealizadaId Int                 @map("disciplina_realizada_id")
   disciplinaRealizada   DisciplinaRealizada @relation(fields: [disciplinaRealizadaId], references: [id], onDelete: Cascade)
   presenca              Presenca[]

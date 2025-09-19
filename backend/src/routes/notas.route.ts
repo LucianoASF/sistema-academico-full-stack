@@ -12,7 +12,7 @@ notaRoutes.post(
   asyncHandler(NotaController.create),
 );
 notaRoutes.get(
-  '/notas/matriculas/:matriculaId',
+  '/notas/matriculas/:matriculaId/usuarios/:usuarioId',
   asyncHandler(NotaController.getAllByMatricula),
 );
 notaRoutes.get('/notas/:id', asyncHandler(NotaController.getById));

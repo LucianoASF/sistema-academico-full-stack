@@ -1,4 +1,5 @@
 import { PrismaClient, type Matricula } from '@prisma/client';
+import type { getMatriculasCursandoByAlunoType } from '../types/getMatriculasCursandoByAluno.js';
 
 export class MatriculaRepository {
   private prisma: PrismaClient;
@@ -17,6 +18,33 @@ export class MatriculaRepository {
   }
   async getById(id: number): Promise<Matricula | null> {
     return this.prisma.matricula.findFirst({ where: { id } });
+  }
+  async getMatriculasCursandoByAluno(
+    alunoId: number,
+  ): Promise<getMatriculasCursandoByAlunoType[]> {
+    const result = await this.prisma.matricula.findMany({
+      where: { alunoId, status: 'cursando' },
+      select: {
+        id: true,
+        alunoId: true,
+        disciplinaRealizadaId: true,
+        disciplinaRealizada: {
+          select: {
+            disciplina: { select: { nome: true } },
+            usuario: { select: { nome: true } }, // ainda é "usuario"
+          },
+        },
+      },
+    });
+
+    // renomeia o campo usuario -> professor
+    return result.map((matricula) => ({
+      ...matricula,
+      disciplinaRealizada: {
+        disciplina: matricula.disciplinaRealizada.disciplina,
+        professor: matricula.disciplinaRealizada.usuario, // novo campo
+      },
+    }));
   }
   async delete(id: number) {
     await this.prisma.matricula.delete({ where: { id } });

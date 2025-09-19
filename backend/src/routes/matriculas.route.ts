@@ -19,6 +19,10 @@ matriculaRoutes.get(
   asyncHandler(MatriculaController.getAllByDisciplinaRealizada),
 );
 matriculaRoutes.get(
+  '/matriculas/usuarios/:alunoId/cursando',
+  asyncHandler(MatriculaController.getMatriculasCursandoByAluno),
+);
+matriculaRoutes.get(
   '/matriculas/:id',
   asyncHandler(MatriculaController.getById),
 );
