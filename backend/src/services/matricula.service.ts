@@ -1,9 +1,10 @@
-import type { Matricula } from '@prisma/client';
+import type { Matricula, Usuario } from '@prisma/client';
 import { MatriculaRepository } from '../repositories/matricula.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
 import type { getMatriculasCursandoByAlunoType } from '../types/getMatriculasCursandoByAluno.js';
+import { ForbiddenError } from '../errors/forbidden.error.js';
 
 export class MatriculaService {
   private matriculaRepository: MatriculaRepository;
@@ -46,7 +47,10 @@ export class MatriculaService {
   }
   async getMatriculasCursandoByAluno(
     alunoId: number,
+    usuario: Pick<Usuario, 'id' | 'role'>,
   ): Promise<getMatriculasCursandoByAlunoType[]> {
+    if (alunoId !== usuario.id && usuario.role !== 'administrador')
+      throw new ForbiddenError();
     return this.matriculaRepository.getMatriculasCursandoByAluno(alunoId);
   }
 

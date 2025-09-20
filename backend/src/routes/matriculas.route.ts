@@ -6,6 +6,7 @@ import {
   novaMatriculaSchema,
   updateMatriculaSchema,
 } from '../schemas/matricula.schema.js';
+import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
 
 export const matriculaRoutes = Router();
 
@@ -20,6 +21,7 @@ matriculaRoutes.get(
 );
 matriculaRoutes.get(
   '/matriculas/usuarios/:alunoId/cursando',
+  AuthorizationMiddleware('aluno'),
   asyncHandler(MatriculaController.getMatriculasCursandoByAluno),
 );
 matriculaRoutes.get(

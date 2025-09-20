@@ -10,9 +10,15 @@ export class PresencaRepository {
       data: presenca,
     });
   }
-  async getAllByMatricula(matriculaId: number): Promise<Presenca[]> {
+  async getAllByMatricula(
+    matriculaId: number,
+    usuarioId: number,
+    isAluno = false,
+  ): Promise<Presenca[]> {
     return this.prisma.presenca.findMany({
-      where: { matriculaId },
+      where: isAluno
+        ? { matriculaId, matricula: { alunoId: usuarioId } }
+        : { matriculaId },
       include: { aula: true },
     });
   }

@@ -10,9 +10,15 @@ export class NotaRepository {
       data: nota,
     });
   }
-  async getAllByMatricula(matriculaId: number): Promise<Nota[]> {
+  async getAllByMatricula(
+    matriculaId: number,
+    idUsuario: number,
+    isAluno = false,
+  ): Promise<Nota[]> {
     return this.prisma.nota.findMany({
-      where: { matriculaId },
+      where: isAluno
+        ? { matriculaId, matricula: { alunoId: idUsuario } }
+        : { matriculaId },
       include: { avaliacao: true },
     });
   }

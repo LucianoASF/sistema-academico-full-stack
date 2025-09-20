@@ -33,9 +33,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
     const fetchNotas = async () => {
       try {
         const dados = (
-          await api.get<typeNotas[]>(
-            `/notas/matriculas/${matriculaId}/usuarios/${user?.id}`,
-          )
+          await api.get<typeNotas[]>(`/notas/matriculas/${matriculaId}`)
         ).data;
         const dadosOrdenados = dados.sort(
           (a, b) =>
@@ -80,9 +78,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
     const fetchPresencas = async () => {
       try {
         const dados = (
-          await api.get<typePresencas[]>(
-            `/presencas/matriculas/${matriculaId}/usuarios/${user?.id}`,
-          )
+          await api.get<typePresencas[]>(`/presencas/matriculas/${matriculaId}`)
         ).data;
         const dadosOrdenados = dados.sort(
           (a, b) =>

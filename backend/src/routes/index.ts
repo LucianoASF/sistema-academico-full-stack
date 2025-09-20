@@ -11,8 +11,10 @@ import { notaRoutes } from './notas.route.js';
 import { presencaRoutes } from './presencas.route.js';
 import { matriculaCursoRoutes } from './matriculasCursos.route.js';
 import { authRoutes } from './auth.route.js';
+import { AuthenticationMiddleware } from '../middlewares/authentication.middleware.js';
 
 export const routes = (app: Express) => {
+  app.use(AuthenticationMiddleware);
   app.use(usuarioRoutes);
   app.use(cursoRoutes);
   app.use(disciplinaRoutes);

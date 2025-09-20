@@ -20,6 +20,7 @@ export class MatriculaController {
       .json(
         await new MatriculaService().getMatriculasCursandoByAluno(
           Number(req.params.alunoId),
+          { id: req.user.id, role: req.user.role },
         ),
       );
   }

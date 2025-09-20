@@ -11,6 +11,7 @@ export class NotaController {
       .json(
         await new NotaService().getAllByMatricula(
           Number(req.params.matriculaId),
+          { id: req.user.id, role: req.user.role },
         ),
       );
   }

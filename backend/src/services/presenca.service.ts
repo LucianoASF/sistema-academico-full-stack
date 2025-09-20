@@ -1,4 +1,4 @@
-import type { Presenca } from '@prisma/client';
+import type { Presenca, Usuario } from '@prisma/client';
 import { PresencaRepository } from '../repositories/presenca.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
@@ -22,8 +22,18 @@ export class PresencaService {
       );
     return this.presencaRepository.create(data);
   }
-  async getAllByMatricula(matriculaId: number): Promise<Presenca[]> {
-    return this.presencaRepository.getAllByMatricula(matriculaId);
+  async getAllByMatricula(
+    matriculaId: number,
+    usuario: Pick<Usuario, 'id' | 'role'>,
+  ): Promise<Presenca[]> {
+    if (usuario.role === 'aluno') {
+      return this.presencaRepository.getAllByMatricula(
+        matriculaId,
+        usuario.id,
+        true,
+      );
+    }
+    return this.presencaRepository.getAllByMatricula(matriculaId, usuario.id);
   }
   async getAllByAula(aulaId: number): Promise<Presenca[]> {
     return this.presencaRepository.getAllByAula(aulaId);

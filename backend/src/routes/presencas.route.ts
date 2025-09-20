@@ -6,6 +6,7 @@ import {
   novaPresencaSchema,
   updatePresencaSchema,
 } from '../schemas/presenca.schema.js';
+import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
 
 export const presencaRoutes = Router();
 
@@ -15,7 +16,8 @@ presencaRoutes.post(
   asyncHandler(PresencaController.create),
 );
 presencaRoutes.get(
-  '/presencas/matriculas/:matriculaId/usuarios/:usuarioId',
+  '/presencas/matriculas/:matriculaId',
+  AuthorizationMiddleware('aluno'),
   asyncHandler(PresencaController.getAllByMatricula),
 );
 presencaRoutes.get(

@@ -3,6 +3,7 @@ import { NotaController } from '../controllers/nota.controller.js';
 import { celebrate, Segments } from 'celebrate';
 import asyncHandler from 'express-async-handler';
 import { novaNotaSchema, updateNotaSchema } from '../schemas/nota.schema.js';
+import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
 
 export const notaRoutes = Router();
 
@@ -12,7 +13,8 @@ notaRoutes.post(
   asyncHandler(NotaController.create),
 );
 notaRoutes.get(
-  '/notas/matriculas/:matriculaId/usuarios/:usuarioId',
+  '/notas/matriculas/:matriculaId',
+  AuthorizationMiddleware('aluno'),
   asyncHandler(NotaController.getAllByMatricula),
 );
 notaRoutes.get('/notas/:id', asyncHandler(NotaController.getById));

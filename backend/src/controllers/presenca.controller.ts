@@ -11,6 +11,7 @@ export class PresencaController {
       .json(
         await new PresencaService().getAllByMatricula(
           Number(req.params.matriculaId),
+          { id: req.user.id, role: req.user.role },
         ),
       );
   }
