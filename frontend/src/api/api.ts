@@ -5,6 +5,9 @@ import { doSetUser } from '../helpers/setUserHelper';
 const api = axios.create({
   baseURL: 'http://localhost:3000', // sua URL base
   withCredentials: true, // se precisar enviar cookies
+  // headers: {
+  //   'Content-Type': 'application/json', // cabeçalho adicionado
+  // },
 });
 
 api.interceptors.response.use(

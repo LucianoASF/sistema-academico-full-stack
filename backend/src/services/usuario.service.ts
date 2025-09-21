@@ -6,6 +6,7 @@ import { NotFoundError } from '../errors/not-found.error.js';
 import { EmailAlreadyExistsError } from '../errors/email-already-exists.error.js';
 import { CpfAlreadyExistsError } from '../errors/cpf-already-exists.error.js';
 import { UnauthorizedError } from '../errors/unauthorized.error.js';
+import { ForbiddenError } from '../errors/forbidden.error.js';
 
 export class UsuarioService {
   private usuarioRepository: UsuarioRepository;
@@ -27,7 +28,12 @@ export class UsuarioService {
     });
   }
 
-  async getById(id: number): Promise<Omit<Usuario, 'senha'> | null> {
+  async getById(
+    id: number,
+    userReq: Pick<Usuario, 'id' | 'role'>,
+  ): Promise<Omit<Usuario, 'senha'> | null> {
+    if (id !== userReq.id && userReq.role !== 'administrador')
+      throw new ForbiddenError();
     const usuario = await this.usuarioRepository.getById(id);
     if (!usuario) throw new NotFoundError('Usuário não encontrado!');
     return usuario;
@@ -37,8 +43,12 @@ export class UsuarioService {
   async update(
     id: number,
     data: Omit<Usuario, 'id' | 'senha'>,
+    userReq: Pick<Usuario, 'id' | 'role'>,
   ): Promise<Omit<Usuario, 'senha'>> {
-    await this.getById(id);
+    if (id !== userReq.id && userReq.role !== 'administrador')
+      throw new ForbiddenError();
+    const usuario = await this.usuarioRepository.getById(id);
+    if (!usuario) throw new NotFoundError('Usuário não encontrado!');
     const usuarioByEmail = await this.usuarioRepository.findByEmail(data.email);
     if (usuarioByEmail && usuarioByEmail.id !== id)
       throw new EmailAlreadyExistsError();
@@ -53,13 +63,15 @@ export class UsuarioService {
     id: number,
     { senha }: Pick<Usuario, 'senha'>,
   ): Promise<Omit<Usuario, 'senha'>> {
-    await this.getById(id);
+    const usuario = await this.usuarioRepository.getById(id);
+    if (!usuario) throw new NotFoundError('Usuário não encontrado!');
     const senhaCrypto = await bcrypt.hash(senha, 10);
     return this.usuarioRepository.updatePassword(id, senhaCrypto);
   }
 
   async delete(id: number) {
-    await this.getById(id);
+    const usuario = await this.usuarioRepository.getById(id);
+    if (!usuario) throw new NotFoundError('Usuário não encontrado!');
     await this.usuarioRepository.delete(id);
   }
 

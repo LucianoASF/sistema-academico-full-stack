@@ -6,6 +6,8 @@ import { AuthProvider } from './contexts/AuthProvider';
 import PrivateRoute from './routes/PrivateRoute';
 import NavigationSetter from './helpers/Setters';
 import DisciplinasEmCurso from './pages/DisciplinasEmCurso';
+import AtualizarCadastro from './pages/AtualizarCadastro';
+import { Bounce, ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -30,8 +32,29 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route
+            path="/atualizar-cadastro"
+            element={
+              <PrivateRoute roles={['aluno']}>
+                <AtualizarCadastro />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          transition={Bounce}
+        />
       </BrowserRouter>
     </AuthProvider>
   );
