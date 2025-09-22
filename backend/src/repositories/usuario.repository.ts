@@ -44,16 +44,7 @@ export class UsuarioRepository {
       select: this.selectUsuarioSemSenha,
     });
   }
-  async updatePassword(
-    id: number,
-    senha: string,
-  ): Promise<Omit<Usuario, 'senha'>> {
-    return this.prisma.usuario.update({
-      where: { id },
-      data: { senha },
-      select: this.selectUsuarioSemSenha,
-    });
-  }
+
   async findByEmail(email: string): Promise<Omit<Usuario, 'senha'> | null> {
     return this.prisma.usuario.findFirst({
       where: { email },

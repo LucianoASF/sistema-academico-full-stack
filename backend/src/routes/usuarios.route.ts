@@ -4,7 +4,6 @@ import { celebrate, Segments } from 'celebrate';
 import asyncHandler from 'express-async-handler';
 import {
   novoUsuarioSchema,
-  senhaSchema,
   updateUsuarioSchema,
 } from '../schemas/usuario.schema.js';
 
@@ -25,9 +24,4 @@ usuarioRoutes.patch(
   '/usuarios/:id',
   celebrate({ [Segments.BODY]: updateUsuarioSchema }),
   asyncHandler(UsuarioController.update),
-),
-  usuarioRoutes.patch(
-    '/usuarios/:id/senha',
-    celebrate({ [Segments.BODY]: senhaSchema }),
-    asyncHandler(UsuarioController.updatePassword),
-  );
+);

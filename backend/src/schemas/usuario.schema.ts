@@ -19,8 +19,5 @@ export const updateUsuarioSchema = Joi.object().keys({
   telefone: Joi.string().trim().regex(brasilPhoneRegex).length(11).required(),
   cpf: Joi.string().trim().length(11).required(),
   dataNascimento: Joi.date().required(),
-});
-
-export const senhaSchema = Joi.object().keys({
-  senha: Joi.string().trim().min(5).max(60).required(),
+  senha: Joi.string().trim().min(5).max(60),
 });

@@ -42,7 +42,7 @@ export class UsuarioService {
   // Atualizar usuário sem senha
   async update(
     id: number,
-    data: Omit<Usuario, 'id' | 'senha'>,
+    data: Omit<Usuario, 'id'>,
     userReq: Pick<Usuario, 'id' | 'role'>,
   ): Promise<Omit<Usuario, 'senha'>> {
     if (id !== userReq.id && userReq.role !== 'administrador')
@@ -57,16 +57,6 @@ export class UsuarioService {
       throw new CpfAlreadyExistsError();
 
     return this.usuarioRepository.update(id, data);
-  }
-
-  async updatePassword(
-    id: number,
-    { senha }: Pick<Usuario, 'senha'>,
-  ): Promise<Omit<Usuario, 'senha'>> {
-    const usuario = await this.usuarioRepository.getById(id);
-    if (!usuario) throw new NotFoundError('Usuário não encontrado!');
-    const senhaCrypto = await bcrypt.hash(senha, 10);
-    return this.usuarioRepository.updatePassword(id, senhaCrypto);
   }
 
   async delete(id: number) {

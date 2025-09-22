@@ -25,16 +25,6 @@ export class UsuarioController {
       }),
     );
   }
-  static async updatePassword(req: Request, res: Response) {
-    res
-      .status(200)
-      .json(
-        await new UsuarioService().updatePassword(
-          Number(req.params.id),
-          req.body,
-        ),
-      );
-  }
   static perfilDecodificadoJwt(req: Request, res: Response) {
     res.json(new UsuarioService().perfilDecodificadoJwt(req.cookies.token));
   }

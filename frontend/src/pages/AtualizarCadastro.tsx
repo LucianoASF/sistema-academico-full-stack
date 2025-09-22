@@ -28,7 +28,13 @@ const atualizarCadastroSchema = z.object({
   dataNascimento: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'Data inválida',
   }),
-  //   dataNascimento: z.date(),
+  senha: z
+    .string()
+    // A validação personalizada que permite "" ou passa para a validação min/max
+    .refine((val) => val === '' || (val.length >= 5 && val.length <= 60), {
+      message: 'A senha deve ter entre 5 e 60 caracteres.',
+    })
+    .optional(),
 });
 type CadastroFormInputs = z.infer<typeof atualizarCadastroSchema>;
 
@@ -66,10 +72,19 @@ const AtualizarCadastro = () => {
     const [year, month, day] = data.dataNascimento.split('-').map(Number);
     const dataNascimento = new Date(year, month - 1, day);
     try {
-      await api.patch(`/usuarios/${user?.id}`, {
-        ...data,
-        dataNascimento,
-      });
+      if (data.senha) {
+        await api.patch(`/usuarios/${user?.id}`, {
+          ...data,
+          dataNascimento,
+        });
+      } else {
+        const dados = { ...data };
+        delete dados.senha;
+        await api.patch(`/usuarios/${user?.id}`, {
+          ...dados,
+          dataNascimento,
+        });
+      }
       toast.success('Alterações salvas!');
     } catch (error) {
       if (error) {
@@ -150,6 +165,16 @@ const AtualizarCadastro = () => {
               />
               {errors.dataNascimento && (
                 <ErrorMessage>{errors.dataNascimento.message}</ErrorMessage>
+              )}
+            </div>
+            <div>
+              <Input
+                label="Senha (opcional)"
+                type="password"
+                {...register('senha')}
+              />
+              {errors.senha && (
+                <ErrorMessage>{errors.senha.message}</ErrorMessage>
               )}
             </div>
           </div>
