@@ -23,7 +23,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
       id: number;
       nome: string;
       valor: number;
-      data: Date;
+      data: string | Date;
       disciplinaRealizadaId: number;
     };
   };
@@ -35,10 +35,17 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
         const dados = (
           await api.get<typeNotas[]>(`/notas/matriculas/${matriculaId}`)
         ).data;
+        dados.forEach((dado) => {
+          const [year, month, day] = (dado.avaliacao.data as string)
+            .slice(0, 10)
+            .split('-')
+            .map(Number);
+          dado.avaliacao.data = new Date(year, month - 1, day);
+        });
         const dadosOrdenados = dados.sort(
           (a, b) =>
-            new Date(a.avaliacao.data).getTime() -
-            new Date(b.avaliacao.data).getTime(),
+            (a.avaliacao.data as Date).getTime() -
+            (b.avaliacao.data as Date).getTime(),
         );
         setNotas(dadosOrdenados);
       } catch (error) {
@@ -67,7 +74,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
       id: number;
       titulo: string;
       descricao: string;
-      data: Date;
+      data: Date | string;
       disciplinaRealizadaId: number;
     };
   };
@@ -80,9 +87,16 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
         const dados = (
           await api.get<typePresencas[]>(`/presencas/matriculas/${matriculaId}`)
         ).data;
+        dados.forEach((dado) => {
+          const [year, month, day] = (dado.aula.data as string)
+            .slice(0, 10)
+            .split('-')
+            .map(Number);
+          dado.aula.data = new Date(year, month - 1, day);
+        });
         const dadosOrdenados = dados.sort(
           (a, b) =>
-            new Date(a.aula.data).getTime() - new Date(b.aula.data).getTime(),
+            (a.aula.data as Date).getTime() - (b.aula.data as Date).getTime(),
         );
         setPresencas(dadosOrdenados);
       } catch (error) {
@@ -135,7 +149,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
                     {nota.avaliacao.nome}
                   </td>
                   <td className="px-4 py-3 text-gray-600">
-                    {new Date(nota.avaliacao.data).toLocaleDateString('pt-BR')}
+                    {(nota.avaliacao.data as Date).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="px-4 py-3 text-gray-600">
                     {nota.avaliacao.valor}
@@ -190,7 +204,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
                       {presenca.aula.descricao}
                     </td>
                     <td className="px-4 py-3 text-gray-600">
-                      {new Date(presenca.aula.data).toLocaleDateString('pt-BR')}
+                      {(presenca.aula.data as Date).toLocaleDateString('pt-BR')}
                     </td>
                     <td className="px-4 py-3">
                       {presenca.presente ? (

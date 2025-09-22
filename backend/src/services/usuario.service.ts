@@ -55,6 +55,13 @@ export class UsuarioService {
     const usuarioByCpf = await this.usuarioRepository.findByCpf(data.cpf);
     if (usuarioByCpf && usuarioByCpf.id !== id)
       throw new CpfAlreadyExistsError();
+    if (data.senha) {
+      const hashedPassword = await bcrypt.hash(data.senha, 10);
+      return this.usuarioRepository.update(id, {
+        ...data,
+        senha: hashedPassword,
+      });
+    }
 
     return this.usuarioRepository.update(id, data);
   }
