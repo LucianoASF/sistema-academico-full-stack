@@ -9,9 +9,12 @@ export class GradeController {
   }
 
   static async getById(req: Request, res: Response) {
-    res
-      .status(200)
-      .json(await new GradeService().getById(Number(req.params.id)));
+    res.status(200).json(
+      await new GradeService().getById(Number(req.params.id), {
+        id: req.user.id,
+        role: req.user.role,
+      }),
+    );
   }
   static async delete(req: Request, res: Response) {
     await new GradeService().delete(Number(req.params.id));

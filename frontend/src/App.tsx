@@ -8,6 +8,7 @@ import NavigationSetter from './helpers/Setters';
 import DisciplinasEmCurso from './pages/DisciplinasEmCurso';
 import AtualizarCadastro from './pages/AtualizarCadastro';
 import { Bounce, ToastContainer } from 'react-toastify';
+import Historico from './pages/Historico';
 
 function App() {
   return (
@@ -37,6 +38,14 @@ function App() {
             element={
               <PrivateRoute roles={['aluno']}>
                 <AtualizarCadastro />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/historico"
+            element={
+              <PrivateRoute roles={['aluno']}>
+                <Historico />
               </PrivateRoute>
             }
           />

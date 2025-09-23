@@ -1,9 +1,10 @@
-import type { MatriculaCurso } from '@prisma/client';
+import type { MatriculaCurso, Usuario } from '@prisma/client';
 import { MatriculaCursoRepository } from '../repositories/matriculaCurso.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
 import { verificaSeDataFimEhMaiorQueDataInicio } from '../utils/verificaSeDataFimEhMaiorQueDataInicio.js';
+import { ForbiddenError } from '../errors/forbidden.error.js';
 
 export class MatriculaCursoService {
   private matriculaCursoRepository: MatriculaCursoRepository;
@@ -23,7 +24,12 @@ export class MatriculaCursoService {
     verificaSeDataFimEhMaiorQueDataInicio(data.dataInicio, data.dataFim);
     return this.matriculaCursoRepository.create(data);
   }
-  async getAllByAluno(alunoId: number): Promise<MatriculaCurso[]> {
+  async getAllByAluno(
+    alunoId: number,
+    user: Pick<Usuario, 'id' | 'role'>,
+  ): Promise<MatriculaCurso[]> {
+    if (alunoId !== user.id && user.role !== 'administrador')
+      throw new ForbiddenError();
     return this.matriculaCursoRepository.getAllByAluno(alunoId);
   }
   async getAllByCurso(cursoId: number): Promise<MatriculaCurso[]> {

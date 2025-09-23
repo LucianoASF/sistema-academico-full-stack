@@ -1,4 +1,4 @@
-import type { Grade } from '@prisma/client';
+import type { Grade, Usuario } from '@prisma/client';
 import { GradeRepository } from '../repositories/grade.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 
@@ -19,14 +19,23 @@ export class GradeService {
     return this.gradeRepository.create({ versao: maiorVersao, cursoId });
   }
 
-  async getById(id: number): Promise<Grade | null> {
-    const grade = await this.gradeRepository.getById(id);
+  async getById(
+    id: number,
+    user: Pick<Usuario, 'id' | 'role'>,
+  ): Promise<Grade | null> {
+    let grade;
+    if (user.role === 'aluno') {
+      grade = await this.gradeRepository.getById(id, user.id, true);
+    } else {
+      grade = await this.gradeRepository.getById(id, 0);
+    }
     if (!grade) throw new NotFoundError('Grade não encontrada!');
     return grade;
   }
 
   async delete(id: number) {
-    await this.getById(id);
+    const grade = await this.gradeRepository.getById(id, 0);
+    if (!grade) throw new NotFoundError('Grade não encontrada!');
     await this.gradeRepository.delete(id);
   }
 
