@@ -35,9 +35,11 @@ export class MatriculaService {
   }
   async getAllByDisciplinaRealizada(
     disciplinaRealizadaId: number,
+    user: Pick<Usuario, 'id' | 'role'>,
   ): Promise<Matricula[]> {
     return this.matriculaRepository.getAllByDisciplinaRealizada(
       disciplinaRealizadaId,
+      user.role === 'professor' ? user.id : undefined,
     );
   }
 

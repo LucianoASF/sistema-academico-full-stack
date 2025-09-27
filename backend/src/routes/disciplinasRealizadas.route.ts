@@ -3,6 +3,7 @@ import { DisciplinaRealizadaController } from '../controllers/disciplinaRealizad
 import { celebrate, Segments } from 'celebrate';
 import asyncHandler from 'express-async-handler';
 import { disciplinaRealizadaSchema } from '../schemas/disciplinaRealizada.schema.js';
+import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
 
 export const disciplinaRealizadaRoutes = Router();
 
@@ -18,6 +19,11 @@ disciplinaRealizadaRoutes.get(
 disciplinaRealizadaRoutes.get(
   '/disciplinas-realizadas/:id',
   asyncHandler(DisciplinaRealizadaController.getById),
+);
+disciplinaRealizadaRoutes.get(
+  '/disciplinas-realizadas/usuarios/:professorId',
+  AuthorizationMiddleware('professor', 'administrador'),
+  asyncHandler(DisciplinaRealizadaController.getDisciplinasEmCusroByProfessor),
 );
 disciplinaRealizadaRoutes.delete(
   '/disciplinas-realizadas/:id',

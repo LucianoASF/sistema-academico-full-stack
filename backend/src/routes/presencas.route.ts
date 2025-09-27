@@ -22,6 +22,7 @@ presencaRoutes.get(
 );
 presencaRoutes.get(
   '/presencas/aulas/:aulaId',
+  AuthorizationMiddleware('professor', 'administrador'),
   asyncHandler(PresencaController.getAllByAula),
 );
 presencaRoutes.get('/presencas/:id', asyncHandler(PresencaController.getById));
@@ -31,6 +32,7 @@ presencaRoutes.delete(
 );
 presencaRoutes.patch(
   '/presencas/:id',
+  AuthorizationMiddleware('professor', 'administrador'),
   celebrate({ [Segments.BODY]: updatePresencaSchema }),
   asyncHandler(PresencaController.update),
 );

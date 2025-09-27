@@ -22,15 +22,31 @@ export class PresencaRepository {
       include: { aula: true },
     });
   }
-  async getAllByAula(aulaId: number): Promise<Presenca[]> {
-    return this.prisma.presenca.findMany({ where: { aulaId } });
+  async getAllByAula(
+    aulaId: number,
+    professorId?: number,
+  ): Promise<Presenca[]> {
+    return this.prisma.presenca.findMany({
+      where: professorId
+        ? { aulaId, aula: { disciplinaRealizada: { professorId } } }
+        : { aulaId },
+      include: {
+        matricula: { select: { usuario: { select: { nome: true } } } },
+      },
+    });
   }
 
   async update(
     id: number,
     data: Pick<Presenca, 'presente'>,
+    professorId?: number,
   ): Promise<Presenca | null> {
-    return this.prisma.presenca.update({ where: { id }, data });
+    return this.prisma.presenca.update({
+      where: professorId
+        ? { id, aula: { disciplinaRealizada: { professorId } } }
+        : { id },
+      data,
+    });
   }
 
   async getById(id: number): Promise<Presenca | null> {

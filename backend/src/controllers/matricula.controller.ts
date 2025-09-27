@@ -11,6 +11,7 @@ export class MatriculaController {
       .json(
         await new MatriculaService().getAllByDisciplinaRealizada(
           Number(req.params.disciplinaRealizadaId),
+          { id: req.user.id, role: req.user.role },
         ),
       );
   }

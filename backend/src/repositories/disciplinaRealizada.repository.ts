@@ -15,8 +15,19 @@ export class DisciplinaRealizadaRepository {
   async getAll(): Promise<DisciplinaRealizada[]> {
     return this.prisma.disciplinaRealizada.findMany();
   }
-  async getById(id: number): Promise<DisciplinaRealizada | null> {
-    return this.prisma.disciplinaRealizada.findFirst({ where: { id } });
+  async getById(id: number, professorId?: number) {
+    return this.prisma.disciplinaRealizada.findFirst({
+      where: professorId
+        ? { id, professorId, dataFim: null }
+        : { id, dataFim: null },
+      include: { disciplina: true },
+    });
+  }
+  async getDisciplinasEmCusroByProfessor(professorId: number) {
+    return this.prisma.disciplinaRealizada.findMany({
+      where: { professorId, dataFim: null },
+      include: { disciplina: true },
+    });
   }
   async delete(id: number) {
     await this.prisma.disciplinaRealizada.delete({ where: { id } });

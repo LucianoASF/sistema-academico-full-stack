@@ -2,15 +2,25 @@ import type { Presenca, Usuario } from '@prisma/client';
 import { PresencaRepository } from '../repositories/presenca.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
+import { AulaRepository } from '../repositories/aula.repository.js';
 
 export class PresencaService {
   private presencaRepository: PresencaRepository;
+  private aulaRepository: AulaRepository;
 
   constructor() {
     this.presencaRepository = new PresencaRepository();
+    this.aulaRepository = new AulaRepository();
   }
 
-  async create(data: Omit<Presenca, 'id'>): Promise<Presenca> {
+  async create(
+    data: Omit<Presenca, 'id'>,
+    user: Pick<Usuario, 'id' | 'role'>,
+  ): Promise<Presenca> {
+    if (user.role !== 'administrador') {
+      const aula = await this.aulaRepository.getById(data.aulaId, user.id);
+      if (!aula) throw new NotFoundError('Aula não encontrada');
+    }
     const presenca =
       await this.presencaRepository.verificaSeJaAPresencaPorAvaliacaoEMatricula(
         data.matriculaId,
@@ -35,8 +45,14 @@ export class PresencaService {
     }
     return this.presencaRepository.getAllByMatricula(matriculaId, usuario.id);
   }
-  async getAllByAula(aulaId: number): Promise<Presenca[]> {
-    return this.presencaRepository.getAllByAula(aulaId);
+  async getAllByAula(
+    aulaId: number,
+    user: Pick<Usuario, 'id' | 'role'>,
+  ): Promise<Presenca[]> {
+    return this.presencaRepository.getAllByAula(
+      aulaId,
+      user.role === 'professor' ? user.id : undefined,
+    );
   }
 
   async getById(id: number): Promise<Presenca | null> {
@@ -48,9 +64,14 @@ export class PresencaService {
   async update(
     id: number,
     data: Pick<Presenca, 'presente'>,
+    user: Pick<Usuario, 'id' | 'role'>,
   ): Promise<Presenca> {
     await this.getById(id);
-    const presenca = await this.presencaRepository.update(id, data);
+    const presenca = await this.presencaRepository.update(
+      id,
+      data,
+      user.role === 'professor' ? user.id : undefined,
+    );
     if (!presenca) throw new NotFoundError('Presenca não encontrada!');
     return presenca;
   }

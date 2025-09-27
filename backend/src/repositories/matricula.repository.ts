@@ -14,8 +14,14 @@ export class MatriculaRepository {
   }
   async getAllByDisciplinaRealizada(
     disciplinaRealizadaId: number,
+    professorId?: number,
   ): Promise<Matricula[]> {
-    return this.prisma.matricula.findMany({ where: { disciplinaRealizadaId } });
+    return this.prisma.matricula.findMany({
+      where: professorId
+        ? { disciplinaRealizadaId, disciplinaRealizada: { professorId } }
+        : { disciplinaRealizadaId },
+      include: { usuario: { select: { nome: true } } },
+    });
   }
   async getById(id: number): Promise<Matricula | null> {
     return this.prisma.matricula.findFirst({ where: { id } });

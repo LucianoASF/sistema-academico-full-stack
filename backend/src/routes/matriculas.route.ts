@@ -17,6 +17,7 @@ matriculaRoutes.post(
 );
 matriculaRoutes.get(
   '/matriculas/disciplinas-realizadas/:disciplinaRealizadaId',
+  AuthorizationMiddleware('professor', 'administrador'),
   asyncHandler(MatriculaController.getAllByDisciplinaRealizada),
 );
 matriculaRoutes.get(

@@ -1,9 +1,10 @@
-import type { DisciplinaRealizada } from '@prisma/client';
+import type { DisciplinaRealizada, Usuario } from '@prisma/client';
 import { DisciplinaRealizadaRepository } from '../repositories/disciplinaRealizada.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
 import { verificaSeDataFimEhMaiorQueDataInicio } from '../utils/verificaSeDataFimEhMaiorQueDataInicio.js';
+import { ForbiddenError } from '../errors/forbidden.error.js';
 
 export class DisciplinaRealizadaService {
   private disciplinaRealizadaRepository: DisciplinaRealizadaRepository;
@@ -38,6 +39,16 @@ export class DisciplinaRealizadaService {
     if (!disciplinaRealizada)
       throw new NotFoundError('Disciplina Realizada não encontrada!');
     return disciplinaRealizada;
+  }
+  async getDisciplinasEmCusroByProfessor(
+    professorId: number,
+    user: Pick<Usuario, 'id' | 'role'>,
+  ) {
+    if (professorId !== user.id && user.role !== 'administrador')
+      throw new ForbiddenError();
+    return this.disciplinaRealizadaRepository.getDisciplinasEmCusroByProfessor(
+      professorId,
+    );
   }
 
   async update(

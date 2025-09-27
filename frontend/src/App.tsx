@@ -9,6 +9,7 @@ import DisciplinasEmCurso from './pages/DisciplinasEmCurso';
 import AtualizarCadastro from './pages/AtualizarCadastro';
 import { Bounce, ToastContainer } from 'react-toastify';
 import Historico from './pages/Historico';
+import Aula from './pages/Aula';
 
 function App() {
   return (
@@ -46,6 +47,14 @@ function App() {
             element={
               <PrivateRoute roles={['aluno']}>
                 <Historico />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/aula"
+            element={
+              <PrivateRoute roles={['professor']}>
+                <Aula />
               </PrivateRoute>
             }
           />

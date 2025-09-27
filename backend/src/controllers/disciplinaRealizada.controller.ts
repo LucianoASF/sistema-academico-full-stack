@@ -17,6 +17,14 @@ export class DisciplinaRealizadaController {
         await new DisciplinaRealizadaService().getById(Number(req.params.id)),
       );
   }
+  static async getDisciplinasEmCusroByProfessor(req: Request, res: Response) {
+    res.json(
+      await new DisciplinaRealizadaService().getDisciplinasEmCusroByProfessor(
+        Number(req.params.professorId),
+        { id: req.user.id, role: req.user.role },
+      ),
+    );
+  }
   static async delete(req: Request, res: Response) {
     await new DisciplinaRealizadaService().delete(Number(req.params.id));
     res.status(204).end();

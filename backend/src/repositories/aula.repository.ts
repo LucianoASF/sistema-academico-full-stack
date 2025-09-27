@@ -10,13 +10,26 @@ export class AulaRepository {
       data: aula,
     });
   }
-  async getAllByDisciplinaRealizada(
+  async getAllByDisciplinaEmAndamento(
     disciplinaRealizadaId: number,
+    professorId: number,
+    isProfessor = false,
   ): Promise<Aula[]> {
-    return this.prisma.aula.findMany({ where: { disciplinaRealizadaId } });
+    return this.prisma.aula.findMany({
+      where: isProfessor
+        ? {
+            disciplinaRealizadaId,
+            disciplinaRealizada: { dataFim: null, professorId },
+          }
+        : { disciplinaRealizadaId, disciplinaRealizada: { dataFim: null } },
+    });
   }
-  async getById(id: number): Promise<Aula | null> {
-    return this.prisma.aula.findFirst({ where: { id } });
+  async getById(id: number, professorId?: number): Promise<Aula | null> {
+    return this.prisma.aula.findFirst({
+      where: professorId
+        ? { id, disciplinaRealizada: { professorId } }
+        : { id },
+    });
   }
   async delete(id: number) {
     await this.prisma.aula.delete({ where: { id } });
