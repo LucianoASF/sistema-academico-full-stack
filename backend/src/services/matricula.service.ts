@@ -1,10 +1,9 @@
-import type { Matricula, Usuario } from '@prisma/client';
+import type { Matricula } from '@prisma/client';
 import { MatriculaRepository } from '../repositories/matricula.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
 import type { getMatriculasCursandoByAlunoType } from '../types/getMatriculasCursandoByAluno.js';
-import { ForbiddenError } from '../errors/forbidden.error.js';
 import type { getMatriculasByAlunoType } from '../types/getMatriculasByAluno.js';
 
 export class MatriculaService {
@@ -35,11 +34,9 @@ export class MatriculaService {
   }
   async getAllByDisciplinaRealizada(
     disciplinaRealizadaId: number,
-    user: Pick<Usuario, 'id' | 'role'>,
   ): Promise<Matricula[]> {
     return this.matriculaRepository.getAllByDisciplinaRealizada(
       disciplinaRealizadaId,
-      user.role === 'professor' ? user.id : undefined,
     );
   }
 
@@ -50,18 +47,12 @@ export class MatriculaService {
   }
   async getMatriculasByAluno(
     alunoId: number,
-    user: Pick<Usuario, 'id' | 'role'>,
   ): Promise<getMatriculasByAlunoType[]> {
-    if (alunoId !== user.id && user.role !== 'administrador')
-      throw new ForbiddenError();
     return this.matriculaRepository.getMatriculasByAluno(alunoId);
   }
   async getMatriculasCursandoByAluno(
     alunoId: number,
-    usuario: Pick<Usuario, 'id' | 'role'>,
   ): Promise<getMatriculasCursandoByAlunoType[]> {
-    if (alunoId !== usuario.id && usuario.role !== 'administrador')
-      throw new ForbiddenError();
     return this.matriculaRepository.getMatriculasCursandoByAluno(alunoId);
   }
 

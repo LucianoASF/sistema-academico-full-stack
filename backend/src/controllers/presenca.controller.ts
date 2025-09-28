@@ -3,14 +3,10 @@ import { PresencaService } from '../services/presenca.service.js';
 
 export class PresencaController {
   static async create(req: Request, res: Response) {
-    res
-      .status(201)
-      .json(
-        await new PresencaService().create(req.body, {
-          id: req.user.id,
-          role: req.user.role,
-        }),
-      );
+    const aulaId = Number(req.params.aulaId);
+    const presencas = req.body.map((p: any) => ({ ...p, aulaId }));
+    await new PresencaService().create(presencas);
+    res.status(201).json({ mensagem: 'Sucesso' });
   }
   static async getAllByMatricula(req: Request, res: Response) {
     res
@@ -18,17 +14,15 @@ export class PresencaController {
       .json(
         await new PresencaService().getAllByMatricula(
           Number(req.params.matriculaId),
-          { id: req.user.id, role: req.user.role },
         ),
       );
   }
   static async getAllByAula(req: Request, res: Response) {
-    res.status(200).json(
-      await new PresencaService().getAllByAula(Number(req.params.aulaId), {
-        id: req.user.id,
-        role: req.user.role,
-      }),
-    );
+    res
+      .status(200)
+      .json(
+        await new PresencaService().getAllByAula(Number(req.params.aulaId)),
+      );
   }
   static async getById(req: Request, res: Response) {
     res
@@ -40,11 +34,12 @@ export class PresencaController {
     res.status(204).end();
   }
   static async update(req: Request, res: Response) {
-    res.status(200).json(
-      await new PresencaService().update(Number(req.params.id), req.body, {
-        id: req.user.id,
-        role: req.user.role,
-      }),
-    );
+    const presencas = req.body.map((p: any) => ({
+      ...p,
+      id: Number(req.params.id),
+    }));
+
+    await new PresencaService().update(presencas);
+    res.status(200).json({ mensagem: 'sucesso' });
   }
 }

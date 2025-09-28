@@ -25,9 +25,9 @@ export class GradeService {
   ): Promise<Grade | null> {
     let grade;
     if (user.role === 'aluno') {
-      grade = await this.gradeRepository.getById(id, user.id, true);
+      grade = await this.gradeRepository.getById(id, user.id);
     } else {
-      grade = await this.gradeRepository.getById(id, 0);
+      grade = await this.gradeRepository.getById(id);
     }
     if (!grade) throw new NotFoundError('Grade não encontrada!');
     return grade;

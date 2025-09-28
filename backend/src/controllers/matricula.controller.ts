@@ -11,7 +11,6 @@ export class MatriculaController {
       .json(
         await new MatriculaService().getAllByDisciplinaRealizada(
           Number(req.params.disciplinaRealizadaId),
-          { id: req.user.id, role: req.user.role },
         ),
       );
   }
@@ -19,7 +18,6 @@ export class MatriculaController {
     res.json(
       await new MatriculaService().getMatriculasByAluno(
         Number(req.params.alunoId),
-        { id: req.user.id, role: req.user.role },
       ),
     );
   }
@@ -29,7 +27,6 @@ export class MatriculaController {
       .json(
         await new MatriculaService().getMatriculasCursandoByAluno(
           Number(req.params.alunoId),
-          { id: req.user.id, role: req.user.role },
         ),
       );
   }

@@ -6,6 +6,8 @@ import {
   novoUsuarioSchema,
   updateUsuarioSchema,
 } from '../schemas/usuario.schema.js';
+import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
+import { checkOwnershipMiddleware } from '../middlewares/checkOwnership.middleware.js';
 
 export const usuarioRoutes = Router();
 
@@ -18,10 +20,17 @@ usuarioRoutes.get(
   '/usuarios/perfil',
   asyncHandler(UsuarioController.perfilDecodificadoJwt),
 );
-usuarioRoutes.get('/usuarios/:id', asyncHandler(UsuarioController.getById));
+usuarioRoutes.get(
+  '/usuarios/:id',
+  AuthorizationMiddleware('aluno', 'professor', 'administrador'),
+  checkOwnershipMiddleware(undefined, undefined, undefined, 'id'),
+  asyncHandler(UsuarioController.getById),
+);
 usuarioRoutes.delete('/usuarios/:id', asyncHandler(UsuarioController.delete));
 usuarioRoutes.patch(
   '/usuarios/:id',
+  AuthorizationMiddleware('aluno', 'professor', 'administrador'),
+  checkOwnershipMiddleware(undefined, undefined, undefined, 'id'),
   celebrate({ [Segments.BODY]: updateUsuarioSchema }),
   asyncHandler(UsuarioController.update),
 );

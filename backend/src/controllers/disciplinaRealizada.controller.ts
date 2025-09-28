@@ -21,7 +21,6 @@ export class DisciplinaRealizadaController {
     res.json(
       await new DisciplinaRealizadaService().getDisciplinasEmCusroByProfessor(
         Number(req.params.professorId),
-        { id: req.user.id, role: req.user.role },
       ),
     );
   }

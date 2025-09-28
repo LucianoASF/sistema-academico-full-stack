@@ -14,12 +14,9 @@ export class MatriculaRepository {
   }
   async getAllByDisciplinaRealizada(
     disciplinaRealizadaId: number,
-    professorId?: number,
   ): Promise<Matricula[]> {
     return this.prisma.matricula.findMany({
-      where: professorId
-        ? { disciplinaRealizadaId, disciplinaRealizada: { professorId } }
-        : { disciplinaRealizadaId },
+      where: { disciplinaRealizadaId },
       include: { usuario: { select: { nome: true } } },
     });
   }

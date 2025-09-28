@@ -5,48 +5,36 @@ export class PresencaRepository {
   constructor() {
     this.prisma = new PrismaClient({ log: ['query'] });
   }
-  async create(presenca: Omit<Presenca, 'id'>): Promise<Presenca> {
-    return await this.prisma.presenca.create({
-      data: presenca,
+  async create(data: Omit<Presenca, 'id'>[]) {
+    await this.prisma.presenca.createMany({
+      data,
+      skipDuplicates: true,
     });
   }
-  async getAllByMatricula(
-    matriculaId: number,
-    usuarioId: number,
-    isAluno = false,
-  ): Promise<Presenca[]> {
+  async getAllByMatricula(matriculaId: number): Promise<Presenca[]> {
     return this.prisma.presenca.findMany({
-      where: isAluno
-        ? { matriculaId, matricula: { alunoId: usuarioId } }
-        : { matriculaId },
+      where: { matriculaId },
       include: { aula: true },
     });
   }
-  async getAllByAula(
-    aulaId: number,
-    professorId?: number,
-  ): Promise<Presenca[]> {
+  async getAllByAula(aulaId: number): Promise<Presenca[]> {
     return this.prisma.presenca.findMany({
-      where: professorId
-        ? { aulaId, aula: { disciplinaRealizada: { professorId } } }
-        : { aulaId },
+      where: { aulaId },
       include: {
         matricula: { select: { usuario: { select: { nome: true } } } },
       },
     });
   }
 
-  async update(
-    id: number,
-    data: Pick<Presenca, 'presente'>,
-    professorId?: number,
-  ): Promise<Presenca | null> {
-    return this.prisma.presenca.update({
-      where: professorId
-        ? { id, aula: { disciplinaRealizada: { professorId } } }
-        : { id },
-      data,
-    });
+  async update(data: Pick<Presenca, 'id' | 'presente'>[]) {
+    await this.prisma.$transaction(
+      data.map((p: { id: number; presente: boolean }) =>
+        this.prisma.presenca.update({
+          where: { id: p.id },
+          data: { presente: p.presente },
+        }),
+      ),
+    );
   }
 
   async getById(id: number): Promise<Presenca | null> {

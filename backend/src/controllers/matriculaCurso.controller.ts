@@ -12,7 +12,6 @@ export class MatriculaCursoController {
       .json(
         await new MatriculaCursoService().getAllByAluno(
           Number(req.params.alunoId),
-          { id: req.user.id, role: req.user.role },
         ),
       );
   }

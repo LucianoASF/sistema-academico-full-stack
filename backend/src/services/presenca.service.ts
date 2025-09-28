@@ -1,4 +1,4 @@
-import type { Presenca, Usuario } from '@prisma/client';
+import type { Presenca } from '@prisma/client';
 import { PresencaRepository } from '../repositories/presenca.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
@@ -13,46 +13,25 @@ export class PresencaService {
     this.aulaRepository = new AulaRepository();
   }
 
-  async create(
-    data: Omit<Presenca, 'id'>,
-    user: Pick<Usuario, 'id' | 'role'>,
-  ): Promise<Presenca> {
-    if (user.role !== 'administrador') {
-      const aula = await this.aulaRepository.getById(data.aulaId, user.id);
-      if (!aula) throw new NotFoundError('Aula não encontrada');
+  async create(data: Omit<Presenca, 'id'>[]) {
+    for (const p of data) {
+      const presenca =
+        await this.presencaRepository.verificaSeJaAPresencaPorAvaliacaoEMatricula(
+          p.matriculaId,
+          p.aulaId,
+        );
+      if (presenca)
+        throw new UnprocessableEntityError(
+          'Já existe presença desse aluno nessa aula',
+        );
     }
-    const presenca =
-      await this.presencaRepository.verificaSeJaAPresencaPorAvaliacaoEMatricula(
-        data.matriculaId,
-        data.aulaId,
-      );
-    if (presenca)
-      throw new UnprocessableEntityError(
-        'Já existe presença desse aluno nessa aula',
-      );
-    return this.presencaRepository.create(data);
+    await this.presencaRepository.create(data);
   }
-  async getAllByMatricula(
-    matriculaId: number,
-    usuario: Pick<Usuario, 'id' | 'role'>,
-  ): Promise<Presenca[]> {
-    if (usuario.role === 'aluno') {
-      return this.presencaRepository.getAllByMatricula(
-        matriculaId,
-        usuario.id,
-        true,
-      );
-    }
-    return this.presencaRepository.getAllByMatricula(matriculaId, usuario.id);
+  async getAllByMatricula(matriculaId: number): Promise<Presenca[]> {
+    return this.presencaRepository.getAllByMatricula(matriculaId);
   }
-  async getAllByAula(
-    aulaId: number,
-    user: Pick<Usuario, 'id' | 'role'>,
-  ): Promise<Presenca[]> {
-    return this.presencaRepository.getAllByAula(
-      aulaId,
-      user.role === 'professor' ? user.id : undefined,
-    );
+  async getAllByAula(aulaId: number): Promise<Presenca[]> {
+    return this.presencaRepository.getAllByAula(aulaId);
   }
 
   async getById(id: number): Promise<Presenca | null> {
@@ -61,19 +40,11 @@ export class PresencaService {
     return presenca;
   }
 
-  async update(
-    id: number,
-    data: Pick<Presenca, 'presente'>,
-    user: Pick<Usuario, 'id' | 'role'>,
-  ): Promise<Presenca> {
-    await this.getById(id);
-    const presenca = await this.presencaRepository.update(
-      id,
-      data,
-      user.role === 'professor' ? user.id : undefined,
-    );
-    if (!presenca) throw new NotFoundError('Presenca não encontrada!');
-    return presenca;
+  async update(data: Pick<Presenca, 'id' | 'presente'>[]) {
+    for (const p of data) {
+      await this.getById(p.id);
+    }
+    await this.presencaRepository.update(data);
   }
 
   async delete(id: number) {

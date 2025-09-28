@@ -12,16 +12,9 @@ export class AulaRepository {
   }
   async getAllByDisciplinaEmAndamento(
     disciplinaRealizadaId: number,
-    professorId: number,
-    isProfessor = false,
   ): Promise<Aula[]> {
     return this.prisma.aula.findMany({
-      where: isProfessor
-        ? {
-            disciplinaRealizadaId,
-            disciplinaRealizada: { dataFim: null, professorId },
-          }
-        : { disciplinaRealizadaId, disciplinaRealizada: { dataFim: null } },
+      where: { disciplinaRealizadaId, disciplinaRealizada: { dataFim: null } },
     });
   }
   async getById(id: number, professorId?: number): Promise<Aula | null> {

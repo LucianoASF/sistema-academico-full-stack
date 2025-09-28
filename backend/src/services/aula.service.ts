@@ -1,4 +1,4 @@
-import type { Aula, Usuario } from '@prisma/client';
+import type { Aula } from '@prisma/client';
 import { AulaRepository } from '../repositories/aula.repository.js';
 import { NotFoundError } from '../errors/not-found.error.js';
 import { DisciplinaRealizadaRepository } from '../repositories/disciplinaRealizada.repository.js';
@@ -13,17 +13,12 @@ export class AulaService {
     this.disciplinaRealizadaRepository = new DisciplinaRealizadaRepository();
   }
 
-  async create(
-    data: Omit<Aula, 'id'>,
-    user: Pick<Usuario, 'id' | 'role'>,
-  ): Promise<Aula> {
+  async create(data: Omit<Aula, 'id'>): Promise<Aula> {
     const aulas = await this.getAllByDisciplinaEmAndamento(
       data.disciplinaRealizadaId,
-      user,
     );
     const disciplinaEMCurso = await this.disciplinaRealizadaRepository.getById(
       data.disciplinaRealizadaId,
-      user.role === 'professor' ? user.id : undefined,
     );
     if (!disciplinaEMCurso)
       throw new NotFoundError('Disciplina em andamento não encontrada');
@@ -37,41 +32,25 @@ export class AulaService {
   }
   async getAllByDisciplinaEmAndamento(
     disciplinaRealizadaId: number,
-    user: Pick<Usuario, 'id' | 'role'>,
   ): Promise<Aula[]> {
-    if (user.role === 'professor') {
-      return this.aulaRepository.getAllByDisciplinaEmAndamento(
-        disciplinaRealizadaId,
-        user.id,
-        true,
-      );
-    }
     return this.aulaRepository.getAllByDisciplinaEmAndamento(
       disciplinaRealizadaId,
-      0,
-      false,
     );
   }
 
   async getById(id: number): Promise<Aula | null> {
     const aula = await this.aulaRepository.getById(id);
-    if (!aula) throw new NotFoundError('Aula não encontrado!');
+    if (!aula) throw new NotFoundError('Aula não encontrada!');
     return aula;
   }
 
-  async update(
-    id: number,
-    data: Omit<Aula, 'id'>,
-    user: Pick<Usuario, 'id' | 'role'>,
-  ): Promise<Aula> {
+  async update(id: number, data: Omit<Aula, 'id'>): Promise<Aula> {
     await this.getById(id);
     const aulas = await this.getAllByDisciplinaEmAndamento(
       data.disciplinaRealizadaId,
-      user,
     );
     const disciplinaEMCurso = await this.disciplinaRealizadaRepository.getById(
       data.disciplinaRealizadaId,
-      user.role === 'professor' ? user.id : undefined,
     );
     if (!disciplinaEMCurso)
       throw new NotFoundError('Disciplina em andamento não encontrada');
@@ -86,11 +65,10 @@ export class AulaService {
     return aula;
   }
 
-  async delete(id: number, user: Pick<Usuario, 'id' | 'role'>) {
+  async delete(id: number) {
     const data = await this.getById(id);
     const disciplinaEMCurso = await this.disciplinaRealizadaRepository.getById(
       data!.disciplinaRealizadaId,
-      user.role === 'professor' ? user.id : undefined,
     );
     if (!disciplinaEMCurso)
       throw new NotFoundError('Disciplina em andamento não encontrada');

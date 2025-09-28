@@ -7,6 +7,7 @@ import {
   updateMatriculaSchema,
 } from '../schemas/matricula.schema.js';
 import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
+import { checkOwnershipMiddleware } from '../middlewares/checkOwnership.middleware.js';
 
 export const matriculaRoutes = Router();
 
@@ -18,16 +19,23 @@ matriculaRoutes.post(
 matriculaRoutes.get(
   '/matriculas/disciplinas-realizadas/:disciplinaRealizadaId',
   AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'disciplinaRealizada',
+    'disciplinaRealizadaId',
+    'professorId',
+  ),
   asyncHandler(MatriculaController.getAllByDisciplinaRealizada),
 );
 matriculaRoutes.get(
   '/matriculas/usuarios/:alunoId',
-  AuthorizationMiddleware('aluno'),
+  AuthorizationMiddleware('aluno', 'administrador'),
+  checkOwnershipMiddleware(undefined, undefined, undefined, 'alunoId'),
   asyncHandler(MatriculaController.getMatriculasByAluno),
 );
 matriculaRoutes.get(
   '/matriculas/usuarios/:alunoId/cursando',
-  AuthorizationMiddleware('aluno'),
+  AuthorizationMiddleware('aluno', 'administrador'),
+  checkOwnershipMiddleware(undefined, undefined, undefined, 'alunoId'),
   asyncHandler(MatriculaController.getMatriculasCursandoByAluno),
 );
 matriculaRoutes.get(

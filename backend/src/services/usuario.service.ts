@@ -6,7 +6,6 @@ import { NotFoundError } from '../errors/not-found.error.js';
 import { EmailAlreadyExistsError } from '../errors/email-already-exists.error.js';
 import { CpfAlreadyExistsError } from '../errors/cpf-already-exists.error.js';
 import { UnauthorizedError } from '../errors/unauthorized.error.js';
-import { ForbiddenError } from '../errors/forbidden.error.js';
 
 export class UsuarioService {
   private usuarioRepository: UsuarioRepository;
@@ -28,12 +27,7 @@ export class UsuarioService {
     });
   }
 
-  async getById(
-    id: number,
-    userReq: Pick<Usuario, 'id' | 'role'>,
-  ): Promise<Omit<Usuario, 'senha'> | null> {
-    if (id !== userReq.id && userReq.role !== 'administrador')
-      throw new ForbiddenError();
+  async getById(id: number): Promise<Omit<Usuario, 'senha'> | null> {
     const usuario = await this.usuarioRepository.getById(id);
     if (!usuario) throw new NotFoundError('Usuário não encontrado!');
     return usuario;
@@ -43,10 +37,7 @@ export class UsuarioService {
   async update(
     id: number,
     data: Omit<Usuario, 'id'>,
-    userReq: Pick<Usuario, 'id' | 'role'>,
   ): Promise<Omit<Usuario, 'senha'>> {
-    if (id !== userReq.id && userReq.role !== 'administrador')
-      throw new ForbiddenError();
     const usuario = await this.usuarioRepository.getById(id);
     if (!usuario) throw new NotFoundError('Usuário não encontrado!');
     const usuarioByEmail = await this.usuarioRepository.findByEmail(data.email);

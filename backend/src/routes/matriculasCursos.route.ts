@@ -6,6 +6,8 @@ import {
   novoMatriculaCursoSchema,
   updateMatriculaCursoSchema,
 } from '../schemas/matriculaCurso.schema.js';
+import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
+import { checkOwnershipMiddleware } from '../middlewares/checkOwnership.middleware.js';
 
 export const matriculaCursoRoutes = Router();
 
@@ -16,6 +18,8 @@ matriculaCursoRoutes.post(
 );
 matriculaCursoRoutes.get(
   '/matriculas-cursos/usuarios/:alunoId',
+  AuthorizationMiddleware('aluno', 'administrador'),
+  checkOwnershipMiddleware(undefined, undefined, undefined, 'alunoId'),
   asyncHandler(MatriculaCursoController.getAllByAluno),
 );
 matriculaCursoRoutes.get(
