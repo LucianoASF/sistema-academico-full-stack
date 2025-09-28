@@ -416,7 +416,7 @@ const Aula = () => {
               )}
             </div>
 
-            {disciplina && (
+            {disciplina && (ligado || aulaId) && (
               <>
                 <h3 className="font-titulo text-lg text-gray-800 mt-8">
                   Lista de Presença

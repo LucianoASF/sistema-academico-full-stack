@@ -266,8 +266,8 @@ const Historico = () => {
                         setRadioSelecionado(Number(e.target.value))
                       }
                       className="appearance-none w-5 h-5 border-2 border-gray-400 rounded-full relative
-                       checked:border-black checked:after:absolute checked:after:w-3 checked:after:h-3 checked:after:rounded-full
-                        checked:after:bg-black checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 
+                       checked:border-purple-700 checked:after:absolute checked:after:w-3 checked:after:h-3 checked:after:rounded-full
+                        checked:after:bg-purple-500 checked:after:top-1/2 checked:after:left-1/2 checked:after:-translate-x-1/2 
                         checked:after:-translate-y-1/2 transition"
                     />
                   </div>
@@ -319,7 +319,7 @@ const Historico = () => {
                     </td>
                   ) : (
                     <td className="px-4 py-3">
-                      <span className="px-2 py-1 rounded-full bg-orange-100 text-orange-700">
+                      <span className="px-2 py-1 rounded-full bg-orange-100 text-orange-700 whitespace-nowrap">
                         Não Cursado
                       </span>
                     </td>
