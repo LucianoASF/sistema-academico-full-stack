@@ -6,7 +6,7 @@ import { disciplinaRealizadaSchema } from '../schemas/disciplinaRealizada.schema
 import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
 import { checkOwnershipMiddleware } from '../middlewares/checkOwnership.middleware.js';
 import { AulaController } from '../controllers/aula.controller.js';
-import { aulaSchema } from '../schemas/aula.schema.js';
+import { newAulaSchema, updateAulaSchema } from '../schemas/aula.schema.js';
 import { AvaliacaoController } from '../controllers/avaliacao.controller.js';
 import { avaliacaoSchema } from '../schemas/avaliacao.schema.js';
 import {
@@ -59,7 +59,7 @@ disciplinaRealizadaRoutes.post(
     'disciplinaRealizadaId',
     'professorId',
   ),
-  celebrate({ [Segments.BODY]: aulaSchema }),
+  celebrate({ [Segments.BODY]: newAulaSchema }),
   asyncHandler(AulaController.create),
 );
 disciplinaRealizadaRoutes.get(
@@ -86,7 +86,7 @@ disciplinaRealizadaRoutes.put(
   '/disciplinas-realizadas/aulas/:id',
   AuthorizationMiddleware('professor', 'administrador'),
   checkOwnershipMiddleware('aula', 'id', 'disciplinaRealizada.professorId'),
-  celebrate({ [Segments.BODY]: aulaSchema }),
+  celebrate({ [Segments.BODY]: updateAulaSchema }),
   asyncHandler(AulaController.update),
 );
 

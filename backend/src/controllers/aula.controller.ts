@@ -30,14 +30,8 @@ export class AulaController {
     res.status(204).end();
   }
   static async update(req: Request, res: Response) {
-    const { disciplinaRealizadaId } = req.params;
     res
       .status(200)
-      .json(
-        await new AulaService().update(Number(req.params.id), {
-          ...req.body,
-          disciplinaRealizadaId: Number(disciplinaRealizadaId),
-        }),
-      );
+      .json(await new AulaService().update(Number(req.params.id), req.body));
   }
 }

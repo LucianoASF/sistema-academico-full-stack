@@ -33,7 +33,9 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
     const fetchNotas = async () => {
       try {
         const dados = (
-          await api.get<typeNotas[]>(`/notas/matriculas/${matriculaId}`)
+          await api.get<typeNotas[]>(
+            `/disciplinas-realizadas/avaliacoes/notas/matriculas/${matriculaId}`,
+          )
         ).data;
         dados.forEach((dado) => {
           const [year, month, day] = (dado.avaliacao.data as string)
@@ -85,7 +87,9 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
     const fetchPresencas = async () => {
       try {
         const dados = (
-          await api.get<typePresencas[]>(`/presencas/matriculas/${matriculaId}`)
+          await api.get<typePresencas[]>(
+            `/disciplinas-realizadas/aulas/presencas/matriculas/${matriculaId}/aluno`,
+          )
         ).data;
         dados.forEach((dado) => {
           const [year, month, day] = (dado.aula.data as string)

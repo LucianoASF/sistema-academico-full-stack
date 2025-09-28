@@ -139,7 +139,7 @@ const Aula = () => {
       try {
         const data = (
           await api.get<aulaType[]>(
-            `/aulas/disciplinas-realizadas/${disciplina}`,
+            `/disciplinas-realizadas/${disciplina}/aulas`,
           )
         ).data;
         setAulas(data);
@@ -166,7 +166,9 @@ const Aula = () => {
       if (!aulaId) return;
       try {
         const data = (
-          await api.get<presencaType[]>(`/presencas/aulas/${aulaId}`)
+          await api.get<presencaType[]>(
+            `/disciplinas-realizadas/aulas/${aulaId}/presencas`,
+          )
         ).data;
         setPresencas(data);
       } catch (error) {
@@ -216,7 +218,7 @@ const Aula = () => {
   async function onSubmit(data: AulaFormInputs) {
     try {
       if (data.id && !ligado) {
-        await api.put(`/aulas/${data.id}`, {
+        await api.put(`/disciplinas-realizadas/aulas/${data.id}`, {
           titulo: data.titulo,
           descricao: data.descricao,
           data: stringToDate(data.data),
@@ -228,9 +230,12 @@ const Aula = () => {
             presente,
           }),
         );
-        for (const p of presencasArray) {
-          await api.patch(`/presencas/${p.id}`, { presente: p.presente });
-        }
+
+        await api.patch(
+          `/disciplinas-realizadas/aulas/${data.id}/presencas`,
+          presencasArray,
+        );
+
         setAulas((prev) =>
           prev?.map((aula) =>
             aula.id === Number(data.id)
@@ -240,21 +245,26 @@ const Aula = () => {
         );
         toast.success('Alterações salvas com sucesso!');
       } else {
-        const aula = await api.post('/aulas', {
-          titulo: data.titulo,
-          descricao: data.descricao,
-          data: stringToDate(data.data),
-          disciplinaRealizadaId: Number(data.disciplinaRealizadaId),
-        });
+        const aula = await api.post(
+          `/disciplinas-realizadas/${data.disciplinaRealizadaId}/aulas`,
+          {
+            titulo: data.titulo,
+            descricao: data.descricao,
+            data: stringToDate(data.data),
+          },
+        );
         const presencasArray = Object.entries(data.presencas).map(
           ([id, presente]) => ({
             matriculaId: Number(id),
             presente,
           }),
         );
-        for (const p of presencasArray) {
-          await api.post(`/presencas`, { ...p, aulaId: aula.data.id });
-        }
+
+        await api.post(
+          `/disciplinas-realizadas/aulas/${aula.data.id}/presencas`,
+          presencasArray,
+        );
+
         setLigado(false);
         setAulas((prev = []) => [...prev, aula.data]);
         setValue('id', String(aula.data.id));
@@ -270,7 +280,7 @@ const Aula = () => {
   async function excluir() {
     if (!aulaId) return;
     try {
-      await api.delete(`/aulas/${aulaId}`);
+      await api.delete(`/disciplinas-realizadas/aulas/${aulaId}`);
       setValue('id', '');
       setPresencas(undefined);
       setValue('presencas', {});
