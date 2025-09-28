@@ -4,6 +4,7 @@ import { useAuthContext } from '../contexts/useAuthContext';
 import api from '../api/api';
 import Modal from './Modal';
 import Table from './Table';
+import { stringToDate } from '../utils/ConverteStringEmDate';
 
 interface AccordionProps {
   matriculaId: number;
@@ -38,11 +39,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
           )
         ).data;
         dados.forEach((dado) => {
-          const [year, month, day] = (dado.avaliacao.data as string)
-            .slice(0, 10)
-            .split('-')
-            .map(Number);
-          dado.avaliacao.data = new Date(year, month - 1, day);
+          dado.avaliacao.data = stringToDate(dado.avaliacao.data as string);
         });
         const dadosOrdenados = dados.sort(
           (a, b) =>
@@ -92,11 +89,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
           )
         ).data;
         dados.forEach((dado) => {
-          const [year, month, day] = (dado.aula.data as string)
-            .slice(0, 10)
-            .split('-')
-            .map(Number);
-          dado.aula.data = new Date(year, month - 1, day);
+          dado.aula.data = stringToDate(dado.aula.data as string);
         });
         const dadosOrdenados = dados.sort(
           (a, b) =>

@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import api from '../api/api';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { stringToDate } from '../utils/ConverteStringEmDate';
 
 const atualizarCadastroSchema = z.object({
   nome: z
@@ -69,8 +70,7 @@ const AtualizarCadastro = () => {
     fetchUsuario();
   }, [user?.id, setValue]);
   async function onSubmit(data: CadastroFormInputs) {
-    const [year, month, day] = data.dataNascimento.split('-').map(Number);
-    const dataNascimento = new Date(year, month - 1, day);
+    const dataNascimento = stringToDate(data.dataNascimento);
     try {
       if (data.senha) {
         await api.patch(`/usuarios/${user?.id}`, {
