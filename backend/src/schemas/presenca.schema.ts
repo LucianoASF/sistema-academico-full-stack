@@ -9,6 +9,7 @@ export const novaPresencaSchema = Joi.array().items(
 
 export const updatePresencaSchema = Joi.array().items(
   Joi.object({
+    id: Joi.number().integer().required(),
     presente: Joi.boolean().required(),
   }),
 );

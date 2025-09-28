@@ -34,12 +34,7 @@ export class PresencaController {
     res.status(204).end();
   }
   static async update(req: Request, res: Response) {
-    const presencas = req.body.map((p: any) => ({
-      ...p,
-      id: Number(req.params.id),
-    }));
-
-    await new PresencaService().update(presencas);
+    await new PresencaService().update(req.body);
     res.status(200).json({ mensagem: 'sucesso' });
   }
 }

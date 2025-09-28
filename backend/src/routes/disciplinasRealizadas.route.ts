@@ -155,13 +155,9 @@ disciplinaRealizadaRoutes.delete(
   asyncHandler(PresencaController.delete),
 );
 disciplinaRealizadaRoutes.patch(
-  '/disciplinas-realizadas/aulas/presencas/:id',
+  '/disciplinas-realizadas/aulas/:aulaId/presencas',
   AuthorizationMiddleware('professor', 'administrador'),
-  checkOwnershipMiddleware(
-    'presenca',
-    'id',
-    'aula.disciplinaRealizada.professorId',
-  ),
+  checkOwnershipMiddleware('aula', 'aulaId', 'disciplinaRealizada.professorId'),
   celebrate({ [Segments.BODY]: updatePresencaSchema }),
   asyncHandler(PresencaController.update),
 );
