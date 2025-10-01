@@ -158,7 +158,7 @@ model Presenca {
 
 model Nota {
   id          Int       @id @default(autoincrement())
-  valorObtido Decimal   @map("valor_obtido") @db.Decimal(4, 2)
+  valorObtido Decimal   @map("valor_obtido") @db.Decimal(5, 2)
   matriculaId Int       @map("matricula_id")
   avaliacaoId Int       @map("avaliacao_id")
   matricula   Matricula @relation(fields: [matriculaId], references: [id], onDelete: Cascade)

@@ -3,7 +3,13 @@ import { AvaliacaoService } from '../services/avaliacao.service.js';
 
 export class AvaliacaoController {
   static async create(req: Request, res: Response) {
-    res.status(201).json(await new AvaliacaoService().create(req.body));
+    const { disciplinaRealizadaId } = req.params;
+    res.status(201).json(
+      await new AvaliacaoService().create({
+        ...req.body,
+        disciplinaRealizadaId: Number(disciplinaRealizadaId),
+      }),
+    );
   }
   static async getAllByDisciplinaRealizada(req: Request, res: Response) {
     res

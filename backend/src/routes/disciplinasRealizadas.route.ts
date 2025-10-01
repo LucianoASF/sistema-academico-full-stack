@@ -8,7 +8,10 @@ import { checkOwnershipMiddleware } from '../middlewares/checkOwnership.middlewa
 import { AulaController } from '../controllers/aula.controller.js';
 import { newAulaSchema, updateAulaSchema } from '../schemas/aula.schema.js';
 import { AvaliacaoController } from '../controllers/avaliacao.controller.js';
-import { avaliacaoSchema } from '../schemas/avaliacao.schema.js';
+import {
+  newAvaliacaoSchema,
+  updateAvaliacaoSchema,
+} from '../schemas/avaliacao.schema.js';
 import {
   novaPresencaSchema,
   updatePresencaSchema,
@@ -93,12 +96,18 @@ disciplinaRealizadaRoutes.put(
 // avaliações
 
 disciplinaRealizadaRoutes.post(
-  '/avaliacoes',
-  celebrate({ [Segments.BODY]: avaliacaoSchema }),
+  '/disciplinas-realizadas/:disciplinaRealizadaId/avaliacoes',
+  AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'disciplinaRealizada',
+    'disciplinaRealizadaId',
+    'professorId',
+  ),
+  celebrate({ [Segments.BODY]: newAvaliacaoSchema }),
   asyncHandler(AvaliacaoController.create),
 );
 disciplinaRealizadaRoutes.get(
-  '/avaliacoes/disciplinas-realizadas/:disciplinaRealizadaId',
+  '/disciplinas-realizadas/:disciplinaRealizadaId/avaliacoes',
   asyncHandler(AvaliacaoController.getAllByDisciplinaRealizada),
 );
 disciplinaRealizadaRoutes.get(
@@ -106,12 +115,24 @@ disciplinaRealizadaRoutes.get(
   asyncHandler(AvaliacaoController.getById),
 );
 disciplinaRealizadaRoutes.delete(
-  '/avaliacoes/:id',
+  '/disciplinas-realizadas/avaliacoes/:id',
+  AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'avaliacao',
+    'id',
+    'disciplinaRealizada.professorId',
+  ),
   asyncHandler(AvaliacaoController.delete),
 );
 disciplinaRealizadaRoutes.put(
-  '/avaliacoes/:id',
-  celebrate({ [Segments.BODY]: avaliacaoSchema }),
+  '/disciplinas-realizadas/avaliacoes/:id',
+  AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'avaliacao',
+    'id',
+    'disciplinaRealizada.professorId',
+  ),
+  celebrate({ [Segments.BODY]: updateAvaliacaoSchema }),
   asyncHandler(AvaliacaoController.update),
 );
 
@@ -165,7 +186,13 @@ disciplinaRealizadaRoutes.patch(
 // notas
 
 disciplinaRealizadaRoutes.post(
-  '/notas',
+  '/disciplinas-realizadas/avaliacoes/:avaliacaoId/notas',
+  AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'avaliacao',
+    'avaliacaoId',
+    'disciplinaRealizada.professorId',
+  ),
   celebrate({ [Segments.BODY]: novaNotaSchema }),
   asyncHandler(NotaController.create),
 );
@@ -176,6 +203,16 @@ disciplinaRealizadaRoutes.get(
   asyncHandler(NotaController.getAllByMatricula),
 );
 disciplinaRealizadaRoutes.get(
+  '/disciplinas-realizadas/avaliacoes/:avaliacaoId/notas',
+  AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'avaliacao',
+    'avaliacaoId',
+    'disciplinaRealizada.professorId',
+  ),
+  asyncHandler(NotaController.getAllByAvaliacao),
+);
+disciplinaRealizadaRoutes.get(
   '/notas/:id',
   asyncHandler(NotaController.getById),
 );
@@ -184,7 +221,13 @@ disciplinaRealizadaRoutes.delete(
   asyncHandler(NotaController.delete),
 );
 disciplinaRealizadaRoutes.patch(
-  '/notas/:id',
+  '/disciplinas-realizadas/avaliacoes/:avaliacaoId/notas',
+  AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'avaliacao',
+    'avaliacaoId',
+    'disciplinaRealizada.professorId',
+  ),
   celebrate({ [Segments.BODY]: updateNotaSchema }),
   asyncHandler(NotaController.update),
 );

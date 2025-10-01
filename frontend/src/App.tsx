@@ -10,6 +10,7 @@ import AtualizarCadastro from './pages/AtualizarCadastro';
 import { Bounce, ToastContainer } from 'react-toastify';
 import Historico from './pages/Historico';
 import Aula from './pages/Aula';
+import Avaliacoes from './pages/Avaliacoes';
 
 function App() {
   return (
@@ -55,6 +56,14 @@ function App() {
             element={
               <PrivateRoute roles={['professor']}>
                 <Aula />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/avaliacoes"
+            element={
+              <PrivateRoute roles={['professor']}>
+                <Avaliacoes />
               </PrivateRoute>
             }
           />

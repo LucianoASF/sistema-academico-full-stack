@@ -5,9 +5,10 @@ export class NotaRepository {
   constructor() {
     this.prisma = new PrismaClient({ log: ['query'] });
   }
-  async create(nota: Omit<Nota, 'id'>): Promise<Nota> {
-    return await this.prisma.nota.create({
+  async create(nota: Omit<Nota, 'id'>[]) {
+    await this.prisma.nota.createMany({
       data: nota,
+      skipDuplicates: true,
     });
   }
   async getAllByMatricula(matriculaId: number): Promise<Nota[]> {
@@ -16,12 +17,23 @@ export class NotaRepository {
       include: { avaliacao: true },
     });
   }
-
-  async update(
-    id: number,
-    data: Pick<Nota, 'valorObtido'>,
-  ): Promise<Nota | null> {
-    return this.prisma.nota.update({ where: { id }, data });
+  async getAllByAvaliacao(avaliacaoId: number): Promise<Nota[]> {
+    return this.prisma.nota.findMany({
+      where: { avaliacaoId },
+      include: {
+        matricula: { select: { usuario: { select: { nome: true } } } },
+      },
+    });
+  }
+  async update(data: Pick<Nota, 'id' | 'valorObtido'>[]) {
+    await this.prisma.$transaction(
+      data.map((n: Pick<Nota, 'id' | 'valorObtido'>) =>
+        this.prisma.nota.update({
+          where: { id: n.id },
+          data: { valorObtido: n.valorObtido },
+        }),
+      ),
+    );
   }
   async getById(id: number): Promise<Nota | null> {
     return this.prisma.nota.findFirst({ where: { id } });
