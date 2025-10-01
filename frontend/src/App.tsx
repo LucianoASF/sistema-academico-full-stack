@@ -9,7 +9,7 @@ import DisciplinasEmCurso from './pages/DisciplinasEmCurso';
 import AtualizarCadastro from './pages/AtualizarCadastro';
 import { Bounce, ToastContainer } from 'react-toastify';
 import Historico from './pages/Historico';
-import Aula from './pages/Aula';
+import Aulas from './pages/Aulas';
 import Avaliacoes from './pages/Avaliacoes';
 
 function App() {
@@ -52,10 +52,10 @@ function App() {
             }
           />
           <Route
-            path="/aula"
+            path="/aulas"
             element={
               <PrivateRoute roles={['professor']}>
-                <Aula />
+                <Aulas />
               </PrivateRoute>
             }
           />

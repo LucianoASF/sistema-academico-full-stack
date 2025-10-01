@@ -13,6 +13,8 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { stringToDate } from '../utils/ConverteStringEmDate';
 import ErrorMessage from '../components/ErrorMessage';
+import type { IdisciplinaRealizada } from '../interfaces/IdisciplinaRealizada';
+import type { Imatricula } from '../interfaces/Imatricula';
 
 const aulaSchema = z.object({
   id: z
@@ -44,27 +46,8 @@ const aulaSchema = z.object({
 
 type AulaFormInputs = z.infer<typeof aulaSchema>;
 
-const Aula = () => {
-  type disciplinaRealizadaType = {
-    id: number;
-    dataInicio: string | Date;
-    dataFim: null | string | Date;
-    disciplinaId: number;
-    professorId: number;
-    disciplina: {
-      id: number;
-      nome: string;
-      quantidadeAulas: number;
-    };
-  };
-  type aulaType = {
-    id: number;
-    titulo: string;
-    descricao: string;
-    data: string | Date;
-    disciplinaRealizadaId: number;
-  };
-  type presencaType = {
+const Aulas = () => {
+  interface Ipresenca {
     id: number;
     presente: boolean;
     matriculaId: number;
@@ -74,18 +57,15 @@ const Aula = () => {
         nome: string;
       };
     };
-  };
-  type alunoMatriculadoType = {
+  }
+  interface Iaula {
     id: number;
-    notaFinal: null;
-    presencaFinal: null;
-    status: string;
-    alunoId: number;
+    titulo: string;
+    descricao: string;
+    data: string | Date;
     disciplinaRealizadaId: number;
-    usuario: {
-      nome: string;
-    };
-  };
+  }
+
   const { user } = useAuthContext();
   const {
     register,
@@ -100,20 +80,19 @@ const Aula = () => {
       presencas: {},
     },
   });
-  const [disciplinas, setDisciplinas] = useState<disciplinaRealizadaType[]>();
+  const [disciplinas, setDisciplinas] = useState<IdisciplinaRealizada[]>();
   const disciplina = watch('disciplinaRealizadaId');
   const aulaId = watch('id');
   const [ligado, setLigado] = useState(false);
-  const [aulas, setAulas] = useState<aulaType[]>();
-  const [presencas, setPresencas] = useState<presencaType[]>();
-  const [alunosMatriculados, setAlunosMatriculados] =
-    useState<alunoMatriculadoType[]>();
+  const [aulas, setAulas] = useState<Iaula[]>();
+  const [presencas, setPresencas] = useState<Ipresenca[]>();
+  const [alunosMatriculados, setAlunosMatriculados] = useState<Imatricula[]>();
 
   useEffect(() => {
     const fetchDisciplinas = async () => {
       try {
         const data = (
-          await api.get<disciplinaRealizadaType[]>(
+          await api.get<IdisciplinaRealizada[]>(
             `/disciplinas-realizadas/usuarios/${user?.id}`,
           )
         ).data;
@@ -138,9 +117,7 @@ const Aula = () => {
       }
       try {
         const data = (
-          await api.get<aulaType[]>(
-            `/disciplinas-realizadas/${disciplina}/aulas`,
-          )
+          await api.get<Iaula[]>(`/disciplinas-realizadas/${disciplina}/aulas`)
         ).data;
         setAulas(data);
       } catch (error) {
@@ -153,7 +130,7 @@ const Aula = () => {
   }, [ligado, disciplina, setValue]);
 
   useEffect(() => {
-    if (!aulas) return;
+    if (!aulas || aulas.length === 0) return;
     const aula = aulas.find((a) => a.id === Number(aulaId));
     if (!aula) return;
     setValue('titulo', aula.titulo);
@@ -166,7 +143,7 @@ const Aula = () => {
       if (!aulaId) return;
       try {
         const data = (
-          await api.get<presencaType[]>(
+          await api.get<Ipresenca[]>(
             `/disciplinas-realizadas/aulas/${aulaId}/presencas`,
           )
         ).data;
@@ -181,7 +158,7 @@ const Aula = () => {
   }, [aulaId]);
 
   useEffect(() => {
-    if (!presencas) return;
+    if (!presencas || presencas.length === 0) return;
     presencas.forEach((p) => {
       setValue(`presencas.${p.id}`, p.presente);
     });
@@ -200,7 +177,7 @@ const Aula = () => {
       if (!ligado || !disciplina) return;
       try {
         const data = (
-          await api.get<alunoMatriculadoType[]>(
+          await api.get<Imatricula[]>(
             `/matriculas/disciplinas-realizadas/${disciplina}`,
           )
         ).data;
@@ -301,7 +278,7 @@ const Aula = () => {
   return (
     <Layout>
       <main className="flex flex-col items-center p-4">
-        <TituloPrincipal styles="mb-6">Aula</TituloPrincipal>
+        <TituloPrincipal styles="mb-6">Aulas</TituloPrincipal>
 
         {!disciplinas ? (
           <h3>Você não está dando nenhuma disciplina!</h3>
@@ -424,43 +401,55 @@ const Aula = () => {
                 <div className="w-4/5">
                   <Table headers={['Nome', 'Presente']}>
                     {!ligado &&
-                      presencas?.map((presenca) => (
-                        <tr
-                          key={presenca.id}
-                          className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
-                        >
-                          <td className="px-4 py-3 text-gray-800 font-medium">
-                            {presenca.matricula.usuario.nome}
-                          </td>
-                          <td>
-                            <input
-                              type="checkbox"
-                              className="w-5 h-5 accent-purple-500"
-                              {...register(`presencas.${presenca.id}` as const)}
-                            />
-                          </td>
-                        </tr>
-                      ))}
+                      presencas
+                        ?.sort((a, b) =>
+                          a.matricula.usuario.nome.localeCompare(
+                            b.matricula.usuario.nome,
+                          ),
+                        )
+                        .map((presenca) => (
+                          <tr
+                            key={presenca.id}
+                            className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+                          >
+                            <td className="px-4 py-3 text-gray-800 font-medium">
+                              {presenca.matricula.usuario.nome}
+                            </td>
+                            <td>
+                              <input
+                                type="checkbox"
+                                className="w-5 h-5 accent-purple-500"
+                                {...register(
+                                  `presencas.${presenca.id}` as const,
+                                )}
+                              />
+                            </td>
+                          </tr>
+                        ))}
                     {ligado &&
-                      alunosMatriculados?.map((matricula) => (
-                        <tr
-                          key={matricula.id}
-                          className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
-                        >
-                          <td className="px-4 py-3 text-gray-800 font-medium">
-                            {matricula.usuario.nome}
-                          </td>
-                          <td>
-                            <input
-                              type="checkbox"
-                              className="w-5 h-5 accent-purple-500"
-                              {...register(
-                                `presencas.${matricula.id}` as const,
-                              )}
-                            />
-                          </td>
-                        </tr>
-                      ))}
+                      alunosMatriculados
+                        ?.sort((a, b) =>
+                          a.usuario.nome.localeCompare(b.usuario.nome),
+                        )
+                        .map((matricula) => (
+                          <tr
+                            key={matricula.id}
+                            className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+                          >
+                            <td className="px-4 py-3 text-gray-800 font-medium">
+                              {matricula.usuario.nome}
+                            </td>
+                            <td>
+                              <input
+                                type="checkbox"
+                                className="w-5 h-5 accent-purple-500"
+                                {...register(
+                                  `presencas.${matricula.id}` as const,
+                                )}
+                              />
+                            </td>
+                          </tr>
+                        ))}
                   </Table>
                 </div>
               </>
@@ -472,4 +461,4 @@ const Aula = () => {
   );
 };
 
-export default Aula;
+export default Aulas;

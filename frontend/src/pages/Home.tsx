@@ -39,7 +39,7 @@ const Home = () => {
                 titulo="Lançar/Ver presenças"
                 paragrafo="Você deseja visualizar o lançar presenças de suas aulas?"
                 nomeDoBotao="Visualizar"
-                to="/aula"
+                to="/aulas"
               />
             </>
           )}
