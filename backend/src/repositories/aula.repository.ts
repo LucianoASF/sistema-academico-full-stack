@@ -24,6 +24,13 @@ export class AulaRepository {
         : { id },
     });
   }
+  async getCountByDisciplinaEmAndamento(
+    disciplinaRealizadaId: number,
+  ): Promise<number> {
+    return this.prisma.aula.count({
+      where: { disciplinaRealizadaId, disciplinaRealizada: { dataFim: null } },
+    });
+  }
   async delete(id: number) {
     await this.prisma.aula.delete({ where: { id } });
   }

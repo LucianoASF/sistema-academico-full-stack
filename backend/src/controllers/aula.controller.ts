@@ -25,6 +25,13 @@ export class AulaController {
       .status(200)
       .json(await new AulaService().getById(Number(req.params.id)));
   }
+  static async getCountByDisciplinaEmAndamento(req: Request, res: Response) {
+    res.json({
+      quantidade: await new AulaService().getCountByDisciplinaEmAndamento(
+        Number(req.params.disciplinaRealizadaId),
+      ),
+    });
+  }
   static async delete(req: Request, res: Response) {
     await new AulaService().delete(Number(req.params.id));
     res.status(204).end();

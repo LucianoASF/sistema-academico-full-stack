@@ -76,6 +76,16 @@ disciplinaRealizadaRoutes.get(
   asyncHandler(AulaController.getAllByDisciplinaEmAndamento),
 );
 disciplinaRealizadaRoutes.get(
+  '/disciplinas-realizadas/:disciplinaRealizadaId/aulas/quantidade',
+  AuthorizationMiddleware('professor', 'administrador'),
+  checkOwnershipMiddleware(
+    'disciplinaRealizada',
+    'disciplinaRealizadaId',
+    'professorId',
+  ),
+  asyncHandler(AulaController.getCountByDisciplinaEmAndamento),
+);
+disciplinaRealizadaRoutes.get(
   '/aulas/:id',
   asyncHandler(AulaController.getById),
 );

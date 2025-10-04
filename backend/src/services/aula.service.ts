@@ -43,6 +43,13 @@ export class AulaService {
     if (!aula) throw new NotFoundError('Aula não encontrada!');
     return aula;
   }
+  async getCountByDisciplinaEmAndamento(
+    disciplinaRealizadaId: number,
+  ): Promise<number> {
+    return this.aulaRepository.getCountByDisciplinaEmAndamento(
+      disciplinaRealizadaId,
+    );
+  }
 
   async update(id: number, data: Omit<Aula, 'id'>): Promise<Aula> {
     await this.getById(id);

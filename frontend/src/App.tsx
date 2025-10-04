@@ -11,6 +11,7 @@ import { Bounce, ToastContainer } from 'react-toastify';
 import Historico from './pages/Historico';
 import Aulas from './pages/Aulas';
 import Avaliacoes from './pages/Avaliacoes';
+import DesempenhoDisciplina from './pages/DesempenhoDisciplina';
 
 function App() {
   return (
@@ -64,6 +65,14 @@ function App() {
             element={
               <PrivateRoute roles={['professor']}>
                 <Avaliacoes />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/desempenho"
+            element={
+              <PrivateRoute roles={['professor']}>
+                <DesempenhoDisciplina />
               </PrivateRoute>
             }
           />
