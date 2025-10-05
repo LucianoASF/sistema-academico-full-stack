@@ -15,6 +15,7 @@ import api from '../api/api';
 import type { IdisciplinaRealizada } from '../interfaces/IdisciplinaRealizada';
 import type { Imatricula } from '../interfaces/Imatricula';
 import { stringToDate } from '../utils/ConverteStringEmDate';
+import type { Iavaliacao } from '../interfaces/Iavaliacao';
 
 const avaliacaoSchema = z.object({
   id: z
@@ -54,13 +55,6 @@ const avaliacaoSchema = z.object({
 type AvaliacaoFormInputs = z.infer<typeof avaliacaoSchema>;
 
 const Avaliacoes = () => {
-  interface Iavaliacao {
-    id: number;
-    nome: string;
-    valor: number;
-    data: string | Date;
-    disciplinaRealizadaId: number;
-  }
   interface Inota {
     id: number;
     valorObtido: number;

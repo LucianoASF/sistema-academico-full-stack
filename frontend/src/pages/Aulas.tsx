@@ -15,6 +15,7 @@ import { stringToDate } from '../utils/ConverteStringEmDate';
 import ErrorMessage from '../components/ErrorMessage';
 import type { IdisciplinaRealizada } from '../interfaces/IdisciplinaRealizada';
 import type { Imatricula } from '../interfaces/Imatricula';
+import type { Iaula } from '../interfaces/Iaula';
 
 const aulaSchema = z.object({
   id: z
@@ -57,13 +58,6 @@ const Aulas = () => {
         nome: string;
       };
     };
-  }
-  interface Iaula {
-    id: number;
-    titulo: string;
-    descricao: string;
-    data: string | Date;
-    disciplinaRealizadaId: number;
   }
 
   const { user } = useAuthContext();
