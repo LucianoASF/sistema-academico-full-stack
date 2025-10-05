@@ -33,6 +33,13 @@ export class PresencaService {
   async getAllByAula(aulaId: number): Promise<Presenca[]> {
     return this.presencaRepository.getAllByAula(aulaId);
   }
+  async getAllByDisciplinaRealizada(
+    disciplinaRealizadaId: number,
+  ): Promise<Presenca[]> {
+    return this.presencaRepository.getAllByDisciplinaRealizada(
+      disciplinaRealizadaId,
+    );
+  }
 
   async getById(id: number): Promise<Presenca | null> {
     const presenca = await this.presencaRepository.getById(id);

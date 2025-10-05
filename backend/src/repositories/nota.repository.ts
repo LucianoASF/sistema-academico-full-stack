@@ -25,6 +25,13 @@ export class NotaRepository {
       },
     });
   }
+  async getAllByDisciplinaRealizada(
+    disciplinaRealizadaId: number,
+  ): Promise<Nota[]> {
+    return this.prisma.nota.findMany({
+      where: { avaliacao: { disciplinaRealizadaId } },
+    });
+  }
   async update(data: Pick<Nota, 'id' | 'valorObtido'>[]) {
     await this.prisma.$transaction(
       data.map((n: Pick<Nota, 'id' | 'valorObtido'>) =>

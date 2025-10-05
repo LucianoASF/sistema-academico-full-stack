@@ -162,14 +162,14 @@ disciplinaRealizadaRoutes.get(
   asyncHandler(PresencaController.getAllByMatricula),
 );
 disciplinaRealizadaRoutes.get(
-  '/disciplinas-realizadas/aulas/presencas/matriculas/:matriculaId/professor',
+  '/disciplinas-realizadas/:disciplinaRealizadaId/aulas/presencas',
   AuthorizationMiddleware('professor', 'Administrador'),
   checkOwnershipMiddleware(
-    'matricula',
-    'matriculaId',
-    'disciplinaRealizada.professorId',
+    'disciplinaRealizada',
+    'disciplinaRealizadaId',
+    'professorId',
   ),
-  asyncHandler(PresencaController.getAllByMatricula),
+  asyncHandler(PresencaController.getAllByDisciplinaRealizada),
 );
 disciplinaRealizadaRoutes.get(
   '/disciplinas-realizadas/aulas/:aulaId/presencas',
@@ -221,6 +221,16 @@ disciplinaRealizadaRoutes.get(
     'disciplinaRealizada.professorId',
   ),
   asyncHandler(NotaController.getAllByAvaliacao),
+);
+disciplinaRealizadaRoutes.get(
+  '/disciplinas-realizadas/:disciplinaRealizadaId/avaliacoes/notas',
+  AuthorizationMiddleware('professor', 'Administrador'),
+  checkOwnershipMiddleware(
+    'disciplinaRealizada',
+    'disciplinaRealizadaId',
+    'professorId',
+  ),
+  asyncHandler(NotaController.getAllByDisciplinaRealizada),
 );
 disciplinaRealizadaRoutes.get(
   '/notas/:id',

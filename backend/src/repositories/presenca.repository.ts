@@ -25,6 +25,13 @@ export class PresencaRepository {
       },
     });
   }
+  async getAllByDisciplinaRealizada(
+    disciplinaRealizadaId: number,
+  ): Promise<Presenca[]> {
+    return this.prisma.presenca.findMany({
+      where: { aula: { disciplinaRealizadaId } },
+    });
+  }
 
   async update(data: Pick<Presenca, 'id' | 'presente'>[]) {
     await this.prisma.$transaction(

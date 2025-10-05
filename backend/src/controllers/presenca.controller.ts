@@ -24,6 +24,13 @@ export class PresencaController {
         await new PresencaService().getAllByAula(Number(req.params.aulaId)),
       );
   }
+  static async getAllByDisciplinaRealizada(req: Request, res: Response) {
+    res.json(
+      await new PresencaService().getAllByDisciplinaRealizada(
+        Number(req.params.disciplinaRealizadaId),
+      ),
+    );
+  }
   static async getById(req: Request, res: Response) {
     res
       .status(200)

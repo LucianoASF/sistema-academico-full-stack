@@ -43,7 +43,13 @@ export class NotaService {
   async getAllByAvaliacao(avaliacaoId: number): Promise<Nota[]> {
     return this.notaRepository.getAllByAvaliacao(avaliacaoId);
   }
-
+  async getAllByDisciplinaRealizada(
+    disciplinaRealizadaId: number,
+  ): Promise<Nota[]> {
+    return this.notaRepository.getAllByDisciplinaRealizada(
+      disciplinaRealizadaId,
+    );
+  }
   async getById(id: number): Promise<Nota | null> {
     const nota = await this.notaRepository.getById(id);
     if (!nota) throw new NotFoundError('Nota não encontrado!');

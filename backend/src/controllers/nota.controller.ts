@@ -22,6 +22,13 @@ export class NotaController {
       await new NotaService().getAllByAvaliacao(Number(req.params.avaliacaoId)),
     );
   }
+  static async getAllByDisciplinaRealizada(req: Request, res: Response) {
+    res.json(
+      await new NotaService().getAllByDisciplinaRealizada(
+        Number(req.params.disciplinaRealizadaId),
+      ),
+    );
+  }
   static async getById(req: Request, res: Response) {
     res
       .status(200)
