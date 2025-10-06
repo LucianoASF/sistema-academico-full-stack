@@ -11,6 +11,7 @@ import TituloPrincipal from '../components/TituloPrincipal';
 import api from '../api/api';
 import { useAuthContext } from '../contexts/useAuthContext';
 import { Navigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 const loginSchema = z.object({
   email: z
@@ -39,16 +40,12 @@ const Login = () => {
   });
 
   const onSubmit = async (data: LoginFormInputs) => {
-    console.log('Dados enviados:', data);
-
     try {
       await api.post('/auth/login', data);
       login();
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data?.erro);
-      } else {
-        console.error(error);
+        toast.error(error.response?.data?.erro);
       }
     }
   };
