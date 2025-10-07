@@ -8,11 +8,13 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import Card from '../components/Card';
 import { stringToDate } from '../utils/ConverteStringEmDate';
+import type { IusuarioBusca } from '../interfaces/IusuarioBusca';
+import PesquisaUsuario from '../components/PesquisaUsuario';
 
 const Historico = () => {
   const { user } = useAuthContext();
 
-  type typeCursos = {
+  interface Icursos {
     id: number;
     dataInicio: string | Date;
     dataFim: string | null | Date;
@@ -28,15 +30,53 @@ const Historico = () => {
         nome: string;
       };
     };
-  };
+  }
 
-  const [cursos, setCursos] = useState<typeCursos[]>();
+  interface Igrade {
+    id: number;
+    versao: number;
+    cursoId: number;
+    disciplinas: {
+      id: number;
+      nome: string;
+      quantidadeAulas: number;
+    }[];
+  }
+
+  interface ImatriculaDisciplinaRealizada {
+    id: number;
+    notaFinal: number | null;
+    presencaFinal: number | null;
+    status: 'cursando' | 'aprovado' | 'reprovado' | 'abandonado';
+    alunoId: number;
+    disciplinaRealizadaId: number;
+    disciplinaRealizada: {
+      dataInicio: string;
+      dataFim: null | string;
+      disciplinaId: number;
+    };
+  }
+  const [cursos, setCursos] = useState<Icursos[]>();
+  const [radioSelecionado, setRadioSelecionado] = useState<number>(0);
+  const [grade, setGrade] = useState<Igrade>();
+  const [matriculaDiscipliansRealizadas, setMatriculaDisciplinasRealizadas] =
+    useState<ImatriculaDisciplinaRealizada[]>();
+  const [selecionado, setSelecionado] = useState<IusuarioBusca | null>(null);
 
   useEffect(() => {
     const fetchCursos = async () => {
       try {
+        if (!user || (user.role === 'administrador' && !selecionado)) {
+          setCursos(undefined);
+          setRadioSelecionado(0);
+          return;
+        }
         const data = (
-          await api.get<typeCursos[]>(`/matriculas-cursos/usuarios/${user?.id}`)
+          await api.get<Icursos[]>(
+            `/matriculas-cursos/usuarios/${
+              user.role === 'administrador' ? selecionado?.id : user.id
+            }`,
+          )
         ).data;
         data.forEach((dado) => {
           dado.dataInicio = stringToDate(dado.dataInicio as string);
@@ -54,49 +94,26 @@ const Historico = () => {
       }
     };
     fetchCursos();
-  }, [user?.id]);
-
-  const [radioSelecionado, setRadioSelecionado] = useState<number>(0);
-
-  type typeGrade = {
-    id: number;
-    versao: number;
-    cursoId: number;
-    disciplinas: {
-      id: number;
-      nome: string;
-      quantidadeAulas: number;
-    }[];
-  };
-
-  type typeMatriculaDisciplinaRealizada = {
-    id: number;
-    notaFinal: number | null;
-    presencaFinal: number | null;
-    status: 'cursando' | 'aprovado' | 'reprovado' | 'abandonado';
-    alunoId: number;
-    disciplinaRealizadaId: number;
-    disciplinaRealizada: {
-      dataInicio: string;
-      dataFim: null | string;
-      disciplinaId: number;
-    };
-  };
-
-  const [grade, setGrade] = useState<typeGrade>();
-  const [matriculaDiscipliansRealizadas, setMatriculaDisciplinasRealizadas] =
-    useState<typeMatriculaDisciplinaRealizada[]>();
+  }, [user, selecionado]);
 
   useEffect(() => {
     const fetchGrade = async () => {
       try {
         if (radioSelecionado === 0) return;
-        const data = (await api.get<typeGrade>(`/grades/${radioSelecionado}`))
+        if (!user || (user.role === 'administrador' && !selecionado)) {
+          setGrade(undefined);
+          setMatriculaDisciplinasRealizadas(undefined);
+          setRadioSelecionado(0);
+          return;
+        }
+        const data = (await api.get<Igrade>(`/grades/${radioSelecionado}`))
           .data;
         setGrade(data);
         const data2 = (
-          await api.get<typeMatriculaDisciplinaRealizada[]>(
-            `/matriculas/usuarios/${user?.id}`,
+          await api.get<ImatriculaDisciplinaRealizada[]>(
+            `/matriculas/usuarios/${
+              user.role === 'administrador' ? selecionado?.id : user.id
+            }`,
           )
         ).data;
         setMatriculaDisciplinasRealizadas(data2);
@@ -107,7 +124,7 @@ const Historico = () => {
       }
     };
     fetchGrade();
-  }, [radioSelecionado, user?.id]);
+  }, [radioSelecionado, user, selecionado]);
 
   const disciplinas: {
     id: number;
@@ -227,10 +244,22 @@ const Historico = () => {
     <Layout>
       <main className="flex flex-col p-4 items-center">
         <TituloPrincipal styles="mb-4">Histórico</TituloPrincipal>
+        {user?.role === 'administrador' && (
+          <PesquisaUsuario
+            role="aluno"
+            selecionado={selecionado}
+            setSelecionado={setSelecionado}
+          />
+        )}
         <div className="flex overflow-x-auto gap-4 py-2 w-full justify-center flex-wrap">
-          {!cursos && (
+          {!cursos && user?.role === 'aluno' && (
             <h3 className="font-titulo">
               Você não está matriculado em nenhum curso!
+            </h3>
+          )}
+          {!cursos && user?.role === 'administrador' && selecionado && (
+            <h3 className="font-titulo">
+              O aluno não está matriculado em nenhum curso!
             </h3>
           )}
           {cursos &&
