@@ -29,7 +29,7 @@ const PesquisaUsuario = ({
             setLoading(true);
             const data = (
               await api.get<IusuarioBusca[]>(
-                `/usuarios?role=${role}&busca=${busca}`,
+                `/usuarios?role=${role ?? ''}&busca=${busca}`,
               )
             ).data;
             const filtrados = data.filter(
@@ -67,7 +67,7 @@ const PesquisaUsuario = ({
   return (
     <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8">
       <Input
-        label={`Digite o nome do ${role}:`}
+        label={`Digite o nome do ${role ?? 'usuário'}:`}
         onChange={(e) => setBusca(e.target.value)}
         value={busca}
       />
