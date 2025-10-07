@@ -31,7 +31,7 @@ function App() {
           <Route
             path="/disciplinas-em-curso"
             element={
-              <PrivateRoute roles={['aluno']}>
+              <PrivateRoute roles={['aluno', 'administrador']}>
                 <DisciplinasEmCurso />
               </PrivateRoute>
             }

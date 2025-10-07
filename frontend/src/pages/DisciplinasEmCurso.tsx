@@ -4,6 +4,8 @@ import Layout from '../components/Layout';
 import TituloPrincipal from '../components/TituloPrincipal';
 import api from '../api/api';
 import { useAuthContext } from '../contexts/useAuthContext';
+import PesquisaUsuario from '../components/PesquisaUsuario';
+import type { IusuarioBusca } from '../interfaces/IusuarioBusca';
 
 const DisciplinasEmCurso = () => {
   const [matriculas, setMatriculas] = useState<
@@ -22,12 +24,21 @@ const DisciplinasEmCurso = () => {
     }[]
   >();
   const { user } = useAuthContext();
+  const [selecionado, setSelecionado] = useState<IusuarioBusca | null>(null);
 
   useEffect(() => {
     const fetchDisciplinas = async () => {
+      if (!user || (user.role === 'administrador' && !selecionado)) {
+        setMatriculas(undefined);
+        return;
+      }
       try {
         const dados = (
-          await api.get(`/matriculas/usuarios/${user?.id}/cursando`)
+          await api.get(
+            `/matriculas/usuarios/${
+              user.role === 'administrador' ? selecionado?.id : user.id
+            }/cursando`,
+          )
         ).data;
         setMatriculas(dados);
       } catch (error) {
@@ -35,12 +46,19 @@ const DisciplinasEmCurso = () => {
       }
     };
     fetchDisciplinas();
-  }, [user?.id]);
+  }, [user, selecionado]);
 
   return (
     <Layout>
       <main className="p-4 flex flex-col items-center">
         <TituloPrincipal styles="mb-16">Disciplinas em Curso</TituloPrincipal>
+        {user?.role === 'administrador' && (
+          <PesquisaUsuario
+            role="aluno"
+            selecionado={selecionado}
+            setSelecionado={setSelecionado}
+          />
+        )}
         {matriculas?.map((matricula) => (
           <Accordion
             key={matricula.id}
@@ -49,6 +67,9 @@ const DisciplinasEmCurso = () => {
             professor={matricula.disciplinaRealizada.professor.nome}
           />
         ))}
+        {!matriculas && user?.role !== 'administrador' && (
+          <p>Você não esta cursando nenhuma disciplina!</p>
+        )}
       </main>
     </Layout>
   );

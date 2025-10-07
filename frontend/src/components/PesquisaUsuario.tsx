@@ -65,7 +65,7 @@ const PesquisaUsuario = ({
   };
 
   return (
-    <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8">
+    <div className="w-full mb-12 max-w-2xl bg-white shadow-lg rounded-2xl p-8">
       <Input
         label={`Digite o nome do ${role ?? 'usuário'}:`}
         onChange={(e) => setBusca(e.target.value)}

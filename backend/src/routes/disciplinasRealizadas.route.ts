@@ -156,14 +156,14 @@ disciplinaRealizadaRoutes.post(
   asyncHandler(PresencaController.create),
 );
 disciplinaRealizadaRoutes.get(
-  '/disciplinas-realizadas/aulas/presencas/matriculas/:matriculaId/aluno',
-  AuthorizationMiddleware('aluno', 'Administrador'),
+  '/disciplinas-realizadas/aulas/presencas/matriculas/:matriculaId',
+  AuthorizationMiddleware('aluno', 'administrador'),
   checkOwnershipMiddleware('matricula', 'matriculaId', 'alunoId'),
   asyncHandler(PresencaController.getAllByMatricula),
 );
 disciplinaRealizadaRoutes.get(
   '/disciplinas-realizadas/:disciplinaRealizadaId/aulas/presencas',
-  AuthorizationMiddleware('professor', 'Administrador'),
+  AuthorizationMiddleware('professor', 'administrador'),
   checkOwnershipMiddleware(
     'disciplinaRealizada',
     'disciplinaRealizadaId',

@@ -85,7 +85,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
       try {
         const dados = (
           await api.get<typePresencas[]>(
-            `/disciplinas-realizadas/aulas/presencas/matriculas/${matriculaId}/aluno`,
+            `/disciplinas-realizadas/aulas/presencas/matriculas/${matriculaId}`,
           )
         ).data;
         dados.forEach((dado) => {
@@ -131,9 +131,7 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
         <div className="flex flex-col mt-4 gap-4">
           {!notas ||
             (notas.length === 0 && (
-              <span className="text-center font-semibold">
-                Nenhuma nota lançada!
-              </span>
+              <span className="text-center">Nenhuma nota lançada!</span>
             ))}
           {notas && notas.length > 0 && (
             <Table headers={['Avaliação', 'Data', 'Valor', 'Nota']}>
@@ -186,7 +184,10 @@ const Accordion = ({ matriculaId, disciplina, professor }: AccordionProps) => {
               {porcentagemFalta >= 15 && `${Math.round(porcentagemFalta)}%`}
             </div>
           </div>
-          {isOpenModal && (
+          {presencas.length === 0 && (
+            <span className="text-center">Nenhuma presença lançada!</span>
+          )}
+          {isOpenModal && presencas.length > 0 && (
             <Modal titulo="Presenças" setIsOpen={setIsOpenModal}>
               <Table headers={['Título', 'Descrição', 'Data', 'Presença']}>
                 {presencas.map((presenca) => (
