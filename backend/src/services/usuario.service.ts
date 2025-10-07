@@ -33,6 +33,13 @@ export class UsuarioService {
     return usuario;
   }
 
+  async buscaUsuarios(
+    busca?: string,
+    role?: Usuario['role'],
+  ): Promise<Pick<Usuario, 'id' | 'nome'>[]> {
+    return this.usuarioRepository.buscaUsuarios(busca, role);
+  }
+
   // Atualizar usuário sem senha
   async update(
     id: number,

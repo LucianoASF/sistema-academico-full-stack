@@ -18,7 +18,13 @@ usuarioRoutes.post(
 );
 usuarioRoutes.get(
   '/usuarios/perfil',
+  AuthorizationMiddleware('aluno', 'professor', 'administrador'),
   asyncHandler(UsuarioController.perfilDecodificadoJwt),
+);
+usuarioRoutes.get(
+  '/usuarios',
+  AuthorizationMiddleware('administrador'),
+  asyncHandler(UsuarioController.buscaUsuarios),
 );
 usuarioRoutes.get(
   '/usuarios/:id',

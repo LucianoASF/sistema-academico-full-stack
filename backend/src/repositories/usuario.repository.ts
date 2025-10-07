@@ -45,6 +45,27 @@ export class UsuarioRepository {
     });
   }
 
+  async buscaUsuarios(
+    busca?: string,
+    role?: Usuario['role'],
+  ): Promise<Pick<Usuario, 'id' | 'nome'>[]> {
+    const where = {
+      ...(role ? { role } : {}),
+      ...(busca
+        ? {
+            nome: {
+              contains: busca,
+            },
+          }
+        : {}),
+    };
+    return this.prisma.usuario.findMany({
+      where,
+      select: { id: true, nome: true, role: true },
+      orderBy: { nome: 'asc' },
+    });
+  }
+
   async findByEmail(email: string): Promise<Omit<Usuario, 'senha'> | null> {
     return this.prisma.usuario.findFirst({
       where: { email },
