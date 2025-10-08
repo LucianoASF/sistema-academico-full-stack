@@ -16,6 +16,8 @@ import ErrorMessage from '../components/ErrorMessage';
 import type { IdisciplinaRealizada } from '../interfaces/IdisciplinaRealizada';
 import type { Imatricula } from '../interfaces/Imatricula';
 import type { Iaula } from '../interfaces/Iaula';
+import type { IusuarioBusca } from '../interfaces/IusuarioBusca';
+import PesquisaUsuario from '../components/PesquisaUsuario';
 
 const aulaSchema = z.object({
   id: z
@@ -81,13 +83,21 @@ const Aulas = () => {
   const [aulas, setAulas] = useState<Iaula[]>();
   const [presencas, setPresencas] = useState<Ipresenca[]>();
   const [alunosMatriculados, setAlunosMatriculados] = useState<Imatricula[]>();
+  const [selecionado, setSelecionado] = useState<IusuarioBusca | null>(null);
 
   useEffect(() => {
     const fetchDisciplinas = async () => {
+      if (!user) return;
+      if (user.role === 'administrador' && !selecionado) {
+        setDisciplinas(undefined);
+        return;
+      }
       try {
         const data = (
           await api.get<IdisciplinaRealizada[]>(
-            `/disciplinas-realizadas/usuarios/${user?.id}`,
+            `/disciplinas-realizadas/usuarios/${
+              user.role === 'administrador' ? selecionado?.id : user.id
+            }`,
           )
         ).data;
         setDisciplinas(data);
@@ -98,7 +108,7 @@ const Aulas = () => {
       }
     };
     fetchDisciplinas();
-  }, [user?.id]);
+  }, [user, selecionado]);
 
   useEffect(() => {
     const fetchAulas = async () => {
@@ -273,10 +283,20 @@ const Aulas = () => {
     <Layout>
       <main className="flex flex-col items-center p-4">
         <TituloPrincipal styles="mb-6">Aulas</TituloPrincipal>
-
-        {!disciplinas ? (
+        {user?.role === 'administrador' && (
+          <PesquisaUsuario
+            role="professor"
+            selecionado={selecionado}
+            setSelecionado={setSelecionado}
+          />
+        )}
+        {!disciplinas && user?.role === 'professor' && (
           <h3>Você não está dando nenhuma disciplina!</h3>
-        ) : (
+        )}
+        {!disciplinas && user?.role === 'administrador' && selecionado && (
+          <h3>Você não está dando nenhuma disciplina!</h3>
+        )}
+        {disciplinas && disciplinas?.length > 0 && (
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="w-full flex flex-col items-center p-4"
