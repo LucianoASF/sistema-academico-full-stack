@@ -2,12 +2,9 @@ import { useEffect, useState } from 'react';
 import Appbar from './Appbar';
 import Sidebar from './Sidebar';
 import useBreakpoint from '../hooks/useBreakpoints';
+import { Outlet } from 'react-router';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout = ({ children }: LayoutProps) => {
+const Layout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const breakpoint = useBreakpoint();
@@ -32,7 +29,7 @@ const Layout = ({ children }: LayoutProps) => {
         className={`flex flex-col w-full transition-all duration-300 ease-in-out ${className}`}
       >
         <Appbar onToggle={toggleSidebar} />
-        {children}
+        <Outlet />
       </div>
       {isSidebarOpen && breakpoint !== 'lg' && (
         <div

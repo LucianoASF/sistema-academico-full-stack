@@ -1,7 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
 import BotaoPrincipal from '../components/BotaoPrincipal';
 import Input from '../components/Input';
-import Layout from '../components/Layout';
 import TituloPrincipal from '../components/TituloPrincipal';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -96,97 +95,93 @@ const AtualizarCadastro = () => {
   }
 
   return (
-    <Layout>
-      <main className="flex flex-col p-4 items-center">
-        <TituloPrincipal styles="mb-16">Atualizar Cadastro</TituloPrincipal>
+    <main className="flex flex-col p-4 items-center">
+      <TituloPrincipal styles="mb-16">Atualizar Cadastro</TituloPrincipal>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-6"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Input label="Nome" {...register('nome')} />
-              {errors.nome && (
-                <ErrorMessage>{errors.nome.message}</ErrorMessage>
-              )}
-            </div>
-
-            <div>
-              <Input label="Email" type="email" {...register('email')} />
-              {errors.email && (
-                <ErrorMessage>{errors.email.message}</ErrorMessage>
-              )}
-            </div>
-
-            <div>
-              <Controller
-                name="cpf"
-                control={control}
-                render={({ field }) => (
-                  <PatternFormat
-                    value={field.value || ''}
-                    format="###.###.###-##"
-                    customInput={Input}
-                    mask="_"
-                    onValueChange={(values) => field.onChange(values.value)}
-                    label="CPF"
-                  />
-                )}
-              />
-              {errors.cpf && <ErrorMessage>{errors.cpf.message}</ErrorMessage>}
-            </div>
-
-            <div>
-              <Controller
-                name="telefone"
-                control={control}
-                render={({ field }) => (
-                  <PatternFormat
-                    value={field.value || ''}
-                    format="(##) #####-####"
-                    customInput={Input}
-                    mask="_"
-                    onValueChange={(values) => field.onChange(values.value)}
-                    label="Telefone"
-                  />
-                )}
-              />
-              {errors.telefone && (
-                <ErrorMessage>{errors.telefone.message}</ErrorMessage>
-              )}
-            </div>
-
-            <div>
-              <Input
-                label="Data de Nascimento"
-                type="date"
-                {...register('dataNascimento')}
-              />
-              {errors.dataNascimento && (
-                <ErrorMessage>{errors.dataNascimento.message}</ErrorMessage>
-              )}
-            </div>
-            <div>
-              <Input
-                label="Senha (opcional)"
-                type="password"
-                {...register('senha')}
-              />
-              {errors.senha && (
-                <ErrorMessage>{errors.senha.message}</ErrorMessage>
-              )}
-            </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-6"
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <Input label="Nome" {...register('nome')} />
+            {errors.nome && <ErrorMessage>{errors.nome.message}</ErrorMessage>}
           </div>
 
-          <div className="flex justify-end pt-6">
-            <BotaoPrincipal>
-              {isSubmitting ? 'Enviando...' : 'Salvar Alterações'}
-            </BotaoPrincipal>
+          <div>
+            <Input label="Email" type="email" {...register('email')} />
+            {errors.email && (
+              <ErrorMessage>{errors.email.message}</ErrorMessage>
+            )}
           </div>
-        </form>
-      </main>
-    </Layout>
+
+          <div>
+            <Controller
+              name="cpf"
+              control={control}
+              render={({ field }) => (
+                <PatternFormat
+                  value={field.value || ''}
+                  format="###.###.###-##"
+                  customInput={Input}
+                  mask="_"
+                  onValueChange={(values) => field.onChange(values.value)}
+                  label="CPF"
+                />
+              )}
+            />
+            {errors.cpf && <ErrorMessage>{errors.cpf.message}</ErrorMessage>}
+          </div>
+
+          <div>
+            <Controller
+              name="telefone"
+              control={control}
+              render={({ field }) => (
+                <PatternFormat
+                  value={field.value || ''}
+                  format="(##) #####-####"
+                  customInput={Input}
+                  mask="_"
+                  onValueChange={(values) => field.onChange(values.value)}
+                  label="Telefone"
+                />
+              )}
+            />
+            {errors.telefone && (
+              <ErrorMessage>{errors.telefone.message}</ErrorMessage>
+            )}
+          </div>
+
+          <div>
+            <Input
+              label="Data de Nascimento"
+              type="date"
+              {...register('dataNascimento')}
+            />
+            {errors.dataNascimento && (
+              <ErrorMessage>{errors.dataNascimento.message}</ErrorMessage>
+            )}
+          </div>
+          <div>
+            <Input
+              label="Senha (opcional)"
+              type="password"
+              {...register('senha')}
+            />
+            {errors.senha && (
+              <ErrorMessage>{errors.senha.message}</ErrorMessage>
+            )}
+          </div>
+        </div>
+
+        <div className="flex justify-end pt-6">
+          <BotaoPrincipal>
+            {isSubmitting ? 'Enviando...' : 'Salvar Alterações'}
+          </BotaoPrincipal>
+        </div>
+      </form>
+    </main>
   );
 };
 

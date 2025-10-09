@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form';
-import Layout from '../components/Layout';
 import TituloPrincipal from '../components/TituloPrincipal';
 import ErrorMessage from '../components/ErrorMessage';
 import Input from '../components/Input';
@@ -375,168 +374,166 @@ const Avaliacoes = () => {
   }
 
   return (
-    <Layout>
-      <main className="flex flex-col items-center p-4">
-        <TituloPrincipal styles="mb-6">Avaliações</TituloPrincipal>
-        {user?.role === 'administrador' && (
-          <PesquisaUsuario
-            role="professor"
-            selecionado={selecionado}
-            setSelecionado={setSelecionado}
-          />
-        )}
-        {!disciplinas && user?.role === 'professor' && (
-          <h3>Você não está dando nenhuma disciplina!</h3>
-        )}
-        {!disciplinas && user?.role === 'administrador' && selecionado && (
-          <h3>O professor não está dando nenhuma disciplina!</h3>
-        )}
-        {disciplinas && disciplinas?.length > 0 && (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full flex flex-col items-center p-4"
-          >
-            <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-4">
-              <label htmlFor="disciplina">Selecione a Disciplina</label>
-              <select
-                id="disciplina"
-                className="w-full border border-gray-700 p-2 rounded-md"
-                {...register('disciplinaRealizadaId')}
-                defaultValue=""
-              >
-                <option disabled hidden value="">
-                  Selecione uma disciplina
+    <main className="flex flex-col items-center p-4">
+      <TituloPrincipal styles="mb-6">Avaliações</TituloPrincipal>
+      {user?.role === 'administrador' && (
+        <PesquisaUsuario
+          role="professor"
+          selecionado={selecionado}
+          setSelecionado={setSelecionado}
+        />
+      )}
+      {!disciplinas && user?.role === 'professor' && (
+        <h3>Você não está dando nenhuma disciplina!</h3>
+      )}
+      {!disciplinas && user?.role === 'administrador' && selecionado && (
+        <h3>O professor não está dando nenhuma disciplina!</h3>
+      )}
+      {disciplinas && disciplinas?.length > 0 && (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col items-center p-4"
+        >
+          <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-4">
+            <label htmlFor="disciplina">Selecione a Disciplina</label>
+            <select
+              id="disciplina"
+              className="w-full border border-gray-700 p-2 rounded-md"
+              {...register('disciplinaRealizadaId')}
+              defaultValue=""
+            >
+              <option disabled hidden value="">
+                Selecione uma disciplina
+              </option>
+              {disciplinas.map((disciplina) => (
+                <option key={disciplina.id} value={disciplina.id}>
+                  {disciplina.disciplina.nome}
                 </option>
-                {disciplinas.map((disciplina) => (
-                  <option key={disciplina.id} value={disciplina.id}>
-                    {disciplina.disciplina.nome}
-                  </option>
-                ))}
-              </select>
-              {errors.disciplinaRealizadaId && (
-                <ErrorMessage>
-                  {errors.disciplinaRealizadaId.message}
-                </ErrorMessage>
-              )}
+              ))}
+            </select>
+            {errors.disciplinaRealizadaId && (
+              <ErrorMessage>
+                {errors.disciplinaRealizadaId.message}
+              </ErrorMessage>
+            )}
 
-              {disciplinaId && (
-                <>
-                  <div className="flex gap-2 items-center justify-center mt-3">
-                    <span className="whitespace-nowrap">Nova Avaliação?</span>
+            {disciplinaId && (
+              <>
+                <div className="flex gap-2 items-center justify-center mt-3">
+                  <span className="whitespace-nowrap">Nova Avaliação?</span>
+                  <button
+                    type="button"
+                    onClick={() => setLigado((prevState) => !prevState)}
+                    className={`cursor-pointer w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 
+                      ${ligado ? 'bg-purple-500' : 'bg-gray-400'}`}
+                  >
+                    <span
+                      className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300
+                        ${ligado ? 'translate-x-6' : 'translate-x-0'}`}
+                    />
+                  </button>
+                </div>
+
+                {!ligado && (
+                  <div className="flex flex-col w-full">
+                    <label htmlFor="id">Selecione a Avaliação</label>
+                    <select
+                      id="id"
+                      className="border border-gray-700 p-2 rounded-md"
+                      defaultValue=""
+                      {...register('id')}
+                    >
+                      {avaliacoes && avaliacoes?.length > 0 ? (
+                        <option disabled hidden value="">
+                          Selecione uma avaliação
+                        </option>
+                      ) : (
+                        <option disabled hidden value="">
+                          Nenhuma avaliação cadastrada
+                        </option>
+                      )}
+                      {avaliacoes?.map((avaliacao) => (
+                        <option key={avaliacao.id} value={avaliacao.id}>
+                          {avaliacao.nome}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.id && (
+                      <ErrorMessage>{errors.id.message}</ErrorMessage>
+                    )}
+                  </div>
+                )}
+
+                <Input label="Título da Avaliação" {...register('nome')} />
+                {errors.nome && (
+                  <ErrorMessage>{errors.nome.message}</ErrorMessage>
+                )}
+                <Input label="Data" type="date" {...register('data')} />
+                {errors.data && (
+                  <ErrorMessage>{errors.data.message}</ErrorMessage>
+                )}
+                <Input label="Valor" {...register('valor')} />
+                {errors.valor && (
+                  <ErrorMessage>{errors.valor.message}</ErrorMessage>
+                )}
+
+                <div className="flex justify-end gap-4">
+                  {!ligado && avaliacaoId && (
                     <button
                       type="button"
-                      onClick={() => setLigado((prevState) => !prevState)}
-                      className={`cursor-pointer w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 
-                      ${ligado ? 'bg-purple-500' : 'bg-gray-400'}`}
+                      className="text-white mt-4 py-2 px-3 rounded-md cursor-pointer bg-red-500 hover:bg-red-700"
+                      onClick={excluir}
                     >
-                      <span
-                        className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300
-                        ${ligado ? 'translate-x-6' : 'translate-x-0'}`}
-                      />
+                      Excluir
                     </button>
-                  </div>
-
-                  {!ligado && (
-                    <div className="flex flex-col w-full">
-                      <label htmlFor="id">Selecione a Avaliação</label>
-                      <select
-                        id="id"
-                        className="border border-gray-700 p-2 rounded-md"
-                        defaultValue=""
-                        {...register('id')}
-                      >
-                        {avaliacoes && avaliacoes?.length > 0 ? (
-                          <option disabled hidden value="">
-                            Selecione uma avaliação
-                          </option>
-                        ) : (
-                          <option disabled hidden value="">
-                            Nenhuma avaliação cadastrada
-                          </option>
-                        )}
-                        {avaliacoes?.map((avaliacao) => (
-                          <option key={avaliacao.id} value={avaliacao.id}>
-                            {avaliacao.nome}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.id && (
-                        <ErrorMessage>{errors.id.message}</ErrorMessage>
-                      )}
-                    </div>
                   )}
+                  <BotaoPrincipal>
+                    {isSubmitting ? 'Enviando...' : 'Salvar'}
+                  </BotaoPrincipal>
+                </div>
+              </>
+            )}
+          </div>
 
-                  <Input label="Título da Avaliação" {...register('nome')} />
-                  {errors.nome && (
-                    <ErrorMessage>{errors.nome.message}</ErrorMessage>
-                  )}
-                  <Input label="Data" type="date" {...register('data')} />
-                  {errors.data && (
-                    <ErrorMessage>{errors.data.message}</ErrorMessage>
-                  )}
-                  <Input label="Valor" {...register('valor')} />
-                  {errors.valor && (
-                    <ErrorMessage>{errors.valor.message}</ErrorMessage>
-                  )}
-
-                  <div className="flex justify-end gap-4">
-                    {!ligado && avaliacaoId && (
-                      <button
-                        type="button"
-                        className="text-white mt-4 py-2 px-3 rounded-md cursor-pointer bg-red-500 hover:bg-red-700"
-                        onClick={excluir}
-                      >
-                        Excluir
-                      </button>
-                    )}
-                    <BotaoPrincipal>
-                      {isSubmitting ? 'Enviando...' : 'Salvar'}
-                    </BotaoPrincipal>
-                  </div>
-                </>
-              )}
-            </div>
-
-            {disciplinaId && (ligado || avaliacaoId) && (
-              <>
-                <h3 className="font-titulo text-lg text-gray-800 mt-8">
-                  Lista de Presença
-                </h3>
-                <div className="w-4/5">
-                  <Table headers={['Nome', 'Presente']}>
-                    {listaDeAlunosEmOrdemAlfabetica?.map((a) => (
-                      <tr
-                        key={a.matriculaId}
-                        className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
-                      >
-                        <td className="px-4 py-3 text-gray-800 font-medium">
-                          {a.nome}
-                        </td>
-                        <td>
-                          <input
-                            className={`w-10 h-8 text-center  bg-white border rounded-md ${
-                              errors.notas?.[a.matriculaId]
-                                ? 'border-red-500'
-                                : 'border-black'
-                            }`}
-                            {...register(`notas.${a.matriculaId}` as const)}
-                          />
-                          {/* {errors.notas[a.matriculaId] && (
+          {disciplinaId && (ligado || avaliacaoId) && (
+            <>
+              <h3 className="font-titulo text-lg text-gray-800 mt-8">
+                Lista de Presença
+              </h3>
+              <div className="w-4/5">
+                <Table headers={['Nome', 'Presente']}>
+                  {listaDeAlunosEmOrdemAlfabetica?.map((a) => (
+                    <tr
+                      key={a.matriculaId}
+                      className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+                    >
+                      <td className="px-4 py-3 text-gray-800 font-medium">
+                        {a.nome}
+                      </td>
+                      <td>
+                        <input
+                          className={`w-10 h-8 text-center  bg-white border rounded-md ${
+                            errors.notas?.[a.matriculaId]
+                              ? 'border-red-500'
+                              : 'border-black'
+                          }`}
+                          {...register(`notas.${a.matriculaId}` as const)}
+                        />
+                        {/* {errors.notas[a.matriculaId] && (
                             <ErrorMessage>
                               {errors.notas[a.matriculaId]?.message}
                             </ErrorMessage>
                           )} */}
-                        </td>
-                      </tr>
-                    ))}
-                  </Table>
-                </div>
-              </>
-            )}
-          </form>
-        )}
-      </main>
-    </Layout>
+                      </td>
+                    </tr>
+                  ))}
+                </Table>
+              </div>
+            </>
+          )}
+        </form>
+      )}
+    </main>
   );
 };
 

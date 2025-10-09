@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Layout from '../components/Layout';
 import TituloPrincipal from '../components/TituloPrincipal';
 import Input from '../components/Input';
 import Table from '../components/Table';
@@ -280,198 +279,194 @@ const Aulas = () => {
   }
 
   return (
-    <Layout>
-      <main className="flex flex-col items-center p-4">
-        <TituloPrincipal styles="mb-6">Aulas</TituloPrincipal>
-        {user?.role === 'administrador' && (
-          <PesquisaUsuario
-            role="professor"
-            selecionado={selecionado}
-            setSelecionado={setSelecionado}
-          />
-        )}
-        {!disciplinas && user?.role === 'professor' && (
-          <h3>Você não está dando nenhuma disciplina!</h3>
-        )}
-        {!disciplinas && user?.role === 'administrador' && selecionado && (
-          <h3>O professor não está dando nenhuma disciplina!</h3>
-        )}
-        {disciplinas && disciplinas?.length > 0 && (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full flex flex-col items-center p-4"
-          >
-            <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-4">
-              <label htmlFor="disciplina">Selecione a Disciplina</label>
-              <select
-                id="disciplina"
-                className="w-full border border-gray-700 p-2 rounded-md"
-                {...register('disciplinaRealizadaId')}
-                defaultValue=""
-              >
-                <option disabled hidden value="">
-                  Selecione uma disciplina
+    <main className="flex flex-col items-center p-4">
+      <TituloPrincipal styles="mb-6">Aulas</TituloPrincipal>
+      {user?.role === 'administrador' && (
+        <PesquisaUsuario
+          role="professor"
+          selecionado={selecionado}
+          setSelecionado={setSelecionado}
+        />
+      )}
+      {!disciplinas && user?.role === 'professor' && (
+        <h3>Você não está dando nenhuma disciplina!</h3>
+      )}
+      {!disciplinas && user?.role === 'administrador' && selecionado && (
+        <h3>O professor não está dando nenhuma disciplina!</h3>
+      )}
+      {disciplinas && disciplinas?.length > 0 && (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col items-center p-4"
+        >
+          <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8 space-y-4">
+            <label htmlFor="disciplina">Selecione a Disciplina</label>
+            <select
+              id="disciplina"
+              className="w-full border border-gray-700 p-2 rounded-md"
+              {...register('disciplinaRealizadaId')}
+              defaultValue=""
+            >
+              <option disabled hidden value="">
+                Selecione uma disciplina
+              </option>
+              {disciplinas.map((disciplina) => (
+                <option key={disciplina.id} value={disciplina.id}>
+                  {disciplina.disciplina.nome}
                 </option>
-                {disciplinas.map((disciplina) => (
-                  <option key={disciplina.id} value={disciplina.id}>
-                    {disciplina.disciplina.nome}
-                  </option>
-                ))}
-              </select>
-              {errors.disciplinaRealizadaId && (
-                <ErrorMessage>
-                  {errors.disciplinaRealizadaId.message}
-                </ErrorMessage>
-              )}
+              ))}
+            </select>
+            {errors.disciplinaRealizadaId && (
+              <ErrorMessage>
+                {errors.disciplinaRealizadaId.message}
+              </ErrorMessage>
+            )}
 
-              {disciplina && (
-                <>
-                  <div className="flex gap-2 items-center justify-center mt-3">
-                    <span className="whitespace-nowrap">Nova Aula?</span>
+            {disciplina && (
+              <>
+                <div className="flex gap-2 items-center justify-center mt-3">
+                  <span className="whitespace-nowrap">Nova Aula?</span>
+                  <button
+                    type="button"
+                    onClick={() => setLigado((prevState) => !prevState)}
+                    className={`cursor-pointer w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 
+                      ${ligado ? 'bg-purple-500' : 'bg-gray-400'}`}
+                  >
+                    <span
+                      className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300
+                        ${ligado ? 'translate-x-6' : 'translate-x-0'}`}
+                    />
+                  </button>
+                </div>
+
+                {!ligado && (
+                  <div className="flex flex-col w-full">
+                    <label htmlFor="tituloAula">Selecione a Aula</label>
+                    <select
+                      id="tituloAula"
+                      className="border border-gray-700 p-2 rounded-md"
+                      defaultValue=""
+                      {...register('id')}
+                    >
+                      {aulas && aulas?.length > 0 ? (
+                        <option disabled hidden value="">
+                          Selecione uma aula
+                        </option>
+                      ) : (
+                        <option disabled hidden value="">
+                          Nenhuma aula cadastrada
+                        </option>
+                      )}
+                      {aulas?.map((aula) => (
+                        <option key={aula.id} value={aula.id}>
+                          {aula.titulo}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.id && (
+                      <ErrorMessage>{errors.id.message}</ErrorMessage>
+                    )}
+                  </div>
+                )}
+
+                <Input label="Título da Aula" {...register('titulo')} />
+                {errors.titulo && (
+                  <ErrorMessage>{errors.titulo.message}</ErrorMessage>
+                )}
+                <Input label="Data" type="date" {...register('data')} />
+                {errors.data && (
+                  <ErrorMessage>{errors.data.message}</ErrorMessage>
+                )}
+
+                <label htmlFor="descricao">Descrição</label>
+                <textarea
+                  className="w-full h-20 border border-gray-700 p-2 rounded-md"
+                  id="descricao"
+                  {...register('descricao')}
+                />
+                {errors.descricao && (
+                  <ErrorMessage>{errors.descricao.message}</ErrorMessage>
+                )}
+                <div className="flex justify-end gap-4">
+                  {!ligado && aulaId && (
                     <button
                       type="button"
-                      onClick={() => setLigado((prevState) => !prevState)}
-                      className={`cursor-pointer w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 
-                      ${ligado ? 'bg-purple-500' : 'bg-gray-400'}`}
+                      className="text-white mt-4 py-2 px-3 rounded-md cursor-pointer bg-red-500 hover:bg-red-700"
+                      onClick={excluir}
                     >
-                      <span
-                        className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-300
-                        ${ligado ? 'translate-x-6' : 'translate-x-0'}`}
-                      />
+                      Excluir
                     </button>
-                  </div>
-
-                  {!ligado && (
-                    <div className="flex flex-col w-full">
-                      <label htmlFor="tituloAula">Selecione a Aula</label>
-                      <select
-                        id="tituloAula"
-                        className="border border-gray-700 p-2 rounded-md"
-                        defaultValue=""
-                        {...register('id')}
-                      >
-                        {aulas && aulas?.length > 0 ? (
-                          <option disabled hidden value="">
-                            Selecione uma aula
-                          </option>
-                        ) : (
-                          <option disabled hidden value="">
-                            Nenhuma aula cadastrada
-                          </option>
-                        )}
-                        {aulas?.map((aula) => (
-                          <option key={aula.id} value={aula.id}>
-                            {aula.titulo}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.id && (
-                        <ErrorMessage>{errors.id.message}</ErrorMessage>
-                      )}
-                    </div>
                   )}
-
-                  <Input label="Título da Aula" {...register('titulo')} />
-                  {errors.titulo && (
-                    <ErrorMessage>{errors.titulo.message}</ErrorMessage>
-                  )}
-                  <Input label="Data" type="date" {...register('data')} />
-                  {errors.data && (
-                    <ErrorMessage>{errors.data.message}</ErrorMessage>
-                  )}
-
-                  <label htmlFor="descricao">Descrição</label>
-                  <textarea
-                    className="w-full h-20 border border-gray-700 p-2 rounded-md"
-                    id="descricao"
-                    {...register('descricao')}
-                  />
-                  {errors.descricao && (
-                    <ErrorMessage>{errors.descricao.message}</ErrorMessage>
-                  )}
-                  <div className="flex justify-end gap-4">
-                    {!ligado && aulaId && (
-                      <button
-                        type="button"
-                        className="text-white mt-4 py-2 px-3 rounded-md cursor-pointer bg-red-500 hover:bg-red-700"
-                        onClick={excluir}
-                      >
-                        Excluir
-                      </button>
-                    )}
-                    <BotaoPrincipal>
-                      {isSubmitting ? 'Enviando...' : 'Salvar'}
-                    </BotaoPrincipal>
-                  </div>
-                </>
-              )}
-            </div>
-
-            {disciplina && (ligado || aulaId) && (
-              <>
-                <h3 className="font-titulo text-lg text-gray-800 mt-8">
-                  Lista de Presença
-                </h3>
-                <div className="w-4/5">
-                  <Table headers={['Nome', 'Presente']}>
-                    {!ligado &&
-                      presencas
-                        ?.sort((a, b) =>
-                          a.matricula.usuario.nome.localeCompare(
-                            b.matricula.usuario.nome,
-                          ),
-                        )
-                        .map((presenca) => (
-                          <tr
-                            key={presenca.id}
-                            className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
-                          >
-                            <td className="px-4 py-3 text-gray-800 font-medium">
-                              {presenca.matricula.usuario.nome}
-                            </td>
-                            <td>
-                              <input
-                                type="checkbox"
-                                className="w-5 h-5 accent-purple-500"
-                                {...register(
-                                  `presencas.${presenca.id}` as const,
-                                )}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                    {ligado &&
-                      alunosMatriculados
-                        ?.sort((a, b) =>
-                          a.usuario.nome.localeCompare(b.usuario.nome),
-                        )
-                        .map((matricula) => (
-                          <tr
-                            key={matricula.id}
-                            className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
-                          >
-                            <td className="px-4 py-3 text-gray-800 font-medium">
-                              {matricula.usuario.nome}
-                            </td>
-                            <td>
-                              <input
-                                type="checkbox"
-                                className="w-5 h-5 accent-purple-500"
-                                {...register(
-                                  `presencas.${matricula.id}` as const,
-                                )}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                  </Table>
+                  <BotaoPrincipal>
+                    {isSubmitting ? 'Enviando...' : 'Salvar'}
+                  </BotaoPrincipal>
                 </div>
               </>
             )}
-          </form>
-        )}
-      </main>
-    </Layout>
+          </div>
+
+          {disciplina && (ligado || aulaId) && (
+            <>
+              <h3 className="font-titulo text-lg text-gray-800 mt-8">
+                Lista de Presença
+              </h3>
+              <div className="w-4/5">
+                <Table headers={['Nome', 'Presente']}>
+                  {!ligado &&
+                    presencas
+                      ?.sort((a, b) =>
+                        a.matricula.usuario.nome.localeCompare(
+                          b.matricula.usuario.nome,
+                        ),
+                      )
+                      .map((presenca) => (
+                        <tr
+                          key={presenca.id}
+                          className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+                        >
+                          <td className="px-4 py-3 text-gray-800 font-medium">
+                            {presenca.matricula.usuario.nome}
+                          </td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              className="w-5 h-5 accent-purple-500"
+                              {...register(`presencas.${presenca.id}` as const)}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                  {ligado &&
+                    alunosMatriculados
+                      ?.sort((a, b) =>
+                        a.usuario.nome.localeCompare(b.usuario.nome),
+                      )
+                      .map((matricula) => (
+                        <tr
+                          key={matricula.id}
+                          className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition"
+                        >
+                          <td className="px-4 py-3 text-gray-800 font-medium">
+                            {matricula.usuario.nome}
+                          </td>
+                          <td>
+                            <input
+                              type="checkbox"
+                              className="w-5 h-5 accent-purple-500"
+                              {...register(
+                                `presencas.${matricula.id}` as const,
+                              )}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                </Table>
+              </div>
+            </>
+          )}
+        </form>
+      )}
+    </main>
   );
 };
 

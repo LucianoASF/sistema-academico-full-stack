@@ -12,6 +12,7 @@ import Historico from './pages/Historico';
 import Aulas from './pages/Aulas';
 import Avaliacoes from './pages/Avaliacoes';
 import DesempenhoDisciplina from './pages/DesempenhoDisciplina';
+import Layout from './components/Layout';
 
 function App() {
   return (
@@ -20,62 +21,64 @@ function App() {
         <NavigationSetter />
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/disciplinas-em-curso"
-            element={
-              <PrivateRoute roles={['aluno', 'administrador']}>
-                <DisciplinasEmCurso />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/atualizar-cadastro"
-            element={
-              <PrivateRoute roles={['aluno']}>
-                <AtualizarCadastro />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/historico"
-            element={
-              <PrivateRoute roles={['aluno', 'administrador']}>
-                <Historico />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/aulas"
-            element={
-              <PrivateRoute roles={['professor', 'administrador']}>
-                <Aulas />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/avaliacoes"
-            element={
-              <PrivateRoute roles={['professor', 'administrador']}>
-                <Avaliacoes />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/desempenho"
-            element={
-              <PrivateRoute roles={['professor', 'administrador']}>
-                <DesempenhoDisciplina />
-              </PrivateRoute>
-            }
-          />
+          <Route element={<Layout />}>
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/disciplinas-em-curso"
+              element={
+                <PrivateRoute roles={['aluno', 'administrador']}>
+                  <DisciplinasEmCurso />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/atualizar-cadastro"
+              element={
+                <PrivateRoute roles={['aluno']}>
+                  <AtualizarCadastro />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/historico"
+              element={
+                <PrivateRoute roles={['aluno', 'administrador']}>
+                  <Historico />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/aulas"
+              element={
+                <PrivateRoute roles={['professor', 'administrador']}>
+                  <Aulas />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/avaliacoes"
+              element={
+                <PrivateRoute roles={['professor', 'administrador']}>
+                  <Avaliacoes />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/desempenho"
+              element={
+                <PrivateRoute roles={['professor', 'administrador']}>
+                  <DesempenhoDisciplina />
+                </PrivateRoute>
+              }
+            />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ToastContainer

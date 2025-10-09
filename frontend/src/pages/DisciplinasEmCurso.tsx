@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Accordion from '../components/Accordion';
-import Layout from '../components/Layout';
 import TituloPrincipal from '../components/TituloPrincipal';
 import api from '../api/api';
 import { useAuthContext } from '../contexts/useAuthContext';
@@ -49,29 +48,27 @@ const DisciplinasEmCurso = () => {
   }, [user, selecionado]);
 
   return (
-    <Layout>
-      <main className="p-4 flex flex-col items-center">
-        <TituloPrincipal styles="mb-16">Disciplinas em Curso</TituloPrincipal>
-        {user?.role === 'administrador' && (
-          <PesquisaUsuario
-            role="aluno"
-            selecionado={selecionado}
-            setSelecionado={setSelecionado}
-          />
-        )}
-        {matriculas?.map((matricula) => (
-          <Accordion
-            key={matricula.id}
-            matriculaId={matricula.id}
-            disciplina={matricula.disciplinaRealizada.disciplina.nome}
-            professor={matricula.disciplinaRealizada.professor.nome}
-          />
-        ))}
-        {!matriculas && user?.role !== 'administrador' && (
-          <p>Você não esta cursando nenhuma disciplina!</p>
-        )}
-      </main>
-    </Layout>
+    <main className="p-4 flex flex-col items-center">
+      <TituloPrincipal styles="mb-16">Disciplinas em Curso</TituloPrincipal>
+      {user?.role === 'administrador' && (
+        <PesquisaUsuario
+          role="aluno"
+          selecionado={selecionado}
+          setSelecionado={setSelecionado}
+        />
+      )}
+      {matriculas?.map((matricula) => (
+        <Accordion
+          key={matricula.id}
+          matriculaId={matricula.id}
+          disciplina={matricula.disciplinaRealizada.disciplina.nome}
+          professor={matricula.disciplinaRealizada.professor.nome}
+        />
+      ))}
+      {!matriculas && user?.role !== 'administrador' && (
+        <p>Você não esta cursando nenhuma disciplina!</p>
+      )}
+    </main>
   );
 };
 
