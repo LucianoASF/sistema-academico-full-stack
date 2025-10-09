@@ -1,8 +1,11 @@
 import { useAuthContext } from '../contexts/useAuthContext';
 import {
+  BookOpenCheckIcon,
+  ChartNoAxesCombinedIcon,
   ClipboardClockIcon,
   GraduationCapIcon,
   LogOutIcon,
+  NotebookPenIcon,
   PencilIcon,
 } from 'lucide-react';
 import Navlink from './Navlink';
@@ -38,6 +41,31 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
             <li>
               <Navlink to="/historico">
                 <ClipboardClockIcon /> Histórico
+              </Navlink>
+            </li>
+          </>
+        )}
+        {user?.role === 'professor' && (
+          <>
+            <li>
+              <Navlink to="/aulas">
+                <NotebookPenIcon /> Disciplinas Em Curso
+              </Navlink>
+            </li>
+            <li>
+              <Navlink to="/avaliacoes">
+                <BookOpenCheckIcon /> Avaliações
+              </Navlink>
+            </li>
+            <li>
+              <Navlink to="/desempenho">
+                <ChartNoAxesCombinedIcon /> Desempenho dos Alunos
+              </Navlink>
+            </li>
+            <li>
+              <Navlink to="/atualizar-cadastro">
+                <PencilIcon />
+                Atualizar Cadastro
               </Navlink>
             </li>
           </>

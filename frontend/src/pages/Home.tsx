@@ -36,10 +36,28 @@ const Home = () => {
           {user?.role === 'professor' && (
             <>
               <CardHome
-                titulo="Lançar/Ver presenças"
-                paragrafo="Você deseja visualizar o lançar presenças de suas aulas?"
+                titulo="Lançar ou ver aulas/presenças"
+                paragrafo="Você deseja visualizar ou lançar aulas/presenças?"
                 nomeDoBotao="Visualizar"
                 to="/aulas"
+              />
+              <CardHome
+                titulo="Lançar ou ver avaliações/notas"
+                paragrafo="Você deseja visualizar ou lançar avaliações/notas?"
+                nomeDoBotao="Visualizar"
+                to="/avaliacoes"
+              />
+              <CardHome
+                titulo="Atualizar Cadastro"
+                paragrafo="Você deseja atualizar seu cadastro?"
+                nomeDoBotao="Atualizar"
+                to="/atualizar-cadastro"
+              />
+              <CardHome
+                titulo="Ver desemenho dos alunos"
+                paragrafo="Você deseja visualizar o desempenho dos seus alunos nas suas disciplinas?"
+                nomeDoBotao="Visualizar"
+                to="/desempenho"
               />
             </>
           )}
