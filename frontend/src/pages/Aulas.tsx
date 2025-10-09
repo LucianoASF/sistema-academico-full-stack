@@ -294,7 +294,7 @@ const Aulas = () => {
           <h3>Você não está dando nenhuma disciplina!</h3>
         )}
         {!disciplinas && user?.role === 'administrador' && selecionado && (
-          <h3>Você não está dando nenhuma disciplina!</h3>
+          <h3>O professor não está dando nenhuma disciplina!</h3>
         )}
         {disciplinas && disciplinas?.length > 0 && (
           <form
