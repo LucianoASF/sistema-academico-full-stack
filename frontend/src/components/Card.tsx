@@ -4,7 +4,7 @@ interface CardProps {
 
 const Card = ({ children }: CardProps) => {
   return (
-    <div className="border m-4 p-4 rounded-lg border-gray-900 bg-gray-100 hover:shadow-2xl">
+    <div className="m-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       {children}
     </div>
   );

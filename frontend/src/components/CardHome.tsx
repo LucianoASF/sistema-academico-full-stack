@@ -11,15 +11,21 @@ interface CardHomeProps {
 const CardHome = ({ titulo, paragrafo, nomeDoBotao, to }: CardHomeProps) => {
   return (
     <Card>
-      <h3 className="font-titulo p-4 text-gray-900">{titulo}</h3>
-      <div className="flex justify-between items-center">
-        <p className="font-corpo pl-4">{paragrafo}</p>
-        <Link
-          to={to}
-          className="font-corpo bg-gray-200 p-2 border border-purple-300 rounded-md hover:bg-gray-300 text-gray-900"
-        >
-          {nomeDoBotao}
-        </Link>
+      <div className="flex flex-col justify-between h-full">
+        <div>
+          <h3 className="font-titulo text-xl font-semibold text-gray-900 mb-3">
+            {titulo}
+          </h3>
+          <p className="font-corpo text-gray-600">{paragrafo}</p>
+        </div>
+        <div className="flex justify-end mt-6">
+          <Link
+            to={to}
+            className="font-corpo bg-gradient-to-r from-purple-500 to-purple-700 text-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md hover:from-purple-600 hover:to-purple-800 transition-all duration-300"
+          >
+            {nomeDoBotao}
+          </Link>
+        </div>
       </div>
     </Card>
   );
