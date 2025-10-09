@@ -174,6 +174,7 @@ const Avaliacoes = () => {
   useEffect(() => {
     if (!notas || notas.length === 0) {
       setValue('notas', {});
+      alunosMatriculados?.forEach((a) => setValue(`notas.${a.id}`, ''));
       return;
     }
     setValue('notas', {});
