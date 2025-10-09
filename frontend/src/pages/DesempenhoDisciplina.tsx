@@ -13,6 +13,8 @@ import type { Iavaliacao } from '../interfaces/Iavaliacao';
 import { EyeIcon } from 'lucide-react';
 import Modal from '../components/Modal';
 import { stringToDate } from '../utils/ConverteStringEmDate';
+import type { IusuarioBusca } from '../interfaces/IusuarioBusca';
+import PesquisaUsuario from '../components/PesquisaUsuario';
 
 const DesempenhoDisciplina = () => {
   interface Ipresenca {
@@ -39,13 +41,21 @@ const DesempenhoDisciplina = () => {
   const [notas, setNotas] = useState<Inota[]>();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [matriculaSelecionada, setMatriculaSelecioada] = useState<Imatricula>();
+  const [selecionado, setSelecionado] = useState<IusuarioBusca | null>(null);
 
   useEffect(() => {
     const fetchDisciplinas = async () => {
+      if (!user) return;
+      if (user.role === 'administrador' && !selecionado) {
+        setDisciplinas(undefined);
+        return;
+      }
       try {
         const data = (
           await api.get<IdisciplinaRealizada[]>(
-            `/disciplinas-realizadas/usuarios/${user?.id}`,
+            `/disciplinas-realizadas/usuarios/${
+              user.role === 'administrador' ? selecionado?.id : user.id
+            }`,
           )
         ).data;
         setDisciplinas(data);
@@ -56,7 +66,7 @@ const DesempenhoDisciplina = () => {
       }
     };
     fetchDisciplinas();
-  }, [user?.id]);
+  }, [user, selecionado]);
 
   useEffect(() => {
     if (!disciplinaSelecionada) return;
@@ -117,9 +127,20 @@ const DesempenhoDisciplina = () => {
     <Layout>
       <main className="flex flex-col items-center p-4">
         <TituloPrincipal styles="mb-6">Desempenho</TituloPrincipal>
-        {!disciplinas ? (
+        {user?.role === 'administrador' && (
+          <PesquisaUsuario
+            role="professor"
+            selecionado={selecionado}
+            setSelecionado={setSelecionado}
+          />
+        )}
+        {!disciplinas && user?.role === 'professor' && (
           <h3>Você não está dando nenhuma disciplina!</h3>
-        ) : (
+        )}
+        {!disciplinas && user?.role === 'administrador' && selecionado && (
+          <h3>O professor não está dando nenhuma disciplina!</h3>
+        )}
+        {disciplinas && disciplinas?.length > 0 && (
           <>
             <div className="w-full max-w-2xl bg-white shadow-lg rounded-2xl p-8">
               <label htmlFor="disciplina">Selecione a Disciplina</label>

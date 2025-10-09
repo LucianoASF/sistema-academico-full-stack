@@ -224,7 +224,7 @@ disciplinaRealizadaRoutes.get(
 );
 disciplinaRealizadaRoutes.get(
   '/disciplinas-realizadas/:disciplinaRealizadaId/avaliacoes/notas',
-  AuthorizationMiddleware('professor', 'Administrador'),
+  AuthorizationMiddleware('professor', 'administrador'),
   checkOwnershipMiddleware(
     'disciplinaRealizada',
     'disciplinaRealizadaId',
