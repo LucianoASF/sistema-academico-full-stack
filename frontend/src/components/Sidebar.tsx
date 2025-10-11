@@ -4,6 +4,7 @@ import {
   ChartNoAxesCombinedIcon,
   ClipboardClockIcon,
   GraduationCapIcon,
+  HomeIcon,
   LogOutIcon,
   NotebookPenIcon,
   PencilIcon,
@@ -25,6 +26,11 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
         <h5>MENU</h5>
       </div>
       <ul>
+        <li>
+          <Navlink to="/">
+            <HomeIcon /> Home
+          </Navlink>
+        </li>
         {user?.role === 'aluno' && (
           <>
             <li>
@@ -49,7 +55,7 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
           <>
             <li>
               <Navlink to="/aulas">
-                <NotebookPenIcon /> Disciplinas Em Curso
+                <NotebookPenIcon /> Aulas
               </Navlink>
             </li>
             <li>
