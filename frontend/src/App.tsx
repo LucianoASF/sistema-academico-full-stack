@@ -13,6 +13,7 @@ import Aulas from './pages/Aulas';
 import Avaliacoes from './pages/Avaliacoes';
 import DesempenhoDisciplina from './pages/DesempenhoDisciplina';
 import Layout from './components/Layout';
+import ListaUsuarios from './pages/ListaUsuarios';
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
             <Route
               path="/atualizar-cadastro"
               element={
-                <PrivateRoute roles={['aluno']}>
+                <PrivateRoute roles={['aluno', 'professor']}>
                   <AtualizarCadastro />
                 </PrivateRoute>
               }
@@ -78,7 +79,17 @@ function App() {
                 </PrivateRoute>
               }
             />
+
+            <Route
+              path="/admin/usuarios"
+              element={
+                <PrivateRoute roles={['administrador']}>
+                  <ListaUsuarios />
+                </PrivateRoute>
+              }
+            />
           </Route>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ToastContainer

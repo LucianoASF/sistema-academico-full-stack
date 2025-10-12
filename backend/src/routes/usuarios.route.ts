@@ -32,7 +32,11 @@ usuarioRoutes.get(
   checkOwnershipMiddleware(undefined, undefined, undefined, 'id'),
   asyncHandler(UsuarioController.getById),
 );
-usuarioRoutes.delete('/usuarios/:id', asyncHandler(UsuarioController.delete));
+usuarioRoutes.delete(
+  '/usuarios/:id',
+  AuthorizationMiddleware('administrador'),
+  asyncHandler(UsuarioController.delete),
+);
 usuarioRoutes.patch(
   '/usuarios/:id',
   AuthorizationMiddleware('aluno', 'professor', 'administrador'),

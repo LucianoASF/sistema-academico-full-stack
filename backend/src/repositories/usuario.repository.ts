@@ -48,7 +48,8 @@ export class UsuarioRepository {
   async buscaUsuarios(
     busca?: string,
     role?: Usuario['role'],
-  ): Promise<Pick<Usuario, 'id' | 'nome'>[]> {
+    completo?: boolean,
+  ): Promise<Pick<Usuario, 'id' | 'nome'>[] | Omit<Usuario, 'senha'>> {
     const where = {
       ...(role ? { role } : {}),
       ...(busca
@@ -61,7 +62,9 @@ export class UsuarioRepository {
     };
     return this.prisma.usuario.findMany({
       where,
-      select: { id: true, nome: true, role: true },
+      select: completo
+        ? this.selectUsuarioSemSenha
+        : { id: true, nome: true, role: true },
       orderBy: { nome: 'asc' },
     });
   }

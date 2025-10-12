@@ -12,13 +12,14 @@ export class UsuarioController {
       .json(await new UsuarioService().getById(Number(req.params.id)));
   }
   static async buscaUsuarios(req: Request, res: Response) {
-    const { busca, role } = req.query;
+    const { busca, role, completo } = req.query;
     res
       .status(200)
       .json(
         await new UsuarioService().buscaUsuarios(
           busca as string | undefined,
           role as Usuario['role'] | undefined,
+          completo as boolean | undefined,
         ),
       );
   }

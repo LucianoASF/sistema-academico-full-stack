@@ -36,8 +36,9 @@ export class UsuarioService {
   async buscaUsuarios(
     busca?: string,
     role?: Usuario['role'],
-  ): Promise<Pick<Usuario, 'id' | 'nome'>[]> {
-    return this.usuarioRepository.buscaUsuarios(busca, role);
+    completo?: boolean,
+  ): Promise<Pick<Usuario, 'id' | 'nome'>[] | Omit<Usuario, 'senha'>> {
+    return this.usuarioRepository.buscaUsuarios(busca, role, completo);
   }
 
   // Atualizar usuário sem senha

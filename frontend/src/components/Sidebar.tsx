@@ -51,31 +51,32 @@ const Sidebar = ({ isOpen }: SidebarProps) => {
             </li>
           </>
         )}
-        {user?.role === 'professor' && (
-          <>
-            <li>
-              <Navlink to="/aulas">
-                <NotebookPenIcon /> Aulas
-              </Navlink>
-            </li>
-            <li>
-              <Navlink to="/avaliacoes">
-                <BookOpenCheckIcon /> Avaliações
-              </Navlink>
-            </li>
-            <li>
-              <Navlink to="/desempenho">
-                <ChartNoAxesCombinedIcon /> Desempenho dos Alunos
-              </Navlink>
-            </li>
-            <li>
-              <Navlink to="/atualizar-cadastro">
-                <PencilIcon />
-                Atualizar Cadastro
-              </Navlink>
-            </li>
-          </>
-        )}
+        {user?.role === 'professor' ||
+          (user?.role === 'administrador' && (
+            <>
+              <li>
+                <Navlink to="/aulas">
+                  <NotebookPenIcon /> Aulas
+                </Navlink>
+              </li>
+              <li>
+                <Navlink to="/avaliacoes">
+                  <BookOpenCheckIcon /> Avaliações
+                </Navlink>
+              </li>
+              <li>
+                <Navlink to="/desempenho">
+                  <ChartNoAxesCombinedIcon /> Desempenho dos Alunos
+                </Navlink>
+              </li>
+              <li>
+                <Navlink to="/atualizar-cadastro">
+                  <PencilIcon />
+                  Atualizar Cadastro
+                </Navlink>
+              </li>
+            </>
+          ))}
         <li>
           <button
             className="flex items-center py-3 pl-3 gap-2 text-sm md:text-xl hover:bg-gray-700 w-full cursor-pointer"
