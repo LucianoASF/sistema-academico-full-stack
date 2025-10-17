@@ -81,7 +81,7 @@ const Login = () => {
             {...register('senha')}
           />
           {errors.senha && <ErrorMessage>{errors.senha.message}</ErrorMessage>}
-          <BotaoPrincipal>
+          <BotaoPrincipal disabled={isSubmitting}>
             {isSubmitting ? 'Entrando...' : 'Login'}
           </BotaoPrincipal>
         </form>

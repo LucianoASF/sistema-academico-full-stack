@@ -397,7 +397,7 @@ const Aulas = () => {
                       Excluir
                     </button>
                   )}
-                  <BotaoPrincipal>
+                  <BotaoPrincipal disabled={isSubmitting}>
                     {isSubmitting ? 'Enviando...' : 'Salvar'}
                   </BotaoPrincipal>
                 </div>
