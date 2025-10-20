@@ -14,6 +14,7 @@ import Avaliacoes from './pages/Avaliacoes';
 import DesempenhoDisciplina from './pages/DesempenhoDisciplina';
 import Layout from './components/Layout';
 import ListaUsuarios from './pages/ListaUsuarios';
+import EditarUsuario from './pages/EditarUsuario';
 
 function App() {
   return (
@@ -85,6 +86,14 @@ function App() {
               element={
                 <PrivateRoute roles={['administrador']}>
                   <ListaUsuarios />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/usuarios/:id/editar"
+              element={
+                <PrivateRoute roles={['administrador']}>
+                  <EditarUsuario />
                 </PrivateRoute>
               }
             />
