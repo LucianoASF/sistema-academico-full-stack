@@ -8,8 +8,9 @@ import { PatternFormat } from 'react-number-format';
 import { useEffect, useMemo } from 'react';
 
 // Função que cria o schema conforme se há dadosDoUsuario
-const criarSchemaCadastro = (temDados: boolean) =>
-  z.object({
+const criarSchemaCadastro = (temDados: boolean) => {
+  // Campos comuns a ambos os casos
+  const baseSchema = {
     nome: z
       .string()
       .min(5, 'Nome deve ter pelo menos 5 caracteres')
@@ -30,9 +31,7 @@ const criarSchemaCadastro = (temDados: boolean) =>
           .string()
           .refine(
             (val) => val === '' || (val.length >= 5 && val.length <= 60),
-            {
-              message: 'A senha deve ter entre 5 e 60 caracteres.',
-            },
+            { message: 'A senha deve ter entre 5 e 60 caracteres.' },
           )
           .optional()
       : // Criação → senha obrigatória
@@ -40,7 +39,17 @@ const criarSchemaCadastro = (temDados: boolean) =>
           .string()
           .min(5, 'A senha deve ter pelo menos 5 caracteres')
           .max(60, 'A senha deve ter no máximo 60 caracteres'),
-  });
+    role: temDados
+      ? z.enum(['administrador', 'professor', 'aluno']).optional()
+      : z.enum(
+          ['administrador', 'professor', 'aluno'],
+          'O campo tem que ser administrador, professor ou aluno',
+        ),
+  };
+
+  // Se for edição, não inclui o campo `role`
+  return z.object(baseSchema);
+};
 
 export type CadastroFormInputs = z.infer<
   ReturnType<typeof criarSchemaCadastro>
@@ -161,6 +170,22 @@ const FormCadastro = ({
           {errors.senha && <ErrorMessage>{errors.senha.message}</ErrorMessage>}
         </div>
       </div>
+      {!dadosDoUsuario && (
+        <>
+          <label htmlFor="role">Tipo de usuário</label>
+          <select
+            id="role"
+            className="w-full border border-gray-700 p-2 rounded-md"
+            {...register('role')}
+          >
+            <option value="">Selecione...</option>
+            <option value="administrador">Administrador</option>
+            <option value="professor">Professor</option>
+            <option value="aluno">Aluno</option>
+          </select>
+          {errors.role && <ErrorMessage>{errors.role.message}</ErrorMessage>}
+        </>
+      )}
 
       <div className="flex justify-end pt-6">
         <BotaoPrincipal disabled={isSubmitting}>
