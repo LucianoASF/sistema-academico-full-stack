@@ -80,7 +80,7 @@ const ListaDisciplinas = () => {
 
   return (
     <main className="flex flex-col p-4 items-center justify-center">
-      <TituloPrincipal styles="mb-6">Lista de Usuários</TituloPrincipal>
+      <TituloPrincipal styles="mb-6">Lista de Disciplinas</TituloPrincipal>
       {loading === false && disciplinas?.length === 0 ? (
         <h3 className="font-titulo">Nenhum Usuário</h3>
       ) : (
