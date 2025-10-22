@@ -6,6 +6,7 @@ import {
   conectarGradeSchema,
   disciplinaSchema,
 } from '../schemas/disciplina.schema.js';
+import { AuthorizationMiddleware } from '../middlewares/authorization.middleware.js';
 
 export const disciplinaRoutes = Router();
 
@@ -14,13 +15,18 @@ disciplinaRoutes.post(
   celebrate({ [Segments.BODY]: disciplinaSchema }),
   asyncHandler(DisciplinaController.create),
 );
-disciplinaRoutes.get('/disciplinas', asyncHandler(DisciplinaController.getAll));
+disciplinaRoutes.get(
+  '/disciplinas',
+  AuthorizationMiddleware('administrador'),
+  asyncHandler(DisciplinaController.getAll),
+);
 disciplinaRoutes.get(
   '/disciplinas/:id',
   asyncHandler(DisciplinaController.getById),
 );
 disciplinaRoutes.delete(
   '/disciplinas/:id',
+  AuthorizationMiddleware('administrador'),
   asyncHandler(DisciplinaController.delete),
 );
 disciplinaRoutes.patch(

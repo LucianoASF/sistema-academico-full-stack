@@ -16,6 +16,7 @@ import Layout from './components/Layout';
 import ListaUsuarios from './pages/ListaUsuarios';
 import EditarUsuario from './pages/EditarUsuario';
 import CriarUsuario from './pages/CriarUsuario';
+import ListaDisciplinas from './pages/ListaDisciplinas';
 
 function App() {
   return (
@@ -103,6 +104,14 @@ function App() {
               element={
                 <PrivateRoute roles={['administrador']}>
                   <CriarUsuario />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/disciplinas"
+              element={
+                <PrivateRoute roles={['administrador']}>
+                  <ListaDisciplinas />
                 </PrivateRoute>
               }
             />
