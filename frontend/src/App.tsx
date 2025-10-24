@@ -17,6 +17,7 @@ import ListaUsuarios from './pages/ListaUsuarios';
 import EditarUsuario from './pages/EditarUsuario';
 import CriarUsuario from './pages/CriarUsuario';
 import ListaDisciplinas from './pages/ListaDisciplinas';
+import CriarDisciplina from './pages/CriarDisciplina';
 
 function App() {
   return (
@@ -112,6 +113,14 @@ function App() {
               element={
                 <PrivateRoute roles={['administrador']}>
                   <ListaDisciplinas />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/disciplinas/criar"
+              element={
+                <PrivateRoute roles={['administrador']}>
+                  <CriarDisciplina />
                 </PrivateRoute>
               }
             />

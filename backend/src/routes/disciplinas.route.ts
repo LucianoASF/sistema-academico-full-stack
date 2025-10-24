@@ -12,6 +12,7 @@ export const disciplinaRoutes = Router();
 
 disciplinaRoutes.post(
   '/disciplinas',
+  AuthorizationMiddleware('administrador'),
   celebrate({ [Segments.BODY]: disciplinaSchema }),
   asyncHandler(DisciplinaController.create),
 );

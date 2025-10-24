@@ -4,10 +4,9 @@ import TituloPrincipal from '../components/TituloPrincipal';
 import api from '../api/api';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { PencilIcon, Trash2Icon } from 'lucide-react';
+import { Trash2Icon } from 'lucide-react';
 import Modal from '../components/Modal';
 import Input from '../components/Input';
-import { useNavigate } from 'react-router';
 
 const ListaDisciplinas = () => {
   interface Idisciplina {
@@ -15,7 +14,6 @@ const ListaDisciplinas = () => {
     nome: string;
     quantidadeAulas: number;
   }
-  const navigate = useNavigate();
   const [disciplinas, setDisciplinas] = useState<Idisciplina[]>();
   const [listaDisciplinas, setListaDisciplinas] = useState<Idisciplina[]>();
   const [disciplinaSelecionada, setDisciplinaSelecionada] =
@@ -114,15 +112,6 @@ const ListaDisciplinas = () => {
                     title="Excluir"
                   >
                     <Trash2Icon className="text-red-500" />
-                  </button>
-                  <button
-                    onClick={() =>
-                      navigate(`/admin/disciplinas/${disciplina.id}/editar`)
-                    }
-                    className="cursor-pointer"
-                    title="Atualizar"
-                  >
-                    <PencilIcon className="text-green-500" />
                   </button>
                 </td>
               </tr>
