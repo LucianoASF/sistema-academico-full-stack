@@ -8,11 +8,8 @@ import { PencilIcon, PlusIcon, Trash2Icon } from 'lucide-react';
 import Modal from '../components/Modal';
 import Input from '../components/Input';
 import FormCursos from '../components/FormCursos';
+import type { Icurso } from '../interfaces/Icurso';
 
-export interface Icurso {
-  id: number;
-  nome: string;
-}
 const Cursos = () => {
   const [cursos, setCursos] = useState<Icurso[]>();
   const [listaCursos, setListaCursos] = useState<Icurso[]>();
