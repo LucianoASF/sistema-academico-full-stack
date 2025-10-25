@@ -10,6 +10,7 @@ export const cursoRoutes = Router();
 cursoRoutes.post(
   '/cursos',
   celebrate({ [Segments.BODY]: cursoSchema }),
+  AuthorizationMiddleware('administrador'),
   asyncHandler(CursoController.create),
 );
 cursoRoutes.get(
@@ -17,10 +18,15 @@ cursoRoutes.get(
   // AuthorizationMiddleware('professor'),
   asyncHandler(CursoController.getAll),
 );
-cursoRoutes.get('/cursos/:id', asyncHandler(CursoController.getById));
+cursoRoutes.get(
+  '/cursos/:id',
+  AuthorizationMiddleware('administrador'),
+  asyncHandler(CursoController.getById),
+);
 cursoRoutes.delete('/cursos/:id', asyncHandler(CursoController.delete));
 cursoRoutes.put(
   '/cursos/:id',
+  AuthorizationMiddleware('administrador'),
   celebrate({ [Segments.BODY]: cursoSchema }),
   asyncHandler(CursoController.update),
 );
