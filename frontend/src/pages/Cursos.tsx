@@ -92,7 +92,7 @@ const Cursos = () => {
         <PlusIcon /> Criar Curso
       </button>
       {loading === false && cursos?.length === 0 ? (
-        <h3 className="font-titulo">Nenhum Usuário</h3>
+        <h3 className="font-titulo">Nenhum Curso</h3>
       ) : (
         <div className="w-4/5">
           <div className="mb-2">
