@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Accordion from '../components/Accordion';
+import AccordionDisciplinasEmCurso from '../components/AccordionDisciplinasEmCurso';
 import TituloPrincipal from '../components/TituloPrincipal';
 import api from '../api/api';
 import { useAuthContext } from '../contexts/useAuthContext';
@@ -58,7 +58,7 @@ const DisciplinasEmCurso = () => {
         />
       )}
       {matriculas?.map((matricula) => (
-        <Accordion
+        <AccordionDisciplinasEmCurso
           key={matricula.id}
           matriculaId={matricula.id}
           disciplina={matricula.disciplinaRealizada.disciplina.nome}
