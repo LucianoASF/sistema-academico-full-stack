@@ -14,5 +14,6 @@ gradeRoutes.get(
 gradeRoutes.delete('/grades/:id', asyncHandler(GradeController.delete));
 gradeRoutes.get(
   '/grades/cursos/:cursoId',
+  AuthorizationMiddleware('administrador'),
   asyncHandler(GradeController.getAllByCurso),
 );

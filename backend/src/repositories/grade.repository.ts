@@ -18,6 +18,9 @@ export class GradeRepository {
     await this.prisma.grade.delete({ where: { id } });
   }
   async getAllByCurso(cursoId: number): Promise<Grade[]> {
-    return this.prisma.grade.findMany({ where: { cursoId } });
+    return this.prisma.grade.findMany({
+      where: { cursoId },
+      include: { disciplinas: true },
+    });
   }
 }

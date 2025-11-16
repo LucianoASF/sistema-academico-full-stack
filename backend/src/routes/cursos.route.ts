@@ -15,7 +15,7 @@ cursoRoutes.post(
 );
 cursoRoutes.get(
   '/cursos',
-  // AuthorizationMiddleware('professor'),
+  AuthorizationMiddleware('administrador'),
   asyncHandler(CursoController.getAll),
 );
 cursoRoutes.get(
