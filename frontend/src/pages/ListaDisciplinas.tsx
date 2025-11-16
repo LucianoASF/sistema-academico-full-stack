@@ -120,7 +120,7 @@ const ListaDisciplinas = () => {
 
           {isOpenModal && (
             <Modal
-              titulo={`Excluir Usuário: ${disciplinaSelecionada?.nome}`}
+              titulo={`Excluir Disciplina: ${disciplinaSelecionada?.nome}`}
               setIsOpen={setIsOpenModal}
             >
               <div className="flex items-center justify-between">
