@@ -7,13 +7,9 @@ import { toast } from 'react-toastify';
 import { Trash2Icon } from 'lucide-react';
 import Modal from '../components/Modal';
 import Input from '../components/Input';
+import type { Idisciplina } from '../interfaces/Idisciplina';
 
 const ListaDisciplinas = () => {
-  interface Idisciplina {
-    id: number;
-    nome: string;
-    quantidadeAulas: number;
-  }
   const [disciplinas, setDisciplinas] = useState<Idisciplina[]>();
   const [listaDisciplinas, setListaDisciplinas] = useState<Idisciplina[]>();
   const [disciplinaSelecionada, setDisciplinaSelecionada] =
