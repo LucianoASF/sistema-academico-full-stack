@@ -23,4 +23,24 @@ export class GradeRepository {
       include: { disciplinas: true },
     });
   }
+  async conectarDisciplinasNaGrade(disciplinas: number[], gradeId: number) {
+    await this.prisma.grade.update({
+      where: { id: gradeId },
+      data: {
+        disciplinas: {
+          connect: disciplinas.map((disciplinaId) => ({ id: disciplinaId })),
+        },
+      },
+    });
+  }
+  async desconectarDisciplinasNaGrade(disciplinas: number[], gradeId: number) {
+    await this.prisma.grade.update({
+      where: { id: gradeId },
+      data: {
+        disciplinas: {
+          disconnect: disciplinas.map((disciplinaId) => ({ id: disciplinaId })),
+        },
+      },
+    });
+  }
 }

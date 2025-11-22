@@ -42,4 +42,13 @@ export class GradeService {
   async getAllByCurso(cursoId: number): Promise<Grade[]> {
     return this.gradeRepository.getAllByCurso(cursoId);
   }
+  async conectarDisciplinasNaGrade(disciplinas: number[], gradeId: number) {
+    await this.gradeRepository.conectarDisciplinasNaGrade(disciplinas, gradeId);
+  }
+  async desconectarDisciplinasNaGrade(disciplinas: number[], gradeId: number) {
+    await this.gradeRepository.desconectarDisciplinasNaGrade(
+      disciplinas,
+      gradeId,
+    );
+  }
 }

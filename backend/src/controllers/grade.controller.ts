@@ -25,4 +25,18 @@ export class GradeController {
       .status(200)
       .json(await new GradeService().getAllByCurso(Number(req.params.cursoId)));
   }
+  static async conectarDisciplinaNaGrade(req: Request, res: Response) {
+    await new GradeService().conectarDisciplinasNaGrade(
+      req.body.disciplinas,
+      Number(req.params.id),
+    );
+    res.status(204).end();
+  }
+  static async desconectarDisciplinaNaGrade(req: Request, res: Response) {
+    await new GradeService().desconectarDisciplinasNaGrade(
+      req.body.disciplinas,
+      Number(req.params.id),
+    );
+    res.status(204).end();
+  }
 }

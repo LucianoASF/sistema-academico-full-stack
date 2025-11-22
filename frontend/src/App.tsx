@@ -20,6 +20,7 @@ import ListaDisciplinas from './pages/ListaDisciplinas';
 import CriarDisciplina from './pages/CriarDisciplina';
 import Cursos from './pages/Cursos';
 import ListarGrades from './pages/ListarGrades';
+import CriarGrade from './pages/CriarGrade';
 
 function App() {
   return (
@@ -139,6 +140,14 @@ function App() {
               element={
                 <PrivateRoute roles={['administrador']}>
                   <ListarGrades />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/grades/criar"
+              element={
+                <PrivateRoute roles={['administrador']}>
+                  <CriarGrade />
                 </PrivateRoute>
               }
             />
