@@ -11,7 +11,7 @@ export class GradeRepository {
   async getById(id: number, alunoId?: number): Promise<Grade | null> {
     return this.prisma.grade.findFirst({
       where: alunoId ? { id, matriculaCurso: { some: { alunoId } } } : { id },
-      include: { disciplinas: true },
+      include: { disciplinas: true, curso: { select: { nome: true } } },
     });
   }
   async delete(id: number) {
