@@ -1,6 +1,5 @@
 import { PrismaClient, type Matricula } from '@prisma/client';
 import type { getMatriculasCursandoByAlunoType } from '../types/getMatriculasCursandoByAluno.js';
-import type { getMatriculasByAlunoType } from '../types/getMatriculasByAluno.js';
 
 export class MatriculaRepository {
   private prisma: PrismaClient;
@@ -23,18 +22,10 @@ export class MatriculaRepository {
   async getById(id: number): Promise<Matricula | null> {
     return this.prisma.matricula.findFirst({ where: { id } });
   }
-  async getMatriculasByAluno(
-    alunoId: number,
-  ): Promise<getMatriculasByAlunoType[]> {
+  async getMatriculasByAluno(alunoId: number): Promise<Matricula[]> {
     return this.prisma.matricula.findMany({
       where: { alunoId },
-      select: {
-        id: true,
-        notaFinal: true,
-        presencaFinal: true,
-        status: true,
-        alunoId: true,
-        disciplinaRealizadaId: true,
+      include: {
         disciplinaRealizada: {
           select: { dataInicio: true, dataFim: true, disciplinaId: true },
         },

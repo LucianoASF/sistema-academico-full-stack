@@ -4,7 +4,6 @@ import { NotFoundError } from '../errors/not-found.error.js';
 import { UsuarioRepository } from '../repositories/usuario.repository.js';
 import { UnprocessableEntityError } from '../errors/unprocessable-entity.error.js';
 import type { getMatriculasCursandoByAlunoType } from '../types/getMatriculasCursandoByAluno.js';
-import type { getMatriculasByAlunoType } from '../types/getMatriculasByAluno.js';
 
 export class MatriculaService {
   private matriculaRepository: MatriculaRepository;
@@ -45,9 +44,7 @@ export class MatriculaService {
     if (!matricula) throw new NotFoundError('Matricula não encontrada!');
     return matricula;
   }
-  async getMatriculasByAluno(
-    alunoId: number,
-  ): Promise<getMatriculasByAlunoType[]> {
+  async getMatriculasByAluno(alunoId: number): Promise<Matricula[]> {
     return this.matriculaRepository.getMatriculasByAluno(alunoId);
   }
   async getMatriculasCursandoByAluno(
