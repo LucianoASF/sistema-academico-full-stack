@@ -26,8 +26,8 @@ export class MatriculaCursoService {
   async getAllByAluno(alunoId: number): Promise<MatriculaCurso[]> {
     return this.matriculaCursoRepository.getAllByAluno(alunoId);
   }
-  async getAllByCurso(cursoId: number): Promise<MatriculaCurso[]> {
-    return this.matriculaCursoRepository.getAllByCurso(cursoId);
+  async getAll(): Promise<MatriculaCurso[]> {
+    return this.matriculaCursoRepository.getAll();
   }
 
   async getById(id: number): Promise<MatriculaCurso | null> {

@@ -15,14 +15,8 @@ export class MatriculaCursoController {
         ),
       );
   }
-  static async getAllByCurso(req: Request, res: Response) {
-    res
-      .status(200)
-      .json(
-        await new MatriculaCursoService().getAllByCurso(
-          Number(req.params.cursoId),
-        ),
-      );
+  static async getAll(req: Request, res: Response) {
+    res.status(200).json(await new MatriculaCursoService().getAll());
   }
   static async getById(req: Request, res: Response) {
     res

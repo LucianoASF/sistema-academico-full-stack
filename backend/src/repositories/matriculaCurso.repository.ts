@@ -18,9 +18,12 @@ export class MatriculaCursoRepository {
       include: { grade: { include: { curso: true } } },
     });
   }
-  async getAllByCurso(cursoId: number): Promise<MatriculaCurso[]> {
+  async getAll(): Promise<MatriculaCurso[]> {
     return this.prisma.matriculaCurso.findMany({
-      where: { grade: { cursoId } },
+      include: {
+        grade: { include: { curso: true } },
+        usuario: { select: { nome: true } },
+      },
     });
   }
   async getById(id: number): Promise<MatriculaCurso | null> {

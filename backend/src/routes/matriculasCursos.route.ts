@@ -23,8 +23,8 @@ matriculaCursoRoutes.get(
   asyncHandler(MatriculaCursoController.getAllByAluno),
 );
 matriculaCursoRoutes.get(
-  '/matriculas-cursos/cursos/:cursoId',
-  asyncHandler(MatriculaCursoController.getAllByCurso),
+  '/matriculas-cursos',
+  asyncHandler(MatriculaCursoController.getAll),
 );
 matriculaCursoRoutes.get(
   '/matriculas-cursos/:id',

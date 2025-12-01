@@ -22,6 +22,7 @@ import Cursos from './pages/Cursos';
 import ListarGrades from './pages/ListarGrades';
 import CriarGrade from './pages/CriarGrade';
 import EditarGrade from './pages/EditarGrade';
+import ListaMatriculaCursos from './pages/ListaMatriculaCursos';
 
 function App() {
   return (
@@ -157,6 +158,14 @@ function App() {
               element={
                 <PrivateRoute roles={['administrador']}>
                   <EditarGrade />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin/matriculas-de-cursos"
+              element={
+                <PrivateRoute roles={['administrador']}>
+                  <ListaMatriculaCursos />
                 </PrivateRoute>
               }
             />
