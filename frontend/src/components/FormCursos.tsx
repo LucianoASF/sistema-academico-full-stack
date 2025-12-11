@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import api from '../api/api';
 import { toast } from 'react-toastify';
-import type { Icurso } from '../pages/Cursos';
+import type { Icurso } from '../interfaces/Icurso';
 
 // Campos comuns a ambos os casos
 const cursoSchema = z.object({
