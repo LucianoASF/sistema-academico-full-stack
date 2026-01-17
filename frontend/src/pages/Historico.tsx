@@ -9,6 +9,7 @@ import Card from '../components/Card';
 import { stringToDate } from '../utils/ConverteStringEmDate';
 import type { IusuarioBusca } from '../interfaces/IusuarioBusca';
 import PesquisaUsuario from '../components/PesquisaUsuario';
+import type { Igrade } from '../interfaces/Igrade';
 
 const Historico = () => {
   const { user } = useAuthContext();
@@ -29,17 +30,6 @@ const Historico = () => {
         nome: string;
       };
     };
-  }
-
-  interface Igrade {
-    id: number;
-    versao: number;
-    cursoId: number;
-    disciplinas: {
-      id: number;
-      nome: string;
-      quantidadeAulas: number;
-    }[];
   }
 
   interface ImatriculaDisciplinaRealizada {

@@ -8,18 +8,9 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import Modal from '../components/Modal';
 import { useNavigate } from 'react-router';
+import type { Igrade } from '../interfaces/Igrade';
 
 const ListarGrades = () => {
-  interface Igrade {
-    id: number;
-    versao: number;
-    cursoId: number;
-    disciplinas: {
-      id: number;
-      nome: string;
-      quantidadeAulas: number;
-    }[];
-  }
   const navigate = useNavigate();
   const [cursos, setCursos] = useState<Icurso[]>();
   const [selectCurso, setSelectCurso] = useState<number>();
